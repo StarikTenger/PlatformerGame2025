@@ -6,13 +6,29 @@ const DESTRUCT_FLAG := "destruct_fire"
 
 var tiles_layer: TileMapLayer
 
+
+
 func _ready() -> void:
 	super()
 	# ищем Tiles в сцене уровня
 	var lvl = get_tree().current_scene
 	tiles_layer = lvl.find_child("Tiles", true, false) as TileMapLayer
+	explosion_scene = preload("res://scenes/Explosion.tscn")
+
+var explosion_scene : PackedScene
+func _spawn_explosion(pos: Vector2) -> void:
+	var explosion = explosion_scene.instantiate()
+	explosion.global_position = pos
+	get_parent().add_child(explosion)
 
 func _death_effect() -> void:
+	_spawn_explosion(global_position)
+
+	# Shake camera
+	var cam = get_parent().camera_node
+	if cam:
+		cam.shake()
+
 	if tiles_layer:
 		_erase_destructibles_around(global_position, explosion_radius_px)
 	await get_tree().process_frame
@@ -39,3 +55,4 @@ func _erase_destructibles_around(world_pos: Vector2, radius_px: float) -> void:
 			var td: TileData = tiles_layer.get_cell_tile_data(cell)
 			if td != null and td.get_custom_data(DESTRUCT_FLAG) == true:
 				tiles_layer.erase_cell(cell)
+				_spawn_explosion(wc)

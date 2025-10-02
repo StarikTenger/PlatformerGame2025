@@ -15,7 +15,7 @@ func _ready():
 		print("Camera following player at position: ", player.position)
 
 func _physics_process(delta: float):
-	if player != null:
+	if player != null and !is_shaking:
 		position += (player.position - position) * 10 * delta
 	
 	# Handle camera shake
@@ -33,5 +33,6 @@ func _physics_process(delta: float):
 			offset = original_offset + shake_offset
 
 func shake():
+	print("Camera shake triggered")
 	is_shaking = true
 	shake_timer = shake_duration
