@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1ta8pm48dpuq"]
+
+[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_exnhs"]
+[ext_resource type="Script" uid="uid://oykdnlvhcmkk" path="res://scenes/fire_player.gd" id="2_lc57u"]
+[ext_resource type="Texture2D" uid="uid://b6lytvyqlupqb" path="res://resources/fire_player.png" id="2_lnaqo"]
+
+[node name="FirePlayer" instance=ExtResource("1_exnhs")]
+script = ExtResource("2_lc57u")
+explosion_radius = 4
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(11, -1)
+texture = ExtResource("2_lnaqo")
+
+[node name="CollisionShape2D2" parent="." index="2"]
+position = Vector2(0, 0)
