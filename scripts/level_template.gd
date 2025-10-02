@@ -3,10 +3,12 @@ extends Node2D
 const CHAR_SCENES := [
 	preload("res://scenes/wind_player.tscn"),
 	preload("res://scenes/fire_player.tscn"),
+	preload("res://scenes/fire_player.tscn"),
 ]
 
 const SPAWN_NAME := "Spawn"               # Marker2D
 const CAMERA_SCENE := preload("res://scenes/Camera.tscn")
+const DEATH_MENU_SCENE := preload("res://scenes/DeathMenu.tscn")
 
 var roster : Array = []
 var current_idx : int = 0
@@ -17,6 +19,13 @@ var moved_once := false
 var spawn_pos : Vector2
 
 var camera_node : Node = null   # камера сцены, чтобы переназначать target
+var death_menu : Control = null
+var death_layer: CanvasLayer = null
+
+var _pending_player : Node = null
+var _pending_scene_idx : int = -1
+
+var _prev_mouse_mode: int = Input.get_mouse_mode()
 
 func _ready():
 	# Инициализация Spawn
@@ -34,7 +43,22 @@ func _ready():
 	if CAMERA_SCENE:
 		camera_node = CAMERA_SCENE.instantiate()
 		add_child(camera_node)
+	
+	# инстансим меню один раз
+	death_layer = CanvasLayer.new()
+	death_layer.layer = 100
+	death_layer.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	add_child(death_layer)
 
+	death_menu = DEATH_MENU_SCENE.instantiate()
+	death_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	death_menu.visible = false
+	death_layer.add_child(death_menu)
+	# сигналы меню
+	death_menu.apply_pressed.connect(_death_apply_pressed)
+	death_menu.skip_pressed.connect(_death_skip_pressed)
+	death_menu.restart_pressed.connect(_death_restart_pressed)
+	
 	# Стартовый пул и первый спавн
 	roster = CHAR_SCENES.duplicate() as Array[PackedScene]
 	current_idx = 0
@@ -49,6 +73,8 @@ func _unhandled_input(event):
 		if event.keycode == KEY_SHIFT:
 			print("test11")
 			_switch_next()
+		if event.keycode == KEY_F1:
+			_show_death_menu(true)
 
 func _switch_next():
 	if roster.is_empty():
@@ -73,6 +99,8 @@ func _spawn_and_bind(packed: PackedScene):
 	# подписка на сигналы игрока
 	if p.has_signal("moved_once"):
 		p.connect("moved_once", Callable(self, "_on_player_moved_once"))
+	if p.has_signal("death_request"):
+		p.connect("death_request", Callable(self, "_on_player_death_request"), CONNECT_ONE_SHOT)
 	if p.has_signal("died"):
 		p.connect("died", Callable(self, "_on_player_died"))
 
@@ -89,24 +117,63 @@ func _on_player_moved_once():
 	moved_once = true
 	can_switch = false  # фиксируем выбор до смерти
 
-func _on_player_died():
-	print(roster)
-	# потратить текущего
-	if roster.size() > 0:
-		roster.remove_at(current_idx)
+func _on_player_death_request(player: Node):
+	print("[death_request] from: ", player.name)
+	_pending_player = player
+	_pending_scene_idx = current_idx
+	_show_death_menu(true)
 
-	if current_player:
-		current_player.queue_free()
-		current_player = null
+func _death_apply_pressed():
+	# применить эффект → убрать перса из ростера → финализировать смерть → респавн следующего
+	_show_death_menu(false)
+	if _pending_player:
+		await _pending_player.apply_death_effect()
+		_pending_player.finalize_death()
+		if roster.size() > 0:
+			roster.remove_at(_pending_scene_idx)
+		_pending_player = null
+		_pending_scene_idx = -1
 
 	if roster.is_empty():
-		print("lost")
-		# все умерли — полный рестарт уровня
-		var ml := Engine.get_main_loop()
-		if ml is SceneTree:
-			(ml as SceneTree).reload_current_scene()
+		_restart_level()
 		return
 
-	# остались живые — респавн на старте и снова можно выбирать
-	current_idx = (current_idx + 1) % roster.size()
+	current_idx = min(current_idx, roster.size()-1)
 	_spawn_and_bind(roster[current_idx])
+
+func _death_skip_pressed():
+	# НЕ применять эффект и НЕ вычеркивать из ростера — респавним того же персонажа
+	_show_death_menu(false)
+	if _pending_player:
+		# «отменим смерть» у инстанса на всякий случай (снимает freeze, если ты захочешь его вернуть)
+		if "cancel_death" in _pending_player:
+			_pending_player.cancel_death()
+		_pending_player.queue_free()
+		_pending_player = null
+		_pending_scene_idx = -1
+
+	# респавним того же типа (индекс не меняем)
+	_spawn_and_bind(roster[current_idx])
+
+func _death_restart_pressed():
+	_show_death_menu(false)
+	_restart_level()
+
+func _show_death_menu(show: bool):
+	get_tree().paused = show
+	death_menu.visible = show
+	if show:
+		_prev_mouse_mode = Input.get_mouse_mode()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		(death_menu as Node).call_deferred("open")
+	else:
+		Input.set_mouse_mode(_prev_mouse_mode)
+		(death_menu as Node).call_deferred("close")
+
+func _restart_level():
+	var ml := Engine.get_main_loop()
+	if ml is SceneTree:
+		(ml as SceneTree).reload_current_scene()
+
+func _on_player_died():
+	pass
