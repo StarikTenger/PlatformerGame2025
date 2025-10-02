@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2f8bjsqjtmdb"]
+
+[ext_resource type="Script" uid="uid://ixfos38yuhud" path="res://scripts/LevelButton.gd" id="1_emfp6"]
+[ext_resource type="Texture2D" uid="uid://dpjjgsmv10hnx" path="res://resources/LevelFrame.png" id="1_nddmr"]
+[ext_resource type="Texture2D" uid="uid://ce5nu8fg75qog" path="res://resources/LevelFrameHover.png" id="2_enqhw"]
+
+[node name="LevelButton" type="TextureButton"]
+custom_minimum_size = Vector2(51.2, 51.2)
+layout_direction = 2
+offset_right = 51.2
+offset_bottom = 51.2
+scale = Vector2(0.1, 0.1)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource("1_nddmr")
+texture_hover = ExtResource("2_enqhw")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("1_emfp6")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -17.0
+offset_right = 20.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+theme_override_font_sizes/font_size = 24
