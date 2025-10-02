@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://haw3bsq76jej"]
+
+[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_effgb"]
+[ext_resource type="Script" uid="uid://cp32gwnnv0olc" path="res://scenes/wind_player.gd" id="2_6uy08"]
+[ext_resource type="Texture2D" uid="uid://c3dcphbn1wuo" path="res://resources/wind_player.png" id="2_77jin"]
+
+[node name="WindPlayer" instance=ExtResource("1_effgb")]
+script = ExtResource("2_6uy08")
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(11, -1)
+texture = ExtResource("2_77jin")
+
+[node name="CollisionShape2D2" parent="." index="2"]
+position = Vector2(0, 0)
