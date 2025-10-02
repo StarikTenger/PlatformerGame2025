@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 signal moved_once
 signal died
+signal death_request(player: Node)
 
 @export var hazards_map: TileMapLayer
 
@@ -19,21 +20,41 @@ var _death_immunity_until_s: float = 0.0
 
 var _emitted_move := false
 var _dead: bool = false
+var _frozen_on_death := false
 
 func die() -> void:
 	if _dead:
 		return
 	_dead = true
-	await _death_effect()
-	if not _can_die():
-		return
+	_freeze_on_death(true)
+	emit_signal("death_request", self)
+	return
+
+# Уровень вызовет это, если в меню нажали «Применить смерть»
+func apply_death_effect() -> void:
+	await _death_effect()                   # у наследников (огненный) тут ломаются тайлы
+
+# Уровень вызовет это, когда надо реально умереть (после эффекта)
+func finalize_death() -> void:
 	emit_signal("died")
 	queue_free()
+
+# Уровень вызовет это, если в меню нажали «Не применять смерть»
+func cancel_death() -> void:
+	_dead = false
+	_freeze_on_death(false)
+
+func _freeze_on_death(f: bool) -> void:
+	_frozen_on_death = f
+	set_physics_process(not f)
+	set_process(not f)
 
 func _death_effect() -> void:
 	await get_tree().process_frame
 
 func _physics_process(delta):
+	if _frozen_on_death:
+		return
 	var input_direction = 0
 	if Input.is_action_pressed("move_right"):
 		input_direction += 1
