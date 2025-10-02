@@ -1,8 +1,8 @@
 extends Node2D
 
 const CHAR_SCENES := [
-	preload("res://scenes/fire_player.tscn"),
 	preload("res://scenes/wind_player.tscn"),
+	preload("res://scenes/fire_player.tscn"),
 ]
 
 const SPAWN_NAME := "Spawn"               # Marker2D

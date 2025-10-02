@@ -9,6 +9,7 @@ signal died
 
 func _ready() -> void:
 	hazards_map = get_parent().get_node("Hazards")
+	add_to_group("liftable")
 
 var hp : int = 1
 var speed : float = 800.0
