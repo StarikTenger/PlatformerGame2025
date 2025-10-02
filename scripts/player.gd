@@ -55,6 +55,8 @@ func _physics_process(delta):
 	var friction_k = 0.2 if is_on_floor() else 0.05
 
 	velocity.x = lerp(velocity.x, velocity_desired, friction_k)
+	if input_direction != 0 and !is_on_floor():
+		velocity.x = velocity_desired
 
 	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
