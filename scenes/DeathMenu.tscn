@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyw2pq031hv4g"]
+
+[ext_resource type="Script" uid="uid://danhiwm7tst86" path="res://scripts/death_menu.gd" id="1_okyhj"]
+
+[node name="DeathMenu" type="Control"]
+process_mode = 2
+z_index = 1000
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_okyhj")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Center"]
+custom_minimum_size = Vector2(420, 220)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Commit Death?"
+horizontal_alignment = 1
+
+[node name="BtnApply" type="Button" parent="Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+text = "COMMIT"
+
+[node name="BtnSkip" type="Button" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "NOT COMMIT"
+
+[node name="BtnRestart" type="Button" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "RESTART LEVEL"
