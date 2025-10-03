@@ -161,7 +161,6 @@ func _on_player_moved_once():
 func _on_player_death_request(player: Node):
 	print("[death_request] from: ", player.name)
 	_pending_player = player
-	_pending_scene_idx = current_idx
 	
 	var allow_apply: bool = roster.size() > 1
 	var hint: String
