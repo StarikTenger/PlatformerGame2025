@@ -71,6 +71,14 @@ func _physics_process(delta):
 		die()
 		return
 
+	# Animation handling
+	var anim_player = $Sprite2D
+	if input_direction == 0:
+		anim_player.play("idle")
+	else:
+		anim_player.play("walking")
+		anim_player.flip_h = input_direction < 0
+
 	var velocity_desired = input_direction * speed
 
 	var friction_k = 0.2 if is_on_floor() else 0.05
