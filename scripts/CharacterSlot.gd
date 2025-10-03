@@ -27,3 +27,15 @@ func _on_character_selected(index: int):
 	var anim_resource = load(characters[char_name])
 	sprite.sprite_frames = anim_resource
 	sprite.play("idle")  # у тебя должна быть анимация "idle"
+	
+func set_character(name: String):
+	var idx := -1
+	for i in range(selector.item_count):
+		if selector.get_item_text(i) == name:
+			idx = i
+			break
+	if idx != -1:
+		selector.select(idx)
+		_on_character_selected(idx)
+	else:
+		push_warning("Character '%s' not found in OptionButton" % name)

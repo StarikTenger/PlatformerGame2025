@@ -3,7 +3,7 @@ extends Control
 @onready var hbox = $Margin/HBoxContainer
 @export var character_slot_scene: PackedScene
 @export var num_slots := 4
-var chosen := []
+var chosen : Array[String]
 signal start_pressed
 
 func _ready():
@@ -18,13 +18,24 @@ func _ready():
 		var tex = slot.sprite.sprite_frames.get_frame_texture("idle", 0)
 		max_height = max(max_height, tex.get_size().y * slot.sprite.scale.y)
 	$Margin/Spacer.custom_minimum_size = Vector2(0, max_height)
-	print(max_height)
 
 func _on_start_pressed():
-	print("start pressed")
+	chosen = []
 	for slot in hbox.get_children():
 		var char_name = slot.selector.get_item_text(slot.selector.selected)
 		chosen.append(char_name)
-	print("Выбранные персонажи:", chosen)
 	emit_signal("start_pressed")
 	# теперь можно передать chosen в level_template
+
+func get_chosen():
+	return chosen
+
+func load_chosen(_chosen : Array[String]):
+	chosen = _chosen
+	var cnt = 0
+	for slot in hbox.get_children():
+		if cnt < chosen.size():
+			var char_name = _chosen[cnt]
+			cnt += 1
+			print (char_name)
+			slot.set_character(char_name)
