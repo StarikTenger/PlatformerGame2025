@@ -38,6 +38,7 @@ texture = ExtResource("1_gup2b")
 
 [sub_resource type="TileSet" id="TileSet_skox6"]
 physics_layer_0/collision_layer = 1
+physics_layer_0/collision_priority = 1.175
 custom_data_layer_0/name = "destruct_fire"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "hazard"
