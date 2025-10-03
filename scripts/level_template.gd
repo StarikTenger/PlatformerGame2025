@@ -3,6 +3,7 @@ extends Node2D
 const CHAR_SCENES := {
 	"Wind": preload("res://scenes/Players/wind_player.tscn"),
 	"Fire": preload("res://scenes/Players/fire_player.tscn"),
+	"Earth": preload("res://scenes/Players/earth_player.tscn"),
 }
 
 const SPAWN_NAME := "Spawn"               # Marker2D
