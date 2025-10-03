@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7xjmqycptucd"]
 
-[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_effgb"]
-[ext_resource type="Script" uid="uid://cp32gwnnv0olc" path="res://scripts/wind_player.gd" id="2_6uy08"]
+[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Players/Player.tscn" id="1_effgb"]
+[ext_resource type="Script" uid="uid://cp32gwnnv0olc" path="res://scripts/Players/wind_player.gd" id="2_6uy08"]
 [ext_resource type="SpriteFrames" uid="uid://h2rpunkpwqy" path="res://animation/wind_player.tres" id="3_6uy08"]
 
 [node name="WindPlayer" instance=ExtResource("1_effgb")]

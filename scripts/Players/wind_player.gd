@@ -1,4 +1,4 @@
-extends "res://scripts/player.gd"
+extends "res://scripts/Players/player.gd"
 
 var tornado_scene : PackedScene
 

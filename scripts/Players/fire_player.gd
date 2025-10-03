@@ -1,4 +1,4 @@
-extends "res://scripts/player.gd"
+extends "res://scripts/Players/player.gd"
 
 @export var explosion_radius: int = 4
 var explosion_radius_px = explosion_radius * 100.0

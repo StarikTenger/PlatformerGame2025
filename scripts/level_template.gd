@@ -1,15 +1,15 @@
 extends Node2D
 
 const CHAR_SCENES := {
-	"Wind": preload("res://scenes/wind_player.tscn"),
-	"Fire": preload("res://scenes/fire_player.tscn"),
+	"Wind": preload("res://scenes/Players/wind_player.tscn"),
+	"Fire": preload("res://scenes/Players/fire_player.tscn"),
 }
 
 const SPAWN_NAME := "Spawn"               # Marker2D
 const CAMERA_SCENE := preload("res://scenes/Camera.tscn")
-const DEATH_MENU_SCENE := preload("res://scenes/DeathMenu.tscn")
-const CHARACTER_MENU_SCENE := preload("res://scenes/CharacterMenu.tscn")
-const HUD_SCENE := preload("res://scenes/HUD.tscn")
+const DEATH_MENU_SCENE := preload("res://scenes/UI/DeathMenu.tscn")
+const CHARACTER_MENU_SCENE := preload("res://scenes/UI/CharacterMenu.tscn")
+const HUD_SCENE := preload("res://scenes/UI/HUD.tscn")
 
 var character_deck: Array[String] = []
 var character_deck_alive : Array[bool] = []
