@@ -15,6 +15,10 @@ run/main_scene="uid://d4mc6vy1eif2i"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SaveState="*res://scripts/SaveState.gd"
+
 [input]
 
 ui_accept={

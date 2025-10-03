@@ -59,6 +59,7 @@ func _ready():
 	character_layer.add_child(character_menu)
 	
 	character_menu.start_pressed.connect(_start_game)
+	character_menu.load_chosen(SaveState.get_chosen())
 	
 	# инстансим меню один раз
 	death_layer = CanvasLayer.new()
@@ -76,6 +77,8 @@ func _ready():
 	death_menu.restart_pressed.connect(_death_restart_pressed)
 
 func _start_game():
+	var chosen : Array[String]
+	SaveState.save_chosen(character_menu.get_chosen())
 	character_menu.visible = false
 	# Стартовый пул и первый спавн
 	for slot in character_menu.chosen:
