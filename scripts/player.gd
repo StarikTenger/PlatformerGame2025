@@ -7,9 +7,14 @@ signal died
 signal death_request(player: Node)
 
 @export var hazards_map: TileMapLayer
+@export var tiles_map: TileMapLayer
+@export var hazard_flag_name := "hazard"
+@export var pushable_flag_name := "pushable"
 
 func _ready() -> void:
-	hazards_map = get_parent().get_node("Hazards")
+	if tiles_map == null:
+		var lvl := get_tree().current_scene
+		tiles_map = lvl.find_child("Tiles", true, false) as TileMapLayer
 	add_to_group("liftable")
 
 var hp : int = 1
@@ -106,9 +111,35 @@ func _physics_process(delta):
 	
 	for i in range(get_slide_collision_count()):
 		var col := get_slide_collision(i)
-		if col.get_collider() == hazards_map:
-			die()
-			return
+		# интересуют только столкновения с нужным TileMapLayer
+		if tiles_map != null and col.get_collider() == tiles_map:
+			var cell := _cell_at_collision(tiles_map, col)
+			if cell != null:
+				var td := tiles_map.get_cell_tile_data(cell)
+				if td != null:
+					if td.get_custom_data(hazard_flag_name) == true:
+						die()
+						return
+					elif td.get_custom_data(pushable_flag_name) == true:
+						_push_block(cell, col.get_normal())
+					
+func _cell_at_collision(layer: TileMapLayer, col: KinematicCollision2D) -> Vector2i:
+	# берём точку чуть "внутрь" тайла (сдвигаемся на полпикселя по нормали)
+	var world_p: Vector2 = col.get_position() - col.get_normal() * 0.5
+	var local_p: Vector2 = layer.to_local(world_p)
+	return layer.local_to_map(local_p)
+
+func _push_block(cell: Vector2i, normal: Vector2) -> void:
+	# вычисляем куда толкнуть
+	var target_cell := cell + Vector2i(round(-normal.x), round(-normal.y))
+	# проверяем что целевая пустая
+	if tiles_map.get_cell_source_id(target_cell) == -1:
+		var source_id := tiles_map.get_cell_source_id(cell)
+		var atlas_coords := tiles_map.get_cell_atlas_coords(cell)
+		# переносим тайл
+		tiles_map.set_cell(target_cell, source_id, atlas_coords)
+		tiles_map.set_cell(cell, -1)
+
 
 func set_death_immunity(seconds: float = 0.5) -> void:
 	_death_immunity_until_s = Time.get_unix_time_from_system() + seconds
