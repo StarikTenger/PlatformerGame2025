@@ -1,12 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1ygt622wxhcy"]
+[gd_scene load_steps=4 format=3 uid="uid://d1ygt622wxhcy"]
 
 [ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Players/Player.tscn" id="1_aun71"]
+[ext_resource type="Script" uid="uid://bv0jysxl1xegj" path="res://scripts/Players/earth_player.gd" id="2_20l7q"]
 [ext_resource type="SpriteFrames" uid="uid://bnqu3q106xdgs" path="res://animation/earth_player.tres" id="2_apmm2"]
 
 [node name="Player" instance=ExtResource("1_aun71")]
+script = ExtResource("2_20l7q")
 
 [node name="Sprite2D" parent="." index="0"]
-scale = Vector2(0.146, 0.137)
 sprite_frames = ExtResource("2_apmm2")
 animation = &"idle"
-frame_progress = 0.00802121
+frame_progress = 0.350285
