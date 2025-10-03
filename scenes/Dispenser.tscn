@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c02kgqghm6xo1"]
+
+[ext_resource type="Script" uid="uid://c18i8ibh4baf4" path="res://scripts/dispenser.gd" id="1_uq1lf"]
+[ext_resource type="Texture2D" uid="uid://c765tcyc23a4r" path="res://resources/dispenser.png" id="1_yuh73"]
+
+[node name="Dispenser" type="Node2D"]
+script = ExtResource("1_uq1lf")
+
+[node name="Spawn" type="Marker2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_yuh73")
