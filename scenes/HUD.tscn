@@ -7,7 +7,7 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_qpvh6")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="DeckPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_right = 370.0
 offset_bottom = 137.0

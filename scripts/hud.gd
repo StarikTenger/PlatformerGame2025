@@ -30,6 +30,10 @@ func _ready() -> void:
 	deck_container.add_theme_constant_override("separation", DECK_ITEM_SEPARATION)
 	add_child(deck_container)
 	
+	var deck_panel = get_node_or_null("DeckPanel")
+	if deck_panel:
+		deck_panel.visible = false
+
 	await get_tree().process_frame
 
 func _on_deck_update(char_deck: Array, alive: Array[bool], current_index: int):
@@ -84,6 +88,14 @@ func _create_deck_items(char_deck: Array, alive: Array[bool], current_index: int
 		# Add border for current character
 		if i == current_index:
 			_add_current_border(deck_item)
+
+		# Adjust DeckPanel size and position to fit all deck items
+		var deck_panel = get_node_or_null("DeckPanel")
+		if deck_panel:
+			var total_width = char_deck.size() * DECK_ITEM_SIZE.x + max(0, char_deck.size() - 1) * DECK_ITEM_SEPARATION
+			deck_panel.size = Vector2(total_width, DECK_ITEM_SIZE.y)
+			deck_panel.position = DECK_CONTAINER_POSITION
+		deck_panel.visible = true
 
 func _add_current_border(deck_item: Control):
 	# Remove existing border first
