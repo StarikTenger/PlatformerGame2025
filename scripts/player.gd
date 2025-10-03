@@ -53,6 +53,10 @@ func _freeze_on_death(f: bool) -> void:
 func _death_effect() -> void:
 	await get_tree().process_frame
 
+func death_hint() -> String:
+	# дефолтный персонаж — без особого эффекта
+	return "This character does not leave any effect after death"
+
 func _physics_process(delta):
 	if _frozen_on_death:
 		return
@@ -70,6 +74,14 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ctrl"):
 		die()
 		return
+
+	# Animation handling
+	var anim_player = $Sprite2D
+	if input_direction == 0:
+		anim_player.play("idle")
+	else:
+		anim_player.play("walking")
+		anim_player.flip_h = input_direction < 0
 
 	var velocity_desired = input_direction * speed
 

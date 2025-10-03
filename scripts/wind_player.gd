@@ -11,5 +11,8 @@ func _death_effect() -> void:
 func _ready() -> void:
 	super()
 	jump_height = 400.0
-
+	
 	tornado_scene = preload("res://scenes/Tornado.tscn")
+
+func death_hint() -> String:
+	return "This character will leave a tornado at the place of death"

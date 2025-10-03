@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_exnhs"]
 [ext_resource type="Script" uid="uid://oykdnlvhcmkk" path="res://scripts/fire_player.gd" id="2_lc57u"]
-[ext_resource type="SpriteFrames" uid="uid://bksr8ny2gqijb" path="res://animations/fire_player.tres" id="3_lnaqo"]
+[ext_resource type="SpriteFrames" uid="uid://b3ern46ouxouq" path="res://animation/fire_player.tres" id="3_lnaqo"]
 
 [node name="FirePlayer" instance=ExtResource("1_exnhs")]
 script = ExtResource("2_lc57u")
@@ -14,8 +14,6 @@ scale = Vector2(0.145923, 0.137167)
 sprite_frames = ExtResource("3_lnaqo")
 animation = &"idle"
 autoplay = "idle"
-frame = 24
-frame_progress = 0.619825
 
 [node name="CollisionShape2D2" parent="." index="2"]
 position = Vector2(0, 0)

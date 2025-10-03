@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_effgb"]
 [ext_resource type="Script" uid="uid://cp32gwnnv0olc" path="res://scripts/wind_player.gd" id="2_6uy08"]
-[ext_resource type="SpriteFrames" uid="uid://pq7glk1mln6r" path="res://animations/wind_player.tres" id="3_6uy08"]
+[ext_resource type="SpriteFrames" uid="uid://h2rpunkpwqy" path="res://animation/wind_player.tres" id="3_6uy08"]
 
 [node name="WindPlayer" instance=ExtResource("1_effgb")]
 script = ExtResource("2_6uy08")
@@ -13,7 +13,6 @@ scale = Vector2(0.146, 0.137)
 sprite_frames = ExtResource("3_6uy08")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.119065
 
 [node name="CollisionShape2D2" parent="." index="2"]
 position = Vector2(0, 0)
