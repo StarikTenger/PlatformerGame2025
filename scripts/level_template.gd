@@ -211,9 +211,20 @@ func _death_apply_pressed():
 	# применить эффект → убрать перса из ростера → финализировать смерть → респавн следующего
 	_show_death_menu(false)
 	if _pending_player:
+		var death_pos: Vector2 = _pending_player.global_position
+		
 		await _pending_player.apply_death_effect()
 		_pending_player.finalize_death()
 		character_deck_alive[_pending_scene_idx] = false
+		
+		if camera_node and "hold_at" in camera_node:
+			# если скрипт огненного — включаем тряску
+			var do_shake := false
+			if _pending_player.get_script() and _pending_player.get_script().resource_path.ends_with("fire_player.gd"):
+				do_shake = true
+			await camera_node.hold_at(death_pos, 1.5, do_shake)  # 2 секунды
+	
+		
 		_pending_player = null
 		_pending_scene_idx = -1
 
