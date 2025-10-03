@@ -109,12 +109,11 @@ func _ready():
 
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
-	if can_switch and event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_SHIFT:
-			print("test11")
-			_switch_next()
-		if event.keycode == KEY_F1:
-			_show_death_menu(true)
+	if can_switch and event.is_action_pressed("switch_char"):
+		print("test11")
+		_switch_next()
+	if event.is_action_pressed("debug_menu"): # например, привяжи F1
+		_show_death_menu(true)
 
 func _switch_next():
 	if roster.is_empty():
@@ -162,7 +161,20 @@ func _on_player_moved_once():
 func _on_player_death_request(player: Node):
 	print("[death_request] from: ", player.name)
 	_pending_player = player
-	_pending_scene_idx = roster_idx
+	_pending_scene_idx = current_idx
+	
+	var allow_apply: bool = roster.size() > 1
+	var hint: String
+	if allow_apply:
+		# спросим у конкретного класса игрока его подсказку
+		if "death_hint" in player:
+			hint = player.death_hint()
+		else:
+			hint = "This character will leave an effect upon death"
+	else:
+		hint = "The characters are over"
+	
+	death_menu.set_context(allow_apply, hint)
 	_show_death_menu(true)
 
 func _death_apply_pressed():
