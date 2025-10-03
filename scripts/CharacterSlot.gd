@@ -5,8 +5,8 @@ extends PanelContainer
 
 # Словарь персонажей: имя → путь к анимации
 var characters = {
-	"Fire": "res://animations/fire_player.tres",
-	"Wind": "res://animations/wind_player.tres"
+	"Fire": "res://animation/fire_player.tres",
+	"Wind": "res://animation/wind_player.tres"
 }
 
 func _ready():

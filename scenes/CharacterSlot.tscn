@@ -548,9 +548,9 @@ size_flags_vertical = 0
 allow_reselect = true
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="VBoxContainer"]
-position = Vector2(146, 99.000015)
+position = Vector2(146, 99)
 scale = Vector2(0.145923, 0.137167)
 sprite_frames = SubResource("SpriteFrames_iggqf")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.46503958
+frame_progress = 0.46504
