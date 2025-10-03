@@ -1,16 +1,16 @@
 extends Node2D
 
-const CHAR_SCENES := [
-	preload("res://scenes/wind_player.tscn"),
-	preload("res://scenes/fire_player.tscn"),
-	preload("res://scenes/fire_player.tscn"),
-]
+const CHAR_SCENES := {
+	"Wind": preload("res://scenes/wind_player.tscn"),
+	"Fire": preload("res://scenes/fire_player.tscn"),
+}
 
 const SPAWN_NAME := "Spawn"               # Marker2D
 const CAMERA_SCENE := preload("res://scenes/Camera.tscn")
 const DEATH_MENU_SCENE := preload("res://scenes/DeathMenu.tscn")
+const CHARACTER_MENU_SCENE := preload("res://scenes/CharacterMenu.tscn")
 
-var roster : Array = []
+var roster: Array[PackedScene] = []
 var current_idx : int = 0
 var current_player : Node = null
 
@@ -22,12 +22,16 @@ var camera_node : Node = null   # камера сцены, чтобы перен
 var death_menu : Control = null
 var death_layer: CanvasLayer = null
 
+var character_menu : Control = null
+var character_layer: CanvasLayer = null
+
 var _pending_player : Node = null
 var _pending_scene_idx : int = -1
 
 var _prev_mouse_mode: int = Input.get_mouse_mode()
 
 func _ready():
+	
 	# Инициализация Spawn
 	var spawn := get_node_or_null(SPAWN_NAME)
 	if spawn == null:
@@ -43,6 +47,18 @@ func _ready():
 	if CAMERA_SCENE:
 		camera_node = CAMERA_SCENE.instantiate()
 		add_child(camera_node)
+		
+	character_layer = CanvasLayer.new()
+	character_layer.layer = 101
+	character_layer.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	add_child(character_layer)
+	
+	character_menu = CHARACTER_MENU_SCENE.instantiate()
+	character_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	character_menu.visible = true
+	character_layer.add_child(character_menu)
+	
+	character_menu.start_pressed.connect(_start_game)
 	
 	# инстансим меню один раз
 	death_layer = CanvasLayer.new()
@@ -58,9 +74,13 @@ func _ready():
 	death_menu.apply_pressed.connect(_death_apply_pressed)
 	death_menu.skip_pressed.connect(_death_skip_pressed)
 	death_menu.restart_pressed.connect(_death_restart_pressed)
-	
+
+func _start_game():
+	character_menu.visible = false
 	# Стартовый пул и первый спавн
-	roster = CHAR_SCENES.duplicate() as Array[PackedScene]
+	for slot in character_menu.chosen:
+		var scene: PackedScene = CHAR_SCENES[slot]
+		roster.append(scene)
 	current_idx = 0
 	_spawn_and_bind(roster[current_idx])
 
@@ -160,6 +180,17 @@ func _death_restart_pressed():
 	_restart_level()
 
 func _show_death_menu(show: bool):
+	get_tree().paused = show
+	death_menu.visible = show
+	if show:
+		_prev_mouse_mode = Input.get_mouse_mode()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		(death_menu as Node).call_deferred("open")
+	else:
+		Input.set_mouse_mode(_prev_mouse_mode)
+		(death_menu as Node).call_deferred("close")
+		
+func _show_character_menu(show: bool):
 	get_tree().paused = show
 	death_menu.visible = show
 	if show:
