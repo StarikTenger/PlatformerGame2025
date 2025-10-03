@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvcrk8ij1o7xk"]
 
-[ext_resource type="Script" uid="uid://qtklbsqcb7t8" path="res://scripts/hud.gd" id="1_qpvh6"]
+[ext_resource type="Script" uid="uid://qtklbsqcb7t8" path="res://scripts/UI/hud.gd" id="1_5fyfn"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_qpvh6")
+script = ExtResource("1_5fyfn")
 
 [node name="DeckPanel" type="Panel" parent="."]
 layout_mode = 0

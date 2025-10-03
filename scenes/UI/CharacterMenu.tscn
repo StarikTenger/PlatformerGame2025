@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dfknlwlwgdik8"]
 
-[ext_resource type="Script" uid="uid://bs6rkav845ctd" path="res://scripts/CharacterMenu.gd" id="1_uaokk"]
-[ext_resource type="PackedScene" uid="uid://bsn0eltoysk2e" path="res://scenes/CharacterSlot.tscn" id="2_d3o0x"]
+[ext_resource type="Script" uid="uid://bs6rkav845ctd" path="res://scripts/UI/CharacterMenu.gd" id="1_uaokk"]
+[ext_resource type="PackedScene" uid="uid://bsn0eltoysk2e" path="res://scenes/UI/CharacterSlot.tscn" id="2_d3o0x"]
 
 [node name="CharacterMenu" type="Control"]
 process_mode = 2

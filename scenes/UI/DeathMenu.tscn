@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dyw2pq031hv4g"]
 
-[ext_resource type="Script" uid="uid://danhiwm7tst86" path="res://scripts/death_menu.gd" id="1_okyhj"]
+[ext_resource type="Script" uid="uid://danhiwm7tst86" path="res://scripts/UI/death_menu.gd" id="1_okyhj"]
 
 [node name="DeathMenu" type="Control"]
 process_mode = 2

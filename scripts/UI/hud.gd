@@ -7,7 +7,7 @@ const DECK_ITEM_SEPARATION = 20  # Distance between deck items in pixels
 const DECK_BORDER_WIDTH = 3  # Width of the current character border
 const DECK_BORDER_RADIUS = 5  # Corner radius for the border
 
-const CharacterDeckItemScene = preload("res://scenes/CharacterDeckItem.tscn")
+const CharacterDeckItemScene = preload("res://scenes/UI/CharacterDeckItem.tscn")
 
 var deck_items: Array[Control] = []
 var deck_container: HBoxContainer

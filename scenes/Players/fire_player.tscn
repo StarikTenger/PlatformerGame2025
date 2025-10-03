@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b1ta8pm48dpuq"]
 
-[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Player.tscn" id="1_exnhs"]
-[ext_resource type="Script" uid="uid://oykdnlvhcmkk" path="res://scripts/fire_player.gd" id="2_lc57u"]
+[ext_resource type="PackedScene" uid="uid://dtcv1pbau0idl" path="res://scenes/Players/Player.tscn" id="1_exnhs"]
+[ext_resource type="Script" uid="uid://oykdnlvhcmkk" path="res://scripts/Players/fire_player.gd" id="2_lc57u"]
 [ext_resource type="SpriteFrames" uid="uid://b3ern46ouxouq" path="res://animation/fire_player.tres" id="3_lnaqo"]
 
 [node name="FirePlayer" instance=ExtResource("1_exnhs")]
