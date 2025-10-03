@@ -1,29 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dyejsvukypokk"]
+[gd_scene load_steps=4 format=3 uid="uid://dyejsvukypokk"]
 
 [ext_resource type="Script" uid="uid://dfiq2ynunar05" path="res://scripts/tornado.gd" id="1_j3qay"]
-[ext_resource type="Texture2D" uid="uid://chlyhw3ynvjgj" path="res://resources/tornado.png" id="2_pir8r"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j3qay"]
-atlas = ExtResource("2_pir8r")
-region = Rect2(0, 0, 128, 256)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pir8r"]
-atlas = ExtResource("2_pir8r")
-region = Rect2(128, 0, 128, 256)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_igt4f"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j3qay")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pir8r")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[ext_resource type="SpriteFrames" uid="uid://byfblwvabgcjq" path="res://animation/Tornado.tres" id="2_j3qay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_igt4f"]
 size = Vector2(95.5, 199.5)
@@ -33,9 +11,8 @@ script = ExtResource("1_j3qay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(8, -118)
-sprite_frames = SubResource("SpriteFrames_igt4f")
+sprite_frames = ExtResource("2_j3qay")
 autoplay = "default"
-frame_progress = 0.0655098
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.25, -100.25)
