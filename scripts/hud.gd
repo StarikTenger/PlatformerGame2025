@@ -32,10 +32,10 @@ func _ready() -> void:
 	
 	await get_tree().process_frame
 
-func _on_roster_updated(char_deck: Array, current_index: int):
+func _on_deck_update(char_deck: Array, alive: Array[bool], current_index: int):
 	print("HUD: Roster updated with ", char_deck.size(), " characters, current index: ", current_index)
 	_clear_deck_items()
-	_create_deck_items(char_deck, current_index)
+	_create_deck_items(char_deck, alive, current_index)
 
 func _clear_deck_items():
 	for item in deck_items:
@@ -43,8 +43,9 @@ func _clear_deck_items():
 			item.queue_free()
 	deck_items.clear()
 
-func _create_deck_items(char_deck: Array, current_index: int):
+func _create_deck_items(char_deck: Array, alive: Array[bool], current_index: int):
 	print("Creating deck items...")
+	print("Character deck: ", alive)
 
 	for i in range(char_deck.size()):
 		var char_type = char_deck[i]
@@ -59,9 +60,10 @@ func _create_deck_items(char_deck: Array, current_index: int):
 		# Set animation and scale the sprite based on character type and state
 		var animated_sprite = deck_item.get_node("AnimatedSprite2D") as AnimatedSprite2D
 		if animated_sprite:
-			var is_current = (i == current_index)
-			var is_dead = (i < current_index)  # Characters below current index are dead
-			var animation_name = _get_animation_name(char_type, is_dead)
+			var is_dead = !alive[i]
+			var animation_name = char_type
+			if is_dead:
+				animation_name += "_dead"
 			if animated_sprite.sprite_frames.has_animation(animation_name):
 				animated_sprite.animation = animation_name
 				if i == current_index:
@@ -82,38 +84,6 @@ func _create_deck_items(char_deck: Array, current_index: int):
 		# Add border for current character
 		if i == current_index:
 			_add_current_border(deck_item)
-
-func _get_animation_name(char_type: int, is_dead: bool) -> String:
-	var base_name = ""
-	match char_type:
-		0: # FIRE
-			base_name = "fire"
-		1: # WIND
-			base_name = "wind"
-		2: # EARTH
-			base_name = "earth"
-		3: # WATER
-			base_name = "water"
-		_:
-			base_name = "fire"  # fallback
-	
-	# Use dead animation for characters below current index
-	if is_dead:
-		return base_name + "_dead"
-	else:
-		return base_name
-
-func _get_char_type_from_animation(animation_name: String) -> int:
-	if "fire" in animation_name:
-		return 0  # FIRE
-	elif "wind" in animation_name:
-		return 1  # WIND
-	elif "earth" in animation_name:
-		return 2  # EARTH
-	elif "water" in animation_name:
-		return 3  # WATER
-	else:
-		return 0  # fallback to FIRE
 
 func _add_current_border(deck_item: Control):
 	# Remove existing border first

@@ -368,7 +368,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_igf85")
 }],
 "loop": true,
-"name": &"fire",
+"name": &"Fire",
 "speed": 24.0
 }, {
 "frames": [{
@@ -376,7 +376,7 @@ animations = [{
 "texture": ExtResource("2_0neus")
 }],
 "loop": true,
-"name": &"fire_dead",
+"name": &"Fire_dead",
 "speed": 5.0
 }, {
 "frames": [{
@@ -525,7 +525,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_n47x2")
 }],
 "loop": true,
-"name": &"wind",
+"name": &"Wind",
 "speed": 24.0
 }, {
 "frames": [{
@@ -533,7 +533,7 @@ animations = [{
 "texture": ExtResource("2_0neus")
 }],
 "loop": true,
-"name": &"wind_dead",
+"name": &"Wind_dead",
 "speed": 5.0
 }]
 
@@ -548,5 +548,5 @@ grow_vertical = 2
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.184491, 0.184491)
 sprite_frames = SubResource("SpriteFrames_7be0f")
-animation = &"fire_dead"
-autoplay = "fire"
+animation = &"Wind_dead"
+autoplay = "Fire"

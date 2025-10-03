@@ -16,6 +16,10 @@ var character_deck_alive : Array[bool] = []
 var character_deck_idx : int = 0
 var current_player : Node = null
 
+# Signal for HUD communication
+signal deck_update(char_deck: Array[String], alive: Array[bool], idx: int)
+
+
 var can_switch := true
 var moved_once := false
 var spawn_pos : Vector2
@@ -87,6 +91,8 @@ func _ready():
 	hud.visible = true
 	hud_layer.add_child(hud)
 
+	deck_update.connect(hud._on_deck_update)
+
 	
 	# сигналы меню
 	death_menu.apply_pressed.connect(_death_apply_pressed)
@@ -106,6 +112,8 @@ func _start_game():
 
 	# Инициализируем гравитацию (можно держать в Project Settings)
 	ProjectSettings.set_setting("physics/2d/default_gravity", 2000)
+
+	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
@@ -137,6 +145,8 @@ func _switch_next():
 		if character_deck_alive[next]:
 			break	
 	_replace_current_with(next)
+
+	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 
 func _replace_current_with(next_idx: int):
 	if current_player:
