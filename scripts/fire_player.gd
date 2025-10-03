@@ -17,6 +17,9 @@ func _death_effect() -> void:
 		_erase_destructibles_around(global_position, explosion_radius_px)
 	await get_tree().process_frame
 
+func death_hint() -> String:
+	return "This character will explode magma blocks around him"
+
 func _erase_destructibles_around(world_pos: Vector2, radius_px: float) -> void:
 	var local_center: Vector2 = tiles_layer.to_local(world_pos)
 	var cell_center: Vector2i = tiles_layer.local_to_map(local_center)

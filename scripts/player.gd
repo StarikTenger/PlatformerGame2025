@@ -52,6 +52,10 @@ func _freeze_on_death(f: bool) -> void:
 func _death_effect() -> void:
 	await get_tree().process_frame
 
+func death_hint() -> String:
+	# дефолтный персонаж — без особого эффекта
+	return "This character does not leave any effect after death"
+
 func _physics_process(delta):
 	if _frozen_on_death:
 		return
