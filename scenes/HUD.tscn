@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvcrk8ij1o7xk"]
+
+[ext_resource type="Script" uid="uid://qtklbsqcb7t8" path="res://scripts/hud.gd" id="1_qpvh6"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_qpvh6")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 370.0
+offset_bottom = 137.0

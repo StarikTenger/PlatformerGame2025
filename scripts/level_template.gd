@@ -5,7 +5,7 @@ const CHAR_SCENES := {
 	"Fire": preload("res://scenes/fire_player.tscn"),
 }
 
-const SPAWN_NAME := "Spawn"               # Marker2D
+const SPAWN_NAME := "Spawn" # Marker2D
 const CAMERA_SCENE := preload("res://scenes/Camera.tscn")
 const DEATH_MENU_SCENE := preload("res://scenes/DeathMenu.tscn")
 const CHARACTER_MENU_SCENE := preload("res://scenes/CharacterMenu.tscn")
@@ -16,10 +16,10 @@ var current_player : Node = null
 
 var can_switch := true
 var moved_once := false
-var spawn_pos : Vector2
+var spawn_pos: Vector2
 
-var camera_node : Node = null   # камера сцены, чтобы переназначать target
-var death_menu : Control = null
+var camera_node: Node = null # камера сцены, чтобы переназначать target
+var death_menu: Control = null
 var death_layer: CanvasLayer = null
 
 var character_menu : Control = null
@@ -87,6 +87,21 @@ func _start_game():
 	# Инициализируем гравитацию (можно держать в Project Settings)
 	ProjectSettings.set_setting("physics/2d/default_gravity", 2000)
 
+	# Initialize HUD layer
+	hud_layer = CanvasLayer.new()
+	hud_layer.layer = 50  # Above gameplay but below death menu (layer 100)
+	add_child(hud_layer)
+	
+	var HUD_scene := preload("res://scenes/HUD.tscn")
+	hud = HUD_scene.instantiate()
+	hud_layer.add_child(hud)
+	
+	# Connect HUD signals
+	roster_updated.connect(hud._on_roster_updated)
+	
+	# Send initial roster data
+	_update_hud_roster()
+
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
 	if can_switch and event.is_action_pressed("switch_char"):
@@ -98,15 +113,17 @@ func _unhandled_input(event):
 func _switch_next():
 	if roster.is_empty():
 		return
-	var next := (current_idx + 1) % roster.size()
+	var next := (roster_idx + 1) % roster.size()
 	_replace_current_with(next)
 
 func _replace_current_with(next_idx: int):
 	if current_player:
 		current_player.queue_free()
 		current_player = null
-	current_idx = next_idx
-	_spawn_and_bind(roster[current_idx])
+	roster_idx = next_idx
+	_spawn_and_bind(roster[roster_idx])
+	# Update HUD
+	roster_updated.emit(char_deck, roster_idx)
 
 func _spawn_and_bind(packed: PackedScene):
 	var p := packed.instantiate()
@@ -134,12 +151,11 @@ func _spawn_and_bind(packed: PackedScene):
 func _on_player_moved_once():
 	if moved_once: return
 	moved_once = true
-	can_switch = false  # фиксируем выбор до смерти
+	can_switch = false # фиксируем выбор до смерти
 
 func _on_player_death_request(player: Node):
 	print("[death_request] from: ", player.name)
 	_pending_player = player
-	_pending_scene_idx = current_idx
 	
 	var allow_apply: bool = roster.size() > 1
 	var hint: String
@@ -161,17 +177,19 @@ func _death_apply_pressed():
 	if _pending_player:
 		await _pending_player.apply_death_effect()
 		_pending_player.finalize_death()
-		if roster.size() > 0:
-			roster.remove_at(_pending_scene_idx)
 		_pending_player = null
 		_pending_scene_idx = -1
 
-	if roster.is_empty():
+	# Move to the next character in the roster
+	roster_idx += 1
+	if roster_idx >= roster.size():
 		_restart_level()
 		return
 
-	current_idx = min(current_idx, roster.size()-1)
-	_spawn_and_bind(roster[current_idx])
+	roster_idx = min(roster_idx, roster.size() - 1)
+	_spawn_and_bind(roster[roster_idx])
+	# Update HUD after roster change
+	_update_hud_roster()
 
 func _death_skip_pressed():
 	# НЕ применять эффект и НЕ вычеркивать из ростера — респавним того же персонажа
@@ -185,7 +203,7 @@ func _death_skip_pressed():
 		_pending_scene_idx = -1
 
 	# респавним того же типа (индекс не меняем)
-	_spawn_and_bind(roster[current_idx])
+	_spawn_and_bind(roster[roster_idx])
 
 func _death_restart_pressed():
 	_show_death_menu(false)
@@ -220,3 +238,22 @@ func _restart_level():
 
 func _on_player_died():
 	pass
+
+func _update_hud_roster():
+	# Pass char_deck and current index to HUD
+	roster_updated.emit(char_deck, roster_idx)
+	print("Emitted roster_updated with deck size ", char_deck.size(), " and current index ", roster_idx)
+
+func _get_char_type_from_scene(scene: PackedScene) -> CharType:
+	# Determine character type from scene path
+	var path = scene.resource_path
+	if "fire_player" in path:
+		return CharType.FIRE
+	elif "wind_player" in path:
+		return CharType.WIND
+	elif "earth_player" in path:
+		return CharType.EARTH
+	elif "water_player" in path:
+		return CharType.WATER
+	else:
+		return CharType.FIRE  # default fallback
