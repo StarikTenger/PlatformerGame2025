@@ -41,3 +41,7 @@ func _center_panel() -> void:
 	var vp := get_viewport_rect().size
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)  # используем position/size
 	panel.position = (vp - panel.size) * 0.5
+
+func set_context(allow_apply: bool, hint: String) -> void:
+	$Center/Panel/Margin/VBox/Title.text = hint
+	$Center/Panel/Margin/VBox/BtnApply.disabled = not allow_apply
