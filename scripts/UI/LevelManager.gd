@@ -1,26 +1,58 @@
 extends Control
 
 @export var level_button_scene: PackedScene
-@onready var grid = $GridContainer
+@onready var grid: GridContainer = $GridContainer
+var current_level: int = 0
 
-var levels = [
-	{"id": 1, "level_scene": "res://levels/level_template.tscn"},
-	{"id": 2, "level_scene": "res://levels/level_template.tscn"},
-	{"id": 3, "level_scene": "res://levels/level_template.tscn"},
+var level_scenes: Array[String] = [
+	"res://levels/level_template.tscn",
+	"res://levels/level_0.tscn",
+	"res://levels/level_template.tscn",
 ]
+
+var levels_by_id: Dictionary = {}
 
 func _ready():
 	print("Start")
+	# Check if grid is properly loaded
+	if not grid:
+		print("ERROR: GridContainer not found!")
+		grid = get_node("GridContainer")
+		if not grid:
+			print("ERROR: Could not find GridContainer node")
+			return
+	print("GridContainer found successfully")
 	populate_levels()
 
 func populate_levels():
-	for level_data in levels:
+	if not grid:
+		print("ERROR: Cannot populate levels - GridContainer is null")
+		return
+		
+	level_button_scene = preload("res://scenes/UI/LevelButton.tscn")
+	for i in range(level_scenes.size()):
 		var btn = level_button_scene.instantiate()
-		btn.setup(level_data)
+		btn.setup(i)
 		btn.level_selected.connect(_on_level_selected)
 		grid.add_child(btn)
+	print("Populated ", level_scenes.size(), " level buttons")
 
+func _launch_level(level_id: int):
+	print("Launching level ", level_id)
+	var level_scene = level_scenes[level_id]
+
+	get_tree().change_scene_to_file(level_scene)
+
+	
 func _on_level_selected(level_id: int):
+	current_level = level_id
 	print("Loading level ", level_id)
-	# здесь: смена сцены на сам уровень
-	# get_tree().change_scene_to_file("res://levels/level_%d.tscn" % level_id)
+	_launch_level(level_id)
+
+func next_level():
+	if current_level + 1 < level_scenes.size():
+		current_level += 1
+		print("Loading next level ", current_level)
+		_launch_level(current_level)
+	else:
+		print("No more levels available.")

@@ -1,6 +1,7 @@
 # Player template. The exact playable characters are to be inherited from this script.
 
 extends CharacterBody2D
+class_name PlayerBase
 
 signal moved_once
 signal died
@@ -11,11 +12,19 @@ signal death_request(player: Node)
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
 
+enum PlayerType {
+	FIRE,
+	WIND,
+	EARTH,
+    UNKNOWN,
+}
+
 func _ready() -> void:
 	if tiles_map == null:
 		var lvl := get_tree().current_scene
 		tiles_map = lvl.find_child("Tiles", true, false) as TileMapLayer
 	add_to_group("liftable")
+	add_to_group("player")
 
 var hp : int = 1
 var speed : float = 800.0
@@ -103,6 +112,8 @@ func _physics_process(delta):
 	var friction_k = 0.2 if is_on_floor() else 0.05
 
 	velocity.x = lerp(velocity.x, velocity_desired, friction_k)
+	
+	# hard movement
 	if input_direction != 0 and !is_on_floor():
 		velocity.x = velocity_desired
 
@@ -156,3 +167,6 @@ func set_death_immunity(seconds: float = 0.5) -> void:
 
 func _can_die() -> bool:
 	return Time.get_unix_time_from_system() >= _death_immunity_until_s
+
+func get_player_type() -> PlayerType:
+	return PlayerType.UNKNOWN

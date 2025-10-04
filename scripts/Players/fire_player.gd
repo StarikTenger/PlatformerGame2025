@@ -1,4 +1,5 @@
-extends "res://scripts/Players/player.gd"
+extends PlayerBase
+class_name FirePlayer
 
 @export var explosion_radius: int = 4
 var explosion_radius_px = explosion_radius * 100.0
@@ -59,3 +60,6 @@ func _erase_destructibles_around(world_pos: Vector2, radius_px: float) -> void:
 			if td != null and td.get_custom_data(DESTRUCT_FLAG) == true:
 				tiles_layer.erase_cell(cell)
 				_spawn_explosion(wc)
+
+func get_player_type() -> PlayerType:
+	return PlayerType.FIRE
