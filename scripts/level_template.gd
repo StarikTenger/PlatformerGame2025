@@ -97,9 +97,9 @@ func _ready():
 
 	
 	# сигналы меню
-	death_menu.apply_pressed.connect(_death_apply_pressed)
-	death_menu.skip_pressed.connect(_death_skip_pressed)
-	death_menu.restart_pressed.connect(_death_restart_pressed)
+	death_menu.apply_pressed.connect(_continue_from_death_menu)
+	death_menu.skip_pressed.connect(_death_restart_pressed)
+	death_menu.restart_pressed.connect(_death_main_menu_pressed)
 
 func _start_game():
 	var chosen : Array[String]
@@ -124,6 +124,8 @@ func _unhandled_input(event):
 	if can_switch and event.is_action_pressed("switch_char"):
 		print("test11")
 		_switch_next()
+	if event.is_action_pressed("esc_menu"):
+		_show_death_menu(true)
 	if event.is_action_pressed("debug_menu"): # например, привяжи F1
 		_show_death_menu(true)
 
@@ -205,7 +207,8 @@ func _on_player_death_request(player: Node):
 		hint = "The characters are over"
 	
 	death_menu.set_context(allow_apply, hint)
-	_show_death_menu(true)
+	#_show_death_menu(true)
+	_death_apply_pressed()
 
 func _death_apply_pressed():
 	
@@ -230,11 +233,15 @@ func _death_apply_pressed():
 		_pending_scene_idx = -1
 
 	if is_deck_empty():
-		_restart_level()
+		#_restart_level()
+		_show_death_menu(true)
 		return
 
 	_switch_next()
 	print("Apply death", character_deck_alive)
+
+func _continue_from_death_menu():
+	_show_death_menu(false)
 
 func _death_skip_pressed():
 	# НЕ применять эффект и НЕ вычеркивать из ростера — респавним того же персонажа
@@ -253,6 +260,10 @@ func _death_skip_pressed():
 func _death_restart_pressed():
 	_show_death_menu(false)
 	_restart_level()
+
+func _death_main_menu_pressed():
+	_show_death_menu(false)
+	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
 
 func _show_death_menu(show: bool):
 	get_tree().paused = show
