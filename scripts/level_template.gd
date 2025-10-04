@@ -108,6 +108,7 @@ func _ready():
 	death_menu.skip_pressed.connect(_death_restart_pressed)
 	death_menu.restart_pressed.connect(_death_main_menu_pressed)
 
+
 	var level_overview_position_node: Variant = get_node_or_null("LevelOverview")
 	if level_overview_position_node != null:
 		if level_overview_position_node is LevelOverviewNode:
@@ -138,9 +139,8 @@ func _unhandled_input(event):
 	if can_switch and event.is_action_pressed("switch_char"):
 		print("test11")
 		_switch_next()
-	if event.is_action_pressed("esc_menu"):
-		_show_death_menu(true)
-	if event.is_action_pressed("debug_menu"): # например, привяжи F1
+	if not character_menu.visible and not get_tree().paused and event.is_action_pressed("esc_menu"):
+		death_menu.set_context(true, "Game on pause")
 		_show_death_menu(true)
 	if event.is_action_pressed("level_overview"):
 		if level_overview_zoom != 0 and player_alive:
@@ -291,15 +291,10 @@ func _death_main_menu_pressed():
 	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
 
 func _show_death_menu(show: bool):
-	get_tree().paused = show
-	death_menu.visible = show
 	if show:
-		_prev_mouse_mode = Input.get_mouse_mode()
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		(death_menu as Node).call_deferred("open")
+		death_menu.open()
 	else:
-		Input.set_mouse_mode(_prev_mouse_mode)
-		(death_menu as Node).call_deferred("close")
+		death_menu.close_menu()
 		
 func _show_character_menu(show: bool):
 	get_tree().paused = show
