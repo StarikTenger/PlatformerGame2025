@@ -12,9 +12,8 @@ explosion_radius = 4
 position = Vector2(2, -1)
 scale = Vector2(0.292, 0.274)
 sprite_frames = ExtResource("3_lnaqo")
-animation = &"jump_up"
+animation = &"walk"
 autoplay = "idle"
-frame_progress = 0.295234
 
 [node name="CollisionShape2D2" parent="." index="2"]
 position = Vector2(0, 0)

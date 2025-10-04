@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cvdkrw1btgn2q"]
 
-[ext_resource type="Script" path="res://scripts/switch.gd" id="1_1i7pn"]
+[ext_resource type="Script" uid="uid://s5d2w4v116v8" path="res://scripts/switch.gd" id="1_1i7pn"]
 [ext_resource type="Texture2D" uid="uid://bwxpe6qad84pf" path="res://resources/switch_off.png" id="2_nnoiq"]
 [ext_resource type="Texture2D" uid="uid://85khun4rv6lq" path="res://resources/switch_on.png" id="3_4m6b1"]
 
