@@ -114,6 +114,8 @@ func _physics_process(delta):
 		die()
 		return
 
+	var moving_down := Input.is_action_pressed("move_down")
+
 	# Animation handling
 	var anim_player = $Sprite2D
 	if is_on_floor():
@@ -141,8 +143,12 @@ func _physics_process(delta):
 	# Wall climb логика
 	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall:
 		# Проверяем столкновения со стенами
-		var wall_left = is_on_wall() and player_direction == PlayerDirection.LEFT
-		var wall_right = is_on_wall() and player_direction == PlayerDirection.RIGHT
+		var wall_left = is_on_wall() and input_direction < 0
+		var wall_right = is_on_wall() and input_direction > 0
+
+		# Если хотим чтобы персонаж прилипал к стене без нахятия клавиши движения
+		# var wall_left = is_on_wall() and player_direction == PlayerDirection.LEFT
+		# var wall_right = is_on_wall() and player_direction == PlayerDirection.RIGHT
 
 		if wall_left or wall_right:
 			# Начинаем wall climb
@@ -217,11 +223,22 @@ func _physics_process(delta):
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
 			can_double_jump = false
-			
+
+	# Обработка действия "движения вниз"
+	if moving_down:
+		# Отпустить стену если игрок на ней висит
+		if is_on_the_wall:
+			print("Отпустить стену")
+			velocity.y = 0
+			is_on_the_wall = false
+			wall_climb_direction = 0
 
 	# Применяем гравитацию только если не в состоянии dash или wall climb
 	if not is_dashing and not is_on_the_wall:
 		velocity.y += gravity * delta
+		# Ускоренное падение вниз при зажатии вниз
+		if moving_down and not is_on_floor():
+			velocity.y += gravity * delta
 	
 	move_and_slide()
 	
