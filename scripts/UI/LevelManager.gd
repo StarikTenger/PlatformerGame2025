@@ -35,6 +35,7 @@ func populate_levels():
 		btn.setup(i)
 		btn.level_selected.connect(_on_level_selected)
 		grid.add_child(btn)
+	grid.get_child(0).grab_focus()
 	print("Populated ", level_scenes.size(), " level buttons")
 
 func _launch_level(level_id: int):

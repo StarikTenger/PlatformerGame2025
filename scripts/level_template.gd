@@ -287,6 +287,7 @@ func _death_restart_pressed():
 	_restart_level()
 
 func _death_main_menu_pressed():
+	SaveState.set_restarted(false)
 	_show_death_menu(false)
 	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
 
@@ -308,6 +309,7 @@ func _show_character_menu(show: bool):
 		(death_menu as Node).call_deferred("close")
 
 func _restart_level():
+	SaveState.set_restarted(true)
 	var ml := Engine.get_main_loop()
 	if ml is SceneTree:
 		(ml as SceneTree).reload_current_scene()

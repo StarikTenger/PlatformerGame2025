@@ -18,11 +18,17 @@ func _ready():
 		var tex = slot.sprite.sprite_frames.get_frame_texture("idle", 0)
 		max_height = max(max_height, tex.get_size().y * slot.sprite.scale.y)
 	$Margin/Spacer.custom_minimum_size = Vector2(0, max_height)
+	if not SaveState.get_restarted():
+		var first_picker: PanelContainer = $Margin/HBoxContainer.get_child(0)
+		first_picker.get_focus()
+	else:
+		$Margin/StartButton.grab_focus()
 
 func _on_start_pressed():
 	chosen = []
 	for slot in hbox.get_children():
-		var char_name = slot.selector.get_item_text(slot.selector.selected)
+		# get char_name
+		var char_name = slot.characters[slot.char_idx][0]
 		chosen.append(char_name)
 	emit_signal("start_pressed")
 	# теперь можно передать chosen в level_template
@@ -39,3 +45,8 @@ func load_chosen(_chosen : Array[String]):
 			cnt += 1
 			print (char_name)
 			slot.set_character(char_name)
+
+
+func _on_main_menu_button_pressed() -> void:
+	SaveState.set_restarted(false)
+	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
