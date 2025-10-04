@@ -9,5 +9,4 @@ script = ExtResource("2_20l7q")
 
 [node name="Sprite2D" parent="." index="0"]
 sprite_frames = ExtResource("2_apmm2")
-animation = &"idle"
-frame_progress = 0.350285
+animation = &"idle_1"
