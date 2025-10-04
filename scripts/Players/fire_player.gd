@@ -11,6 +11,8 @@ var tiles_layer: TileMapLayer
 
 func _ready() -> void:
 	super()
+	enabled_dash = true
+
 	# ищем Tiles в сцене уровня
 	var lvl = get_tree().current_scene
 	tiles_layer = lvl.find_child("Tiles", true, false) as TileMapLayer

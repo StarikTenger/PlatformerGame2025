@@ -47,9 +47,8 @@ var _dead: bool = false
 var _frozen_on_death := false
 
 # Переопределяемые наследниками флаги
-# TODO: ПОСТАВИТЬ false
-var enabled_double_jumps := true
-var enabled_dash := true 
+var enabled_double_jumps := false
+var enabled_dash := false 
 
 
 func die() -> void:
@@ -149,16 +148,10 @@ func _physics_process(delta):
 			velocity.y = 0
 	
 	# Инициируем новый dash
-	var dash_direction = 0
 	if enabled_dash and not is_dashing and time_since_last_dash >= delay_between_dashes:
-		if Input.is_action_just_pressed("dash_right"):
-			dash_direction = 1
-		elif Input.is_action_just_pressed("dash_left"):
-			dash_direction = -1
-
-		if dash_direction != 0:
+		if Input.is_action_just_pressed("dash") and input_direction != 0:
 			# TODO: анимация дэша
-			velocity.x = dash_direction * dash_speed
+			velocity.x = input_direction * dash_speed
 			time_since_last_dash = 0.0
 			is_dashing = true
 			dash_time_left = dash_duration
