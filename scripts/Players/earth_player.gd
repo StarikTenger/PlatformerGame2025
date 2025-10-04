@@ -1,4 +1,5 @@
-extends "res://scripts/Players/player.gd"
+extends PlayerBase
+class_name EarthPlayer
 
 var platform_scene : PackedScene
 
@@ -17,3 +18,6 @@ func _ready() -> void:
 
 func death_hint() -> String:
 	return "This character will leave a platform at the place of death"
+
+func get_player_type() -> PlayerType:
+	return PlayerType.EARTH

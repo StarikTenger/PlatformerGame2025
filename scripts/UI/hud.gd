@@ -1,7 +1,7 @@
 extends Control
 
 # Configuration parameters for deck display
-const DECK_ITEM_SIZE = Vector2(100, 100)  # Size of each character deck item
+const DECK_ITEM_SIZE = Vector2(80, 80)  # Size of each character deck item
 const DECK_CONTAINER_POSITION = Vector2(20, 20)  # Position from top-left corner
 const DECK_ITEM_SEPARATION = 20  # Distance between deck items in pixels
 const DECK_BORDER_WIDTH = 3  # Width of the current character border
@@ -58,44 +58,53 @@ func _create_deck_items(char_deck: Array, alive: Array[bool], current_index: int
 		# Set up the item
 		deck_item.custom_minimum_size = DECK_ITEM_SIZE
 		deck_item.size = DECK_ITEM_SIZE
-		deck_container.add_child(deck_item)
-		deck_items.append(deck_item)
+
 		
 		# Set animation and scale the sprite based on character type and state
 		var animated_sprite = deck_item.get_node("AnimatedSprite2D") as AnimatedSprite2D
-		if animated_sprite:
-			var is_dead = !alive[i]
-			var animation_name = char_type
-			if is_dead:
-				animation_name += "_dead"
-			if animated_sprite.sprite_frames.has_animation(animation_name):
-				animated_sprite.animation = animation_name
-				if i == current_index:
-					animated_sprite.play()
-				else:
-					# freeze animation for non-current characters
-					animated_sprite.frame = 0
-					animated_sprite.stop()
-			
-			# Scale the sprite to fit within the deck item size
-			# The original sprite is quite large (1920x1080), so we need to scale it down significantly
-			var sprite_scale = min(DECK_ITEM_SIZE.x / 1920.0, DECK_ITEM_SIZE.y / 1080.0)
-			animated_sprite.scale = Vector2(sprite_scale, sprite_scale)
-			
-			# Center the sprite within the control
-			animated_sprite.position = DECK_ITEM_SIZE * 0.5
+		
+		# Scale the sprite to fit within the deck item size
+		# The original sprite is quite large (1920x1080), so we need to scale it down significantly
+		var sprite_scale = min(DECK_ITEM_SIZE.x / 1920.0, DECK_ITEM_SIZE.y / 1080.0)
+		if  i != current_index:
+			sprite_scale *= 0.75
+		else:
+			sprite_scale *= 1.2
+		animated_sprite.scale = Vector2(sprite_scale, sprite_scale)
+		
+
+		# Center the sprite within the control
+		animated_sprite.position = DECK_ITEM_SIZE * 0.5
 		
 		# Add border for current character
 		if i == current_index:
 			_add_current_border(deck_item)
 
-		# Adjust DeckPanel size and position to fit all deck items
-		var deck_panel = get_node_or_null("DeckPanel")
-		if deck_panel:
-			var total_width = char_deck.size() * DECK_ITEM_SIZE.x + max(0, char_deck.size() - 1) * DECK_ITEM_SEPARATION
-			deck_panel.size = Vector2(total_width, DECK_ITEM_SIZE.y)
-			deck_panel.position = DECK_CONTAINER_POSITION
-		deck_panel.visible = true
+		var is_dead = !alive[i]
+		var animation_name = char_type
+		if is_dead:
+			animation_name += "_dead"
+		if animated_sprite.sprite_frames.has_animation(animation_name):
+			animated_sprite.animation = animation_name
+			if i == current_index:
+				animated_sprite.play()
+			else:
+				# freeze animation for non-current characters
+				animated_sprite.frame = 0
+				animated_sprite.stop()
+
+		# Add the item to the container and track it
+		deck_container.add_child(deck_item)
+		deck_items.append(deck_item)
+
+	# Adjust DeckPanel size and position to fit all deck items
+	var deck_panel = get_node_or_null("DeckPanel")
+	if deck_panel:
+		var total_width = char_deck.size() * DECK_ITEM_SIZE.x + max(0, char_deck.size() - 1) * DECK_ITEM_SEPARATION
+		deck_panel.size = Vector2(total_width, DECK_ITEM_SIZE.y)
+		deck_panel.position = DECK_CONTAINER_POSITION
+	deck_panel.visible = true
+
 
 func _add_current_border(deck_item: Control):
 	# Remove existing border first
