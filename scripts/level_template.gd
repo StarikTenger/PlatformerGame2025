@@ -225,13 +225,15 @@ func _on_player_death_request(player: PlayerBase):
 		hint = "The characters are over"
 	
 	death_menu.set_context(allow_apply, hint)
-	#_show_death_menu(true)
-	_death_apply_pressed()
 
 	player_alive = false
 	if camera_node:
 		camera_node.hard_reset_target_state()
 		camera_node.unbind_player()
+
+	#_show_death_menu(true)
+	_death_apply_pressed()
+
 
 func _death_apply_pressed():
 	
@@ -244,12 +246,13 @@ func _death_apply_pressed():
 		_pending_player.finalize_death()
 		character_deck_alive[_pending_scene_idx] = false
 		
+		print("CAMERA NODE: ", camera_node)
 		if camera_node:
-			# если скрипт огненного — включаем тряску	
+			# если скрипт огненного — включаем тряску
+			# camera_node.hard_reset_target_state()
+			camera_node.set_target_state(death_pos, 1, 0.7, 0.7)
 			if _pending_player.get_player_type() == PlayerBase.PlayerType.FIRE:
 				camera_node.shake(1)
-			camera_node.hard_reset_target_state()
-			camera_node.set_target_state(death_pos, 1, 0.7, 0.7)
 			await get_tree().create_timer(1.5).timeout
 
 		_pending_player = null
