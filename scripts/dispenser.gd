@@ -50,12 +50,8 @@ func _fire() -> void:
 	get_parent().add_child(p)
 
 func _find_player() -> Node2D:
-	# самый простой способ — камера уже знает current_player
-	var cam := get_tree().current_scene.find_child("Camera", true, false)
-	if cam and "player" in cam and cam.player:
-		return cam.player as Node2D
 	# запасной — берём первого CharacterBody2D в сцене с методом die()
 	for n in get_tree().current_scene.get_children():
-		if n is CharacterBody2D and n.has_method("die"):
+		if n is PlayerBase:
 			return n
 	return null
