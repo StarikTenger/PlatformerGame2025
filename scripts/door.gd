@@ -7,7 +7,7 @@ extends StaticBody2D
 @export var ease_up: bool = true              # плавное ускор/замедление
 @export var disable_collision_on_open: bool = true  # сразу убрать коллизию при открытии
 
-@onready var _coll: CollisionShape2D = $CollisionShape2Dц
+@onready var _coll: CollisionShape2D = $CollisionShape2D
 
 var is_open: bool = false
 var _opening: bool = false
