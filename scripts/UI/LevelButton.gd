@@ -3,16 +3,13 @@ extends TextureButton
 signal level_selected(level_id: int)
 
 var level_id: int
-var level_scene: String
 
-func setup(data: Dictionary):
-	level_id = data["id"] 
-	level_scene = data["level_scene"]
+func setup(id: int):
+	level_id = id
 
 	if has_node("Label"):
 		var lbl = $Label
-		lbl.text = str(level_id)
+		lbl.text = str(level_id + 1)
 
 func _pressed():
 	emit_signal("level_selected", level_id)
-	get_tree().change_scene_to_file(level_scene)
