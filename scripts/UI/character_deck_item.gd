@@ -1,77 +1,33 @@
 extends Control
-class_name CharacterDeckItem
 
-@export var character_type: level_template.CharType
-@export var is_current: bool = false
-@export var item_index: int = 0
+@onready var animation_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@onready var background: Panel = $Background
-@onready var icon: TextureRect = $Icon
-@onready var border: Panel = $Border
-
-# Character type colors and icons
-const TYPE_COLORS = {
-	level_template.CharType.FIRE: Color.RED,
-	level_template.CharType.WIND: Color.CYAN,
-	level_template.CharType.EARTH: Color.BROWN,
-	level_template.CharType.WATER: Color.BLUE
-}
-
-const TYPE_NAMES = {
-	level_template.CharType.FIRE: "F",
-	level_template.CharType.WIND: "W", 
-	level_template.CharType.EARTH: "E",
-	level_template.CharType.WATER: "A"
-}
+var max_width = 0
+var max_height = 0
+var default_scale: Vector2 = Vector2.ONE
 
 func _ready():
-	# Set up the item appearance
-	_setup_appearance()
+	# Find the largest frame size among all animations
+	for anim in animation_sprite.sprite_frames.get_animation_names():
+		var frame_count = animation_sprite.sprite_frames.get_frame_count(anim)
+		for i in range(frame_count):
+			var tex = animation_sprite.sprite_frames.get_frame_texture(anim, i)
+			if tex:
+				max_width = max(max_width, tex.get_width())
+				max_height = max(max_height, tex.get_height())
 
-func _setup_appearance():
-	if not background or not border:
-		return
-		
-	# Set background color based on character type
-	var style_bg = StyleBoxFlat.new()
-	style_bg.bg_color = TYPE_COLORS.get(character_type, Color.GRAY)
-	style_bg.corner_radius_top_left = 4
-	style_bg.corner_radius_top_right = 4
-	style_bg.corner_radius_bottom_left = 4
-	style_bg.corner_radius_bottom_right = 4
-	background.add_theme_stylebox_override("panel", style_bg)
-	
-	# Set border for current character
-	var style_border = StyleBoxFlat.new()
-	if is_current:
-		style_border.bg_color = Color.TRANSPARENT
-		style_border.border_color = Color.WHITE
-		style_border.border_width_left = 3
-		style_border.border_width_right = 3
-		style_border.border_width_top = 3
-		style_border.border_width_bottom = 3
-	else:
-		style_border.bg_color = Color.TRANSPARENT
-		style_border.border_color = Color.TRANSPARENT
-	
-	style_border.corner_radius_top_left = 4
-	style_border.corner_radius_top_right = 4
-	style_border.corner_radius_bottom_left = 4
-	style_border.corner_radius_bottom_right = 4
-	border.add_theme_stylebox_override("panel", style_border)
-	
-	# Set icon text (simple letter representation)
-	if icon and icon is Label:
-		(icon as Label).text = TYPE_NAMES.get(character_type, "?")
-		(icon as Label).add_theme_color_override("font_color", Color.WHITE)
+	print("Max frame size: ", max_width, "x", max_height)
 
-func update_current_status(current: bool):
-	is_current = current
-	_setup_appearance()
-
-func set_character_data(type: level_template.CharType, index: int, current: bool):
-	character_type = type
-	item_index = index
-	is_current = current
-	if is_inside_tree():
-		_setup_appearance()
+	default_scale = animation_sprite.scale
+	
+func _physics_process(delta):
+	# Detect the current animation and scale it to fit max sizes
+	var current_anim = animation_sprite.animation
+	var current_frame = animation_sprite.frame
+	var current_tex = animation_sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
+	if current_tex and max_width > 0 and max_height > 0:
+		var scale_x = float(max_width) / current_tex.get_width()
+		var scale_y = float(max_height) / current_tex.get_height()
+		var scale_factor = min(scale_x, scale_y)
+		animation_sprite.scale = default_scale * scale_factor
+		# animation_sprite.position = Vector2((max_width - current_tex.get_width() * scale_factor) / 2, (max_height - current_tex.get_height() * scale_factor) / 2)
