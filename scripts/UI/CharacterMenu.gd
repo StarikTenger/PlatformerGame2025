@@ -45,3 +45,8 @@ func load_chosen(_chosen : Array[String]):
 			cnt += 1
 			print (char_name)
 			slot.set_character(char_name)
+
+
+func _on_main_menu_button_pressed() -> void:
+	SaveState.set_restarted(false)
+	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
