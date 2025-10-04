@@ -110,7 +110,7 @@ func _physics_process(delta):
 		if input_direction == 0:
 			anim_player.play("idle")
 		else:
-			anim_player.play("walking")
+			anim_player.play("walk")
 			anim_player.flip_h = input_direction < 0
 	else:
 		if input_direction == 0:
