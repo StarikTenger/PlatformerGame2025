@@ -33,3 +33,8 @@ func _is_player(body: Node) -> bool:
 func _apply_look() -> void:
 	if _sprite:
 		_sprite.texture = (on_texture if _triggered else off_texture)
+		var camera_node: MainCamera = get_parent().camera_node
+		if camera_node:
+			camera_node.set_target_state(door.position, 1, 0.7, 0.7)
+			await get_tree().create_timer(1.5).timeout
+			camera_node.reset_target_state()

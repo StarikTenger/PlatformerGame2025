@@ -16,7 +16,7 @@ enum PlayerType {
 	FIRE,
 	WIND,
 	EARTH,
-    UNKNOWN,
+	UNKNOWN,
 }
 
 func _ready() -> void:
