@@ -57,7 +57,7 @@ var _frozen_on_death := false
 # Переопределяемые наследниками флаги
 var enabled_double_jumps := false
 var enabled_dash := false
-var enabled_wall_climb := true # TODO: false
+var enabled_wall_climb := false
 
 
 func die() -> void:
