@@ -3,11 +3,11 @@ class_name Door
 extends StaticBody2D
 
 @export var open_distance: float = 250.0       # на сколько пикселей поднять ворота
-@export var open_duration: float = 0.25       # время анимации (сек)
+@export var open_duration: float = 2       # время анимации (сек)
 @export var ease_up: bool = true              # плавное ускор/замедление
 @export var disable_collision_on_open: bool = true  # сразу убрать коллизию при открытии
 
-@onready var _coll: CollisionShape2D = $CollisionShape2Dц
+@onready var _coll: CollisionShape2D = $CollisionShape2D
 
 var is_open: bool = false
 var _opening: bool = false
