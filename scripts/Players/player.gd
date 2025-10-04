@@ -29,13 +29,22 @@ func _ready() -> void:
 var hp : int = 1
 var speed : float = 800.0
 var jump_height : float = 250.0
+var double_jump_height : float = 200.0
 var delay_between_jumps : float = 0.4
 var time_since_last_jump : float = 0.0
+var can_double_jump := true
+
 var _death_immunity_until_s: float = 0.0
 
 var _emitted_move := false
 var _dead: bool = false
 var _frozen_on_death := false
+
+# Переопределяемые наследниками флаги
+# TODO: ПОСТАВИТЬ false
+var enabled_double_jumps := true
+var enabled_dash := true 
+
 
 func die() -> void:
 	if _dead:
@@ -120,12 +129,19 @@ func _physics_process(delta):
 	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
 
-	if Input.is_action_pressed("jump") and is_on_floor() and time_since_last_jump >= delay_between_jumps:
-		velocity.y = -sqrt(2 * gravity * jump_height)
-		time_since_last_jump = 0.0
-		if not _emitted_move:
-			_emitted_move = true
-			emit_signal("moved_once")
+
+	if Input.is_action_pressed("jump") and time_since_last_jump >= delay_between_jumps:
+		if is_on_floor(): 	# Прыжок с пола
+			velocity.y = -sqrt(2 * gravity * jump_height)
+			time_since_last_jump = 0.0
+			can_double_jump = true
+			if not _emitted_move:
+				_emitted_move = true
+				emit_signal("moved_once")
+		elif enabled_double_jumps and can_double_jump: 	# Прыжок в воздухе
+			velocity.y = -sqrt(2 * gravity * jump_height)
+			time_since_last_jump = 0.0
+			can_double_jump = false
 
 	velocity.y += gravity * delta
 	move_and_slide()
