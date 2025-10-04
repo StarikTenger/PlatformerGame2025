@@ -38,6 +38,8 @@ var dash_duration : float = 0.15  # Продолжительность dash в �
 var dash_time_left : float = 0.0
 var is_dashing : bool = false
 var can_dash := true
+var is_on_the_wall := false  # Флаг состояния прилипания к стене
+var wall_climb_direction := 0  # Направление стены (-1 слева, 1 справа)
 
 enum PlayerDirection {
 	RIGHT,
@@ -54,7 +56,8 @@ var _frozen_on_death := false
 
 # Переопределяемые наследниками флаги
 var enabled_double_jumps := false
-var enabled_dash := false 
+var enabled_dash := false
+var enabled_wall_climb := true # TODO: false
 
 
 func die() -> void:
@@ -119,7 +122,7 @@ func _physics_process(delta):
 		else:
 			anim_player.play("walk")
 			anim_player.flip_h = input_direction < 0
-	else:
+	elif not is_on_the_wall:
 		if input_direction == 0:
 			if velocity.y < 0:
 				anim_player.play("jump_up")
@@ -128,12 +131,30 @@ func _physics_process(delta):
 		else:
 			anim_player.play("jump_right")
 			anim_player.flip_h = input_direction < 0
+	else:
+		anim_player.play("idle")
 
 	var velocity_desired = input_direction * speed
 
 	var friction_k = 0.2 if is_on_floor() else 0.05
 
-	velocity.x = lerp(velocity.x, velocity_desired, friction_k)
+	# Wall climb логика
+	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall:
+		# Проверяем столкновения со стенами
+		var wall_left = is_on_wall() and player_direction == PlayerDirection.LEFT
+		var wall_right = is_on_wall() and player_direction == PlayerDirection.RIGHT
+
+		if wall_left or wall_right:
+			# Начинаем wall climb
+			is_on_the_wall = true
+			wall_climb_direction = -1 if wall_left else 1
+			velocity.x = 0  # Останавливаем горизонтальное движение
+			velocity.y = 0  # Останавливаем вертикальное движение (прилипаем к стене)
+
+
+	# Применяем обычное движение только если не в состоянии wall climb
+	if not is_on_the_wall:
+		velocity.x = lerp(velocity.x, velocity_desired, friction_k)
 	
 	## hard movement
 	#if input_direction != 0 and !is_on_floor():
@@ -182,6 +203,15 @@ func _physics_process(delta):
 			if not _emitted_move:
 				_emitted_move = true
 				emit_signal("moved_once")
+		elif is_on_the_wall:  # Прыжок со стены
+			velocity.y = -sqrt(2 * gravity * jump_height)
+			# Добавляем небольшой импульс в сторону от стены
+			velocity.x = -wall_climb_direction * speed * 0.6
+			player_direction = PlayerDirection.RIGHT if wall_climb_direction < 0 else PlayerDirection.LEFT
+			time_since_last_jump = 0.0
+			is_on_the_wall = false  # Отключаем wall climb
+			wall_climb_direction = 0
+
 		elif enabled_double_jumps and can_double_jump: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
 			velocity.y = -sqrt(2 * gravity * jump_height)
@@ -189,8 +219,8 @@ func _physics_process(delta):
 			can_double_jump = false
 			
 
-	# Применяем гравитацию только если не в состоянии dash
-	if not is_dashing:
+	# Применяем гравитацию только если не в состоянии dash или wall climb
+	if not is_dashing and not is_on_the_wall:
 		velocity.y += gravity * delta
 	
 	move_and_slide()
@@ -198,6 +228,9 @@ func _physics_process(delta):
 	# Восстанавливаем возможность dash при приземлении
 	if is_on_floor():
 		can_dash = true
+		# На земле отключаем wall climb
+		is_on_the_wall = false
+		wall_climb_direction = 0
 	
 	for i in range(get_slide_collision_count()):
 		var col := get_slide_collision(i)
