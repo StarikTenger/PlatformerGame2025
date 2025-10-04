@@ -5,7 +5,7 @@ extends Control
 
 var levels = [
 	{"id": 1, "level_scene": "res://levels/level_template.tscn"},
-	{"id": 2, "level_scene": "res://levels/level_template.tscn"},
+	{"id": 2, "level_scene": "res://levels/level_0.tscn"},
 	{"id": 3, "level_scene": "res://levels/level_template.tscn"},
 ]
 

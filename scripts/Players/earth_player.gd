@@ -10,8 +10,9 @@ func _death_effect() -> void:
 
 func _ready() -> void:
 	super()
-	jump_height = 400.0
-	
+	jump_height = 210.0
+	speed = 600.0
+	delay_between_jumps = 0.7
 	platform_scene = preload("res://scenes/Platform.tscn")
 
 func death_hint() -> String:
