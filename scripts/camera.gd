@@ -151,12 +151,15 @@ func shake(duration: float = -1.0, strength: float = -1.0) -> void:
 	_shake_timer = duration if duration > 0.0 else shake_duration
 	_runtime_shake_strength = strength if strength > 0.0 else shake_strength
 
-func set_target_state(pos: Vector2, zoom: float, zoom_in_duration: float = 1, return_back_zoom_duration: float = 1) -> void:
-	_target_state = TargetState.new(CameraState.new(pos, zoom), zoom_in_duration, return_back_zoom_duration)
+func set_target_state(pos: Vector2, zoom_: float, zoom_in_duration: float = 1, return_back_zoom_duration: float = 1) -> void:
+	print("SET_TARGET_STATE: ", pos, zoom_, zoom_in_duration, return_back_zoom_duration)
+	_target_state = TargetState.new(CameraState.new(pos, zoom_), zoom_in_duration, return_back_zoom_duration)
 
 func reset_target_state() -> void:
+	print("RESET_TARGET_STATE")
 	if _target_state != null:
 		_target_state.return_back()
 
 func hard_reset_target_state() -> void:
+	print("HARD_RESET_TARGET_STATE")
 	_target_state = null

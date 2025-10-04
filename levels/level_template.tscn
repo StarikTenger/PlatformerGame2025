@@ -51,7 +51,7 @@ custom_data_layer_2/name = "pushable"
 custom_data_layer_2/type = 1
 sources/0 = SubResource("TileSetAtlasSource_vgt4e")
 
-[node name="Level0" type="Node2D"]
+[node name="Level1" type="Node2D"]
 script = ExtResource("1_vgt4e")
 
 [node name="Tiles" type="TileMapLayer" parent="."]

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5i8ejqe05u3s"]
+
+[ext_resource type="Script" uid="uid://bt00kn0gecaa6" path="res://scripts/eye.gd" id="1_uv56g"]
+[ext_resource type="SpriteFrames" uid="uid://bewhjw5r0modm" path="res://animation/eye.tres" id="2_ifnh4"]
+
+[node name="Eye" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("2_ifnh4")
+animation = &"blink"
+frame_progress = 0.568638
+script = ExtResource("1_uv56g")
