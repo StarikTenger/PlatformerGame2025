@@ -10,7 +10,7 @@ explosion_radius = 4
 
 [node name="Sprite2D" parent="." index="0"]
 position = Vector2(2, -1)
-scale = Vector2(0.292, 0.274)
+scale = Vector2(0.584, 0.548)
 sprite_frames = ExtResource("3_lnaqo")
 animation = &"walk"
 autoplay = "idle"
