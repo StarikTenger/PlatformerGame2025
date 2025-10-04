@@ -40,6 +40,13 @@ var dash_duration : float = 0.15  # Продолжительность dash в �
 var dash_time_left : float = 0.0
 var is_dashing : bool = false
 
+enum PlayerDirection {
+	RIGHT,
+	LEFT,
+}
+
+var player_direction : PlayerDirection = PlayerDirection.RIGHT
+
 var _death_immunity_until_s: float = 0.0
 
 var _emitted_move := false
@@ -91,11 +98,13 @@ func _physics_process(delta):
 	var input_direction = 0
 	if Input.is_action_pressed("move_right"):
 		input_direction += 1
+		player_direction = PlayerDirection.RIGHT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
 	if Input.is_action_pressed("move_left"):
 		input_direction -= 1
+		player_direction = PlayerDirection.LEFT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
@@ -149,9 +158,15 @@ func _physics_process(delta):
 	
 	# Инициируем новый dash
 	if enabled_dash and not is_dashing and time_since_last_dash >= delay_between_dashes:
-		if Input.is_action_just_pressed("dash") and input_direction != 0:
+		if Input.is_action_just_pressed("dash"):
 			# TODO: анимация дэша
-			velocity.x = input_direction * dash_speed
+			var dash_direction = 0
+			if player_direction == PlayerDirection.RIGHT:
+				dash_direction = 1
+			elif player_direction == PlayerDirection.LEFT:
+				dash_direction = -1
+
+			velocity.x = dash_direction * dash_speed
 			time_since_last_dash = 0.0
 			is_dashing = true
 			dash_time_left = dash_duration
