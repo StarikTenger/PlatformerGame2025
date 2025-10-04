@@ -8,5 +8,8 @@
 script = ExtResource("2_20l7q")
 
 [node name="Sprite2D" parent="." index="0"]
+scale = Vector2(0.584, 0.548)
 sprite_frames = ExtResource("2_apmm2")
-animation = &"idle_1"
+animation = &"walk"
+frame = 20
+frame_progress = 0.311685

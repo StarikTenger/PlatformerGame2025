@@ -13,3 +13,15 @@ func setup(id: int):
 
 func _pressed():
 	emit_signal("level_selected", level_id)
+
+
+func _on_focus_entered() -> void:
+	modulate = "#ffffffff"
+
+
+func _on_ready() -> void:
+	modulate = "#ffffff30"
+
+
+func _on_focus_exited() -> void:
+	modulate = "#ffffff30"

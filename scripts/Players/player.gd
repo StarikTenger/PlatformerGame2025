@@ -28,14 +28,34 @@ func _ready() -> void:
 
 var hp : int = 1
 var speed : float = 800.0
+var dash_speed : float = 2000.0
 var jump_height : float = 250.0
+var double_jump_height : float = 200.0
 var delay_between_jumps : float = 0.4
 var time_since_last_jump : float = 0.0
+var can_double_jump := true
+var dash_duration : float = 0.15  # Продолжительность dash в секундах
+var dash_time_left : float = 0.0
+var is_dashing : bool = false
+var can_dash := true
+
+enum PlayerDirection {
+	RIGHT,
+	LEFT,
+}
+
+var player_direction : PlayerDirection = PlayerDirection.RIGHT
+
 var _death_immunity_until_s: float = 0.0
 
 var _emitted_move := false
 var _dead: bool = false
 var _frozen_on_death := false
+
+# Переопределяемые наследниками флаги
+var enabled_double_jumps := false
+var enabled_dash := false 
+
 
 func die() -> void:
 	if _dead:
@@ -77,11 +97,13 @@ func _physics_process(delta):
 	var input_direction = 0
 	if Input.is_action_pressed("move_right"):
 		input_direction += 1
+		player_direction = PlayerDirection.RIGHT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
 	if Input.is_action_pressed("move_left"):
 		input_direction -= 1
+		player_direction = PlayerDirection.LEFT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
@@ -95,7 +117,7 @@ func _physics_process(delta):
 		if input_direction == 0:
 			anim_player.play("idle")
 		else:
-			anim_player.play("walking")
+			anim_player.play("walk")
 			anim_player.flip_h = input_direction < 0
 	else:
 		if input_direction == 0:
@@ -113,22 +135,69 @@ func _physics_process(delta):
 
 	velocity.x = lerp(velocity.x, velocity_desired, friction_k)
 	
-	# hard movement
-	if input_direction != 0 and !is_on_floor():
-		velocity.x = velocity_desired
+	## hard movement
+	#if input_direction != 0 and !is_on_floor():
+		#velocity.x = velocity_desired
+		
+	# Dash в воздухе
+	# Обновляем состояние dash
+	if is_dashing:
+		dash_time_left -= delta
+		if dash_time_left <= 0:
+			is_dashing = false
+			if velocity_desired != 0:
+				velocity.x = velocity_desired
+			else:
+				velocity.x /= 3  # плавное замедление после dash
+		else:
+			# Во время dash обнуляем вертикальную скорость
+			velocity.y = 0
+	
+	# Инициируем новый dash (только в воздухе и только один раз до приземления)
+	if enabled_dash and not is_dashing and not is_on_floor() and can_dash:
+		if Input.is_action_just_pressed("dash"):
+			# TODO: анимация дэша
+			var dash_direction = 0
+			if player_direction == PlayerDirection.RIGHT:
+				dash_direction = 1
+			elif player_direction == PlayerDirection.LEFT:
+				dash_direction = -1
+
+			if dash_direction != 0:
+				velocity.x = dash_direction * dash_speed
+				is_dashing = true
+				dash_time_left = dash_duration
+				can_dash = false
 
 	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
+	
 
-	if Input.is_action_pressed("jump") and is_on_floor() and time_since_last_jump >= delay_between_jumps:
-		velocity.y = -sqrt(2 * gravity * jump_height)
-		time_since_last_jump = 0.0
-		if not _emitted_move:
-			_emitted_move = true
-			emit_signal("moved_once")
+	# Прыжки
+	if Input.is_action_pressed("jump") and time_since_last_jump >= delay_between_jumps:
+		if is_on_floor(): 	# Прыжок с пола
+			velocity.y = -sqrt(2 * gravity * jump_height)
+			time_since_last_jump = 0.0
+			can_double_jump = true
+			if not _emitted_move:
+				_emitted_move = true
+				emit_signal("moved_once")
+		elif enabled_double_jumps and can_double_jump: 	# Прыжок в воздухе
+			# TODO: анимация двойного прыжка
+			velocity.y = -sqrt(2 * gravity * jump_height)
+			time_since_last_jump = 0.0
+			can_double_jump = false
+			
 
-	velocity.y += gravity * delta
+	# Применяем гравитацию только если не в состоянии dash
+	if not is_dashing:
+		velocity.y += gravity * delta
+	
 	move_and_slide()
+	
+	# Восстанавливаем возможность dash при приземлении
+	if is_on_floor():
+		can_dash = true
 	
 	for i in range(get_slide_collision_count()):
 		var col := get_slide_collision(i)
