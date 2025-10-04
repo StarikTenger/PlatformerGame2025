@@ -28,11 +28,17 @@ func _ready() -> void:
 
 var hp : int = 1
 var speed : float = 800.0
+var dash_speed : float = 2000.0
 var jump_height : float = 250.0
 var double_jump_height : float = 200.0
 var delay_between_jumps : float = 0.4
 var time_since_last_jump : float = 0.0
 var can_double_jump := true
+var delay_between_dashes : float = 1
+var time_since_last_dash : float = 0.0
+var dash_duration : float = 0.15  # Продолжительность dash в секундах
+var dash_time_left : float = 0.0
+var is_dashing : bool = false
 
 var _death_immunity_until_s: float = 0.0
 
@@ -122,14 +128,46 @@ func _physics_process(delta):
 
 	velocity.x = lerp(velocity.x, velocity_desired, friction_k)
 	
-	# hard movement
-	if input_direction != 0 and !is_on_floor():
-		velocity.x = velocity_desired
+	## hard movement
+	#if input_direction != 0 and !is_on_floor():
+		#velocity.x = velocity_desired
+		
+	# Dash в сторону
+	time_since_last_dash += delta
+	
+	# Обновляем состояние dash
+	if is_dashing:
+		dash_time_left -= delta
+		if dash_time_left <= 0:
+			is_dashing = false
+			if velocity_desired != 0:
+				velocity.x = velocity_desired
+			else:
+				velocity.x /= 3  # плавное замедление после dash
+		else:
+			# Во время dash обнуляем вертикальную скорость
+			velocity.y = 0
+	
+	# Инициируем новый dash
+	var dash_direction = 0
+	if enabled_dash and not is_dashing and time_since_last_dash >= delay_between_dashes:
+		if Input.is_action_just_pressed("dash_right"):
+			dash_direction = 1
+		elif Input.is_action_just_pressed("dash_left"):
+			dash_direction = -1
+
+		if dash_direction != 0:
+			# TODO: анимация дэша
+			velocity.x = dash_direction * dash_speed
+			time_since_last_dash = 0.0
+			is_dashing = true
+			dash_time_left = dash_duration
 
 	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
+	
 
-
+	# Прыжки
 	if Input.is_action_pressed("jump") and time_since_last_jump >= delay_between_jumps:
 		if is_on_floor(): 	# Прыжок с пола
 			velocity.y = -sqrt(2 * gravity * jump_height)
@@ -139,11 +177,16 @@ func _physics_process(delta):
 				_emitted_move = true
 				emit_signal("moved_once")
 		elif enabled_double_jumps and can_double_jump: 	# Прыжок в воздухе
+			# TODO: анимация двойного прыжка
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
 			can_double_jump = false
+			
 
-	velocity.y += gravity * delta
+	# Применяем гравитацию только если не в состоянии dash
+	if not is_dashing:
+		velocity.y += gravity * delta
+	
 	move_and_slide()
 	
 	for i in range(get_slide_collision_count()):
