@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://ba2g2v361mcky"]
+[gd_scene load_steps=5 format=3 uid="uid://cvdkrw1btgn2q"]
 
 [ext_resource type="Script" uid="uid://s5d2w4v116v8" path="res://scripts/switch.gd" id="1_1i7pn"]
 [ext_resource type="Texture2D" uid="uid://bwxpe6qad84pf" path="res://resources/switch_off.png" id="2_nnoiq"]

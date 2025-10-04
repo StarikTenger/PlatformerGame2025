@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyw2pq031hv4g"]
+[gd_scene load_steps=2 format=3 uid="uid://duwv8s7xto038"]
 
-[ext_resource type="Script" uid="uid://danhiwm7tst86" path="res://scripts/UI/death_menu.gd" id="1_okyhj"]
+[ext_resource type="Script" uid="uid://bwp22x1l86byq" path="res://scripts/UI/WinMenu.gd" id="1_ag0l5"]
 
-[node name="DeathMenu" type="Control"]
+[node name="WinMenu" type="Control"]
 process_mode = 2
 z_index = 1000
 layout_mode = 3
@@ -11,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_okyhj")
+script = ExtResource("1_ag0l5")
 
 [node name="Center" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -40,15 +40,15 @@ layout_mode = 2
 text = "Level Complete!"
 horizontal_alignment = 1
 
-[node name="BtnApply" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="BtnNext" type="Button" parent="Center/Panel/Margin/VBox"]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 text = "NEXT LEVEL"
 
-[node name="BtnSkip" type="Button" parent="Center/Panel/Margin/VBox"]
-layout_mode = 2
-text = "PLAY IT AGAIN"
-
 [node name="BtnRestart" type="Button" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "RESTART THIS LEVEL"
+
+[node name="BtnMenu" type="Button" parent="Center/Panel/Margin/VBox"]
 layout_mode = 2
 text = "MAIN MENU"
