@@ -6,7 +6,7 @@ var current_level: int = 0
 
 var level_scenes: Array[String] = [
 	"res://levels/level_template.tscn",
-	"res://levels/level_template.tscn",
+	"res://levels/level_0.tscn",
 	"res://levels/level_template.tscn",
 ]
 
