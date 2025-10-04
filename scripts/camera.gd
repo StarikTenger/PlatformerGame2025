@@ -1,6 +1,7 @@
 extends Camera2D
+class_name MainCamera
 
-var player: Node2D = null
+var player: PlayerBase = null
 var SHAKE_TIME: float = 0.7
 
 # === shake ===
@@ -12,8 +13,6 @@ var _runtime_shake_strength: float = 10.0
 
 # === follow/hold ===
 @export var follow_lerp: float = 10.0
-var _follow_enabled: bool = true
-var _is_holding: bool = false
 
 
 class CameraState:
@@ -39,10 +38,12 @@ class CameraState:
 #######################################################
 
 
+@export var follow_zoom: float = 1.0
+
 var _follow_state: CameraState = null
 var _target_state: TargetState = null
 
-var _original_offset: Vector2
+var _original_offset: Vector2 = Vector2.ZERO
 
 
 class TargetState:
@@ -82,7 +83,8 @@ class TargetState:
 		return false
 
 	func return_back() -> void:
-		_timer = 0.0
+		var _progress: float = min(_timer / zoom_in_duration, 1.0)
+		_timer = (1 - _progress) * return_back_zoom_duration
 		_returning_back = true
 
 	func get_effective_state(follow_state: CameraState) -> CameraState:
@@ -93,15 +95,24 @@ class TargetState:
 func _ready():
 	_original_offset = offset
 	if player != null:
-		_follow_state = CameraState.new(player.global_position, 1.0)
+		_follow_state = CameraState.new(player.global_position, follow_zoom)
+
+func bind_player(player_: PlayerBase) -> void:
+	player = player_
+	_follow_state = CameraState.new(player.global_position, follow_zoom)
+
+func unbind_player() -> void:
+	player = null
+	# remember last followed state for smooth transition
+	# _follow_state = null
 
 func _physics_process(delta: float):
 	# слежение за игроком, если не держим камеру и не шейкаем позицию
-	if player and _follow_enabled and not _is_holding and not _is_shaking:
+	if player and _follow_state:
 		_follow_state.position += (player.global_position - _follow_state.position) * follow_lerp * delta
 
 	# обработка шейка (offset)
-	if _is_shaking and (_target_state == null or not _target_state.shake_enabled):
+	if _is_shaking:
 		_shake_timer -= delta
 		if _shake_timer <= 0.0:
 			_is_shaking = false
@@ -140,24 +151,12 @@ func shake(duration: float = -1.0, strength: float = -1.0) -> void:
 	_shake_timer = duration if duration > 0.0 else shake_duration
 	_runtime_shake_strength = strength if strength > 0.0 else shake_strength
 
-func set_target_position(pos: Vector2, zoom: float, zoom_in_duration: float = 1, return_back_zoom_duration: float = 1) -> void:
+func set_target_state(pos: Vector2, zoom: float, zoom_in_duration: float = 1, return_back_zoom_duration: float = 1) -> void:
 	_target_state = TargetState.new(CameraState.new(pos, zoom), zoom_in_duration, return_back_zoom_duration)
 
-# удержать камеру в точке pos на seconds сек; опционально трясти всё это время
-func hold_at(pos: Vector2, seconds: float, do_shake: bool = false, shake_strength_override: float = -1.0) -> void:
-	var prev_follow := _follow_enabled
-	_follow_enabled = false
-	_is_holding = true
+func reset_target_state() -> void:
+	if _target_state != null:
+		_target_state.return_back()
 
-	if do_shake:
-		var prev_strength := shake_strength
-		if shake_strength_override > 0.0:
-			shake_strength = shake_strength_override
-		shake(SHAKE_TIME)  # трясём всё время удержания
-		await get_tree().create_timer(seconds).timeout
-		shake_strength = prev_strength
-	else:
-		await get_tree().create_timer(seconds).timeout
-
-	_is_holding = false
-	_follow_enabled = prev_follow
+func hard_reset_target_state() -> void:
+	_target_state = null
