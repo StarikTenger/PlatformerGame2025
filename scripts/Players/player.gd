@@ -1,6 +1,7 @@
 # Player template. The exact playable characters are to be inherited from this script.
 
 extends CharacterBody2D
+class_name PlayerBase
 
 signal moved_once
 signal died
@@ -10,6 +11,13 @@ signal death_request(player: Node)
 @export var tiles_map: TileMapLayer
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
+
+enum PlayerType {
+	FIRE,
+	WIND,
+	EARTH,
+    UNKNOWN,
+}
 
 func _ready() -> void:
 	if tiles_map == null:
@@ -83,11 +91,21 @@ func _physics_process(delta):
 
 	# Animation handling
 	var anim_player = $Sprite2D
-	if input_direction == 0:
-		anim_player.play("idle")
+	if is_on_floor():
+		if input_direction == 0:
+			anim_player.play("idle")
+		else:
+			anim_player.play("walking")
+			anim_player.flip_h = input_direction < 0
 	else:
-		anim_player.play("walking")
-		anim_player.flip_h = input_direction < 0
+		if input_direction == 0:
+			if velocity.y < 0:
+				anim_player.play("jump_up")
+			else:
+				anim_player.play("fall")
+		else:
+			anim_player.play("jump_right")
+			anim_player.flip_h = input_direction < 0
 
 	var velocity_desired = input_direction * speed
 
@@ -149,3 +167,6 @@ func set_death_immunity(seconds: float = 0.5) -> void:
 
 func _can_die() -> bool:
 	return Time.get_unix_time_from_system() >= _death_immunity_until_s
+
+func get_player_type() -> PlayerType:
+	return PlayerType.UNKNOWN

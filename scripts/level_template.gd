@@ -16,6 +16,7 @@ var character_deck: Array[String] = []
 var character_deck_alive : Array[bool] = []
 var character_deck_idx : int = 0
 var current_player : Node = null
+var player_alive : bool = false
 
 # Signal for HUD communication
 signal deck_update(char_deck: Array[String], alive: Array[bool], idx: int)
@@ -25,7 +26,7 @@ var can_switch := true
 var moved_once := false
 var spawn_pos : Vector2
 
-var camera_node : Node = null   # камера сцены, чтобы переназначать target
+var camera_node : MainCamera = null   # камера сцены, чтобы переназначать target
 var death_menu : Control = null
 var death_layer: CanvasLayer = null
 
@@ -35,10 +36,16 @@ var hud_layer: CanvasLayer = null
 var character_menu : Control = null
 var character_layer: CanvasLayer = null
 
-var _pending_player : Node = null
+var _pending_player : PlayerBase = null
 var _pending_scene_idx : int = -1
 
 var _prev_mouse_mode: int = Input.get_mouse_mode()
+
+######################################################
+# level overview
+
+var level_overview_position: Vector2 = Vector2.ZERO
+var level_overview_zoom: float = 0
 
 func _ready():
 	
@@ -101,6 +108,13 @@ func _ready():
 	death_menu.skip_pressed.connect(_death_restart_pressed)
 	death_menu.restart_pressed.connect(_death_main_menu_pressed)
 
+	var level_overview_position_node: Variant = get_node_or_null("LevelOverview")
+	if level_overview_position_node != null:
+		if level_overview_position_node is LevelOverviewNode:
+			level_overview_position = level_overview_position_node.global_position
+			level_overview_zoom = level_overview_position_node.zoom
+
+
 func _start_game():
 	var chosen : Array[String]
 	SaveState.save_chosen(character_menu.get_chosen())
@@ -128,6 +142,12 @@ func _unhandled_input(event):
 		_show_death_menu(true)
 	if event.is_action_pressed("debug_menu"): # например, привяжи F1
 		_show_death_menu(true)
+	if event.is_action_pressed("level_overview"):
+		if level_overview_zoom != 0 and player_alive:
+			camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+	elif event.is_action_released("level_overview"):
+		if player_alive:
+			camera_node.reset_target_state()
 
 func is_deck_empty() -> bool:
 	for alive in character_deck_alive:
@@ -167,8 +187,10 @@ func _spawn_and_bind(char_type: String):
 	add_child(p)
 	p.global_position = spawn_pos
 	current_player = p
-	camera_node.player = current_player
-
+	camera_node.bind_player(current_player)
+	camera_node.reset_target_state()
+	player_alive = true
+	
 	# подписка на сигналы игрока
 	if p.has_signal("moved_once"):
 		p.connect("moved_once", Callable(self, "_on_player_moved_once"))
@@ -176,10 +198,6 @@ func _spawn_and_bind(char_type: String):
 		p.connect("death_request", Callable(self, "_on_player_death_request"), CONNECT_ONE_SHOT)
 	if p.has_signal("died"):
 		p.connect("died", Callable(self, "_on_player_died"))
-
-	# привязываем камеру к текущему игроку (если у камеры есть поле player)
-	if camera_node and "player" in camera_node:
-		camera_node.player = current_player
 
 	# новый заход — снова можно выбирать, пока не двинулся
 	can_switch = true
@@ -190,7 +208,7 @@ func _on_player_moved_once():
 	moved_once = true
 	can_switch = false  # фиксируем выбор до смерти
 
-func _on_player_death_request(player: Node):
+func _on_player_death_request(player: PlayerBase):
 	print("[death_request] from: ", player.name)
 	_pending_player = player
 	_pending_scene_idx = character_deck_idx
@@ -210,6 +228,11 @@ func _on_player_death_request(player: Node):
 	#_show_death_menu(true)
 	_death_apply_pressed()
 
+	player_alive = false
+	if camera_node:
+		camera_node.hard_reset_target_state()
+		camera_node.unbind_player()
+
 func _death_apply_pressed():
 	
 	# применить эффект → убрать перса из ростера → финализировать смерть → респавн следующего
@@ -221,14 +244,14 @@ func _death_apply_pressed():
 		_pending_player.finalize_death()
 		character_deck_alive[_pending_scene_idx] = false
 		
-		if camera_node and "hold_at" in camera_node:
-			# если скрипт огненного — включаем тряску
-			var do_shake := false
-			if _pending_player.get_script() and _pending_player.get_script().resource_path.ends_with("fire_player.gd"):
-				do_shake = true
-			await camera_node.hold_at(death_pos, 1.5, do_shake)  # 2 секунды
-	
-		
+		if camera_node:
+			# если скрипт огненного — включаем тряску	
+			if _pending_player.get_player_type() == PlayerBase.PlayerType.FIRE:
+				camera_node.shake(1)
+			camera_node.hard_reset_target_state()
+			camera_node.set_target_state(death_pos, 1, 0.7, 0.7)
+			await get_tree().create_timer(1.5).timeout
+
 		_pending_player = null
 		_pending_scene_idx = -1
 
@@ -248,8 +271,7 @@ func _death_skip_pressed():
 	_show_death_menu(false)
 	if _pending_player:
 		# «отменим смерть» у инстанса на всякий случай (снимает freeze, если ты захочешь его вернуть)
-		if "cancel_death" in _pending_player:
-			_pending_player.cancel_death()
+		_pending_player.cancel_death()
 		_pending_player.queue_free()
 		_pending_player = null
 		_pending_scene_idx = -1
