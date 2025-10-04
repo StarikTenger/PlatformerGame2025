@@ -1,6 +1,7 @@
 # Player template. The exact playable characters are to be inherited from this script.
 
 extends CharacterBody2D
+class_name PlayerBase
 
 signal moved_once
 signal died
@@ -10,6 +11,13 @@ signal death_request(player: Node)
 @export var tiles_map: TileMapLayer
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
+
+enum PlayerType {
+	FIRE,
+	WIND,
+	EARTH,
+    UNKNOWN,
+}
 
 func _ready() -> void:
 	if tiles_map == null:
@@ -146,3 +154,6 @@ func set_death_immunity(seconds: float = 0.5) -> void:
 
 func _can_die() -> bool:
 	return Time.get_unix_time_from_system() >= _death_immunity_until_s
+
+func get_player_type() -> PlayerType:
+	return PlayerType.UNKNOWN

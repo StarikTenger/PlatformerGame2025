@@ -35,7 +35,7 @@ var hud_layer: CanvasLayer = null
 var character_menu : Control = null
 var character_layer: CanvasLayer = null
 
-var _pending_player : Node = null
+var _pending_player : PlayerBase = null
 var _pending_scene_idx : int = -1
 
 var _prev_mouse_mode: int = Input.get_mouse_mode()
@@ -188,7 +188,7 @@ func _on_player_moved_once():
 	moved_once = true
 	can_switch = false  # фиксируем выбор до смерти
 
-func _on_player_death_request(player: Node):
+func _on_player_death_request(player: PlayerBase):
 	print("[death_request] from: ", player.name)
 	_pending_player = player
 	_pending_scene_idx = character_deck_idx
@@ -221,7 +221,7 @@ func _death_apply_pressed():
 		if camera_node and "hold_at" in camera_node:
 			# если скрипт огненного — включаем тряску
 			var do_shake := false
-			if _pending_player.get_script() and _pending_player.get_script().resource_path.ends_with("fire_player.gd"):
+			if _pending_player.get_player_type() == PlayerBase.PlayerType.FIRE:
 				do_shake = true
 			await camera_node.hold_at(death_pos, 1.5, do_shake)  # 2 секунды
 	
@@ -241,8 +241,7 @@ func _death_skip_pressed():
 	_show_death_menu(false)
 	if _pending_player:
 		# «отменим смерть» у инстанса на всякий случай (снимает freeze, если ты захочешь его вернуть)
-		if "cancel_death" in _pending_player:
-			_pending_player.cancel_death()
+		_pending_player.cancel_death()
 		_pending_player.queue_free()
 		_pending_player = null
 		_pending_scene_idx = -1
