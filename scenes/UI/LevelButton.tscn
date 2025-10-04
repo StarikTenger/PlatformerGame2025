@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://ce5nu8fg75qog" path="res://resources/LevelFrameHover.png" id="2_enqhw"]
 
 [node name="LevelButton" type="TextureButton"]
+modulate = Color(1, 1, 1, 0.223529)
 custom_minimum_size = Vector2(51.2, 51.2)
 layout_direction = 2
 offset_right = 51.2
@@ -33,3 +34,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(20, 20)
 theme_override_font_sizes/font_size = 24
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="ready" from="." to="." method="_on_ready"]
