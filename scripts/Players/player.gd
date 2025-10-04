@@ -16,6 +16,7 @@ func _ready() -> void:
 		var lvl := get_tree().current_scene
 		tiles_map = lvl.find_child("Tiles", true, false) as TileMapLayer
 	add_to_group("liftable")
+	add_to_group("player")
 
 var hp : int = 1
 var speed : float = 800.0
