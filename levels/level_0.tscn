@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://3jlb8s52grl8"]
+[gd_scene load_steps=8 format=4 uid="uid://3cuxwomim7ev"]
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_yi3jx"]
 [ext_resource type="Texture2D" uid="uid://blcrbxcv3ix0g" path="res://resources/platformer-tiles.png" id="2_foxie"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bqeykxs2dl2yd" path="res://scenes/Projectile.tscn" id="4_jum3j"]
 [ext_resource type="PackedScene" uid="uid://cdpe0vowoxnfi" path="res://scenes/door.tscn" id="5_7d3si"]
 [ext_resource type="PackedScene" uid="uid://ba2g2v361mcky" path="res://scenes/switch.tscn" id="6_jum3j"]
+[ext_resource type="PackedScene" uid="uid://c5i8ejqe05u3s" path="res://scenes/Eye.tscn" id="5_foxie"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vgt4e"]
 texture = ExtResource("2_foxie")
@@ -93,3 +94,17 @@ position = Vector2(4602, 1251)
 [node name="Switch2" parent="." node_paths=PackedStringArray("door") instance=ExtResource("6_jum3j")]
 position = Vector2(4099, 1303)
 door = NodePath("../Door2")
+
+[node name="Eye2" parent="." instance=ExtResource("5_foxie")]
+position = Vector2(827.292, 1389.71)
+rotation = -4.40172
+scale = Vector2(0.218831, 0.218831)
+
+[node name="Eye" parent="." instance=ExtResource("5_foxie")]
+position = Vector2(2347, 1479)
+scale = Vector2(0.392, 0.392)
+
+[node name="Eye3" parent="." instance=ExtResource("5_foxie")]
+position = Vector2(3382, 677)
+rotation = -0.959931
+scale = Vector2(0.831999, 0.831999)
