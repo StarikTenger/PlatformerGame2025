@@ -362,6 +362,8 @@ script = ExtResource("1_uq1lf")
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+z_index = 5
 texture = ExtResource("1_yuh73")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
