@@ -52,6 +52,7 @@ var special_action_released := true
 var special_action_released_delay := 0.2
 var special_action_just_released_time_left := 0.0
 var is_walking := false
+var is_climbing := false
 
 enum PlayerDirection {
 	RIGHT,
@@ -169,11 +170,15 @@ func _physics_process(delta):
 		# Wall climb animation
 		# Направление определять по player_direction
 		anim_player.play("idle")
-		# Stop walking sound when on wall
+		
+		# Play sound only when first starting to climb
+		if not is_climbing:
+			audio_player.stream = load("res://sounds/EARTH_GUY_HEAVY.mp3")
+			audio_player.play()
+			is_climbing = true
+		
 		if is_walking:
-			audio_player.stop()
 			is_walking = false
-
 	var velocity_desired = input_direction * speed
 
 	var friction_k = 0.2 if is_on_floor() else 0.05
@@ -255,8 +260,6 @@ func _physics_process(delta):
 		
 			# Play sound
 			audio_player.stream = load("res://sounds/PLAYER_JUMP.mp3")
-			#audio_player.position = global_position
-			#get_parent().add_child(audio_player)
 			audio_player.play()
 
 		elif is_on_the_wall:  # Прыжок со стены
@@ -265,7 +268,12 @@ func _physics_process(delta):
 			velocity.x = -wall_climb_direction * speed * 0.6
 			time_since_last_jump = 0.0
 			is_on_the_wall = false  # Отключаем wall climb
+			is_climbing = false  # Reset climbing state
 			wall_climb_direction = 0
+
+			# Play sound
+			audio_player.stream = load("res://sounds/EARTH_GUY_LIGHT.mp3")
+			audio_player.play()
 		
 	if Input.is_action_just_pressed("jump"):
 		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
@@ -284,12 +292,14 @@ func _physics_process(delta):
 		if is_on_the_wall:
 			velocity.y = 0
 			is_on_the_wall = false
+			is_climbing = false  # Reset climbing state
 			wall_climb_direction = 0
 
 	# Отпускаем стену при отпускании клавиши dash
 	if is_on_the_wall and special_action_released:
 		velocity.y = 0
 		is_on_the_wall = false
+		is_climbing = false  # Reset climbing state
 		wall_climb_direction = 0
 
 	# Применяем гравитацию только если не в состоянии dash или wall climb
@@ -312,6 +322,7 @@ func _physics_process(delta):
 		can_dash = true
 		# На земле отключаем wall climb
 		is_on_the_wall = false
+		is_climbing = false  # Reset climbing state
 		wall_climb_direction = 0
 	
 	for i in range(get_slide_collision_count()):
