@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://duwv8s7xto038"]
 
-[ext_resource type="Script" uid="uid://bwp22x1l86byq" path="res://scripts/UI/WinMenu.gd" id="1_ag0l5"]
+[ext_resource type="Script" path="res://scripts/UI/WinMenu.gd" id="1_ag0l5"]
 
 [node name="WinMenu" type="Control"]
 process_mode = 2

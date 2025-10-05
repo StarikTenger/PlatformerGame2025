@@ -27,8 +27,12 @@ func _ready() -> void:
 	_center_panel()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if visible and event.is_action_pressed("esc_menu"):
+	if visible and Input.is_action_just_pressed("esc_menu"):
+		get_tree().root.set_input_as_handled()
+		print("Death menu: Escape pressed, closing menu")
 		close_menu()
+		# emit_signal("apply_pressed")
+
 
 func open() -> void:
 	visible = true

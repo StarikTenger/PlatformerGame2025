@@ -164,7 +164,8 @@ func _unhandled_input(event):
 	if can_switch and event.is_action_pressed("switch_char"):
 		print("test11")
 		_switch_next()
-	if not character_menu.visible and not get_tree().paused and event.is_action_pressed("esc_menu"):
+	if not character_menu.visible and not get_tree().paused and Input.is_action_just_pressed("esc_menu"):
+		print("Pause menu requested")
 		death_menu.set_context(true, "Game on pause")
 		_show_death_menu(true)
 	if event.is_action_pressed("level_overview"):
