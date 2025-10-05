@@ -6,9 +6,9 @@ var current_level: int = 0
 var max_opened_level: int = 0
 
 var level_scenes: Array[String] = [
-	"res://levels/level_template.tscn",
-	"res://levels/level_0.tscn",
-	"res://levels/level_template.tscn",
+	"res://levels/level_1.tscn",
+	"res://levels/level_2.tscn",
+	"res://levels/level_3.tscn",
 ]
 
 var levels_by_id: Dictionary = {}
