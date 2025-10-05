@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_yi3jx"]
 [ext_resource type="Texture2D" uid="uid://blcrbxcv3ix0g" path="res://resources/platformer-tiles.png" id="2_foxie"]
-[ext_resource type="PackedScene" path="res://scenes/Dispenser.tscn" id="3_7d3si"]
+[ext_resource type="PackedScene" uid="uid://c02kgqghm6xo1" path="res://scenes/Dispenser.tscn" id="3_7d3si"]
 [ext_resource type="PackedScene" uid="uid://bqeykxs2dl2yd" path="res://scenes/Projectile.tscn" id="4_jum3j"]
-[ext_resource type="PackedScene" path="res://scenes/door.tscn" id="5_7d3si"]
+[ext_resource type="PackedScene" uid="uid://yf0f760m6xxh" path="res://scenes/door.tscn" id="5_7d3si"]
 [ext_resource type="PackedScene" path="res://scenes/Eye.tscn" id="5_foxie"]
 [ext_resource type="PackedScene" uid="uid://cvdkrw1btgn2q" path="res://scenes/switch.tscn" id="6_jum3j"]
 [ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="7_jum3j"]
