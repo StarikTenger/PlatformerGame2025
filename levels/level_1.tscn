@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=4 uid="uid://dwgk0pf343bfs"]
+
+[ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_btoec"]
+[ext_resource type="TileSet" uid="uid://cr3d0l0os2ax0" path="res://animation/tile_set.tres" id="2_btoec"]
+[ext_resource type="PackedScene" uid="uid://c02kgqghm6xo1" path="res://scenes/Dispenser.tscn" id="3_l53as"]
+[ext_resource type="PackedScene" uid="uid://bqeykxs2dl2yd" path="res://scenes/Projectile.tscn" id="4_3sk1a"]
+[ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="5_08mmt"]
+[ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="6_5ot28"]
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1_btoec")
+
+[node name="Tiles" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAAYAAQAAAAAAAAABAAYAAQAAAAAAAAACAAYAAQAAAAAAAAADAAYAAQAAAAAAAAAEAAYAAQAAAAAAAAD+/wYAAQAAAAAAAAD9/wYAAQAAAAAAAAD8/wYAAQAAAAAAAAD7/wYAAQAAAAAAAAD//wYAAQAAAAAAAAA=")
+tile_set = ExtResource("2_btoec")
+
+[node name="Spawn" type="Marker2D" parent="."]
+position = Vector2(100, 100)
+
+[node name="Dispenser" parent="." instance=ExtResource("3_l53as")]
+visible = false
+position = Vector2(1552, 320)
+rotation = -1.5708
+scale = Vector2(6.25, 6.25)
+projectile_scene = ExtResource("4_3sk1a")
+active = false
+
+[node name="Dispenser2" parent="." instance=ExtResource("3_l53as")]
+visible = false
+position = Vector2(2960, 944)
+rotation = -1.5708
+scale = Vector2(6.25, 6.25)
+projectile_scene = ExtResource("4_3sk1a")
+active = false
+
+[node name="LevelOverview" type="Node2D" parent="."]
+position = Vector2(-600, 1600)
+script = ExtResource("5_08mmt")
+
+[node name="Exit" parent="." instance=ExtResource("6_5ot28")]
+position = Vector2(7400, 2600)
