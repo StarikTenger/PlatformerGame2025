@@ -33,10 +33,12 @@ func _ready():
 	populate_levels()
 
 func populate_levels():
+	grid = get_node("GridContainer")
+	
 	if not grid:
 		print("ERROR: Cannot populate levels - GridContainer is null")
 		return
-		
+	
 	level_button_scene = preload("res://scenes/UI/LevelButton.tscn")
 	for i in range(level_scenes.size()):
 		var btn = level_button_scene.instantiate()
@@ -49,7 +51,11 @@ func populate_levels():
 
 	print("Populated ", level_scenes.size(), " level buttons")
 
+func get_focus():
+	grid.get_child(0).grab_focus()
+
 func _launch_level(level_id: int):
+	current_level = level_id
 	print("Launching level ", level_id)
 	var level_scene = level_scenes[level_id]
 
@@ -57,15 +63,14 @@ func _launch_level(level_id: int):
 
 	
 func _on_level_selected(level_id: int):
-	current_level = level_id
 	print("Loading level ", level_id)
 	_launch_level(level_id)
 
 func next_level():
-	if current_level + 1 < level_scenes.size():
-		current_level += 1
-		max_opened_level = max(max_opened_level, current_level)
-		print("Loading next level ", current_level)
-		_launch_level(current_level)
-	else:
-		print("No more levels available.")
+	print("Current level - " + str(current_level))
+	current_level = (current_level + 1) % level_scenes.size()
+	max_opened_level = max(max_opened_level, current_level)
+	_launch_level(current_level)
+
+func _process(delta: float) -> void:
+	pass
