@@ -31,7 +31,7 @@ var speed : float = 800.0
 var dash_speed : float = 2000.0
 var jump_height : float = 250.0
 var double_jump_height : float = 200.0
-var delay_between_jumps : float = 0.2
+var delay_between_jumps : float = 0.25
 var time_since_last_jump : float = 0.0
 var can_double_jump := true
 var dash_duration : float = 0.15  # Продолжительность dash в секундах
@@ -216,7 +216,7 @@ func _physics_process(delta):
 	
 
 	# Прыжки
-	if Input.is_action_pressed("jump") and time_since_last_jump >= delay_between_jumps:
+	if Input.is_action_pressed("jump"):
 		if is_on_floor(): 	# Прыжок с пола
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
@@ -233,7 +233,7 @@ func _physics_process(delta):
 			is_on_the_wall = false  # Отключаем wall climb
 			wall_climb_direction = 0
 
-		elif enabled_double_jumps and can_double_jump: 	# Прыжок в воздухе
+		elif enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
