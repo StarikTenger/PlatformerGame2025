@@ -54,7 +54,7 @@ var level_overview_zoom: float = 0
 func _ready():
 	var start_roster = $StartRoster
 	
-	if start_roster:
+	if start_roster and not SaveState.get_restarted():
 		SaveState.save_chosen(start_roster.get_roster())
 	
 	# Инициализация Spawn

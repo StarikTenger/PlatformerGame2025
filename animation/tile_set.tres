@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cr3d0l0os2ax0"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b3peoecox56is"]
 
 [ext_resource type="Texture2D" uid="uid://rpe3t0ry3iso" path="res://resources/tiles.png" id="1_3imnp"]
 
@@ -292,42 +292,42 @@ texture_region_size = Vector2i(200, 200)
 2:0/next_alternative_id = 4
 2:0/0 = 0
 2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-6:6/0 = 0
-6:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, -84, -100, -84)
-6:6/0/physics_layer_0/polygon_0/one_way = true
-4:7/0 = 0
-4:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
-4:7/0/custom_data_0 = true
-5:7/0 = 0
-5:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
-5:7/0/custom_data_0 = true
-6:7/0 = 0
-6:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
-6:7/0/custom_data_0 = true
-4:3/0 = 0
-4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-4:3/0/custom_data_0 = true
-5:2/0 = 0
 4:2/0 = 0
+5:2/0 = 0
 4:1/0 = 0
 5:1/0 = 0
 6:1/0 = 0
-6:2/0 = 0
-7:2/0 = 0
 7:1/0 = 0
 8:1/0 = 0
-8:0/0 = 0
-8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-7:0/0 = 0
-7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-6:0/0 = 0
-6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-5:0/0 = 0
-5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
-4:0/0 = 0
-4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+6:2/0 = 0
+7:2/0 = 0
 3:0/0 = 0
 3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+8:0/0 = 0
+8:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, 100, -100, 100)
+4:3/0/custom_data_0 = true
+6:6/0 = 0
+6:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-100, -100, 100, -100, 100, -84, -100, -84)
+6:6/0/physics_layer_0/polygon_0/one_way = true
+6:7/0 = 0
+6:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
+6:7/0/custom_data_0 = true
+5:7/0 = 0
+5:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
+5:7/0/custom_data_0 = true
+4:7/0 = 0
+4:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(100, -100, 100, 100, -100, 100)
+4:7/0/custom_data_0 = true
 
 [resource]
 resource_local_to_scene = true

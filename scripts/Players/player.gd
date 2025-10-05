@@ -229,8 +229,9 @@ func _physics_process(delta):
 			time_since_last_jump = 0.0
 			is_on_the_wall = false  # Отключаем wall climb
 			wall_climb_direction = 0
-
-		elif enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
+		
+	if Input.is_action_just_pressed("jump"):
+		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
