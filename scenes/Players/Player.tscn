@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dtcv1pbau0idl"]
+[gd_scene load_steps=5 format=3 uid="uid://dtcv1pbau0idl"]
 
 [ext_resource type="Script" uid="uid://cbnd3u0xrkejf" path="res://scripts/Players/player.gd" id="1_v6fml"]
+[ext_resource type="AudioStream" uid="uid://cyk1vsox6hdj0" path="res://sounds/PLAYER_WALK_LOOP.mp3" id="2_d0tyu"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
 
@@ -22,3 +23,6 @@ shape = SubResource("CapsuleShape2D_v6fml")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
 position = Vector2(-2, -3)
 shape = SubResource("CapsuleShape2D_3li8b")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_d0tyu")

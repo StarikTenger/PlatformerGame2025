@@ -12,6 +12,8 @@ signal death_request(player: Node)
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
 
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+
 enum PlayerType {
 	FIRE,
 	WIND,
@@ -49,6 +51,7 @@ var wall_climb_direction := 0  # Направление стены (-1 слев�
 var special_action_released := true
 var special_action_released_delay := 0.2
 var special_action_just_released_time_left := 0.0
+var is_walking := false
 
 enum PlayerDirection {
 	RIGHT,
@@ -138,10 +141,22 @@ func _physics_process(delta):
 	if is_on_floor():
 		if input_direction == 0:
 			anim_player.play("idle")
+			# Stop walking sound when not moving
+			if is_walking:
+				audio_player.stop()
+				is_walking = false
 		else:
 			anim_player.play("walk")
+			# Start walking sound only if not already playing
+			if not is_walking:
+				audio_player.stream = load("res://sounds/PLAYER_WALK_LOOP.mp3")
+				audio_player.play()
+				is_walking = true
+			
 			anim_player.flip_h = input_direction < 0
 	elif not is_on_the_wall:
+		if is_walking:
+			is_walking = false
 		if input_direction == 0:
 			if velocity.y < 0:
 				anim_player.play("jump_up")
@@ -154,6 +169,10 @@ func _physics_process(delta):
 		# Wall climb animation
 		# Направление определять по player_direction
 		anim_player.play("idle")
+		# Stop walking sound when on wall
+		if is_walking:
+			audio_player.stop()
+			is_walking = false
 
 	var velocity_desired = input_direction * speed
 
@@ -228,6 +247,13 @@ func _physics_process(delta):
 			if not _emitted_move:
 				_emitted_move = true
 				emit_signal("moved_once")
+		
+			# Play sound
+			audio_player.stream = load("res://sounds/PLAYER_JUMP.mp3")
+			#audio_player.position = global_position
+			#get_parent().add_child(audio_player)
+			audio_player.play()
+
 		elif is_on_the_wall:  # Прыжок со стены
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			# Добавляем небольшой импульс в сторону от стены
