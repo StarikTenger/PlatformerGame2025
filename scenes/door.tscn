@@ -371,10 +371,9 @@ shape = SubResource("RectangleShape2D_83dcw")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = -5
 z_as_relative = false
-position = Vector2(3.8147e-06, 2)
-scale = Vector2(1.49, 1.49)
+position = Vector2(1, 2.5034e-06)
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_mgd4q")
-animation = &"open"
+animation = &"idle"
 autoplay = "idle"
-frame = 23
-frame_progress = 1.0
+frame_progress = 0.50283
