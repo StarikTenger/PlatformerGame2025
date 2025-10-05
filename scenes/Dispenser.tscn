@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c02kgqghm6xo1"]
+[gd_scene load_steps=4 format=3 uid="uid://c02kgqghm6xo1"]
 
 [ext_resource type="Script" uid="uid://c18i8ibh4baf4" path="res://scripts/dispenser.gd" id="1_uq1lf"]
 [ext_resource type="Texture2D" uid="uid://c765tcyc23a4r" path="res://resources/dispenser.png" id="1_yuh73"]
+[ext_resource type="SpriteFrames" uid="uid://dew0j6ehu3ft4" path="res://animation/dispenser.tres" id="3_qd80i"]
 
 [node name="Dispenser" type="Node2D"]
 script = ExtResource("1_uq1lf")
@@ -11,4 +12,16 @@ script = ExtResource("1_uq1lf")
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+z_index = 5
 texture = ExtResource("1_yuh73")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2.27374e-13, -1)
+rotation = -1.5708
+scale = Vector2(0.104451, 0.104451)
+sprite_frames = ExtResource("3_qd80i")
+animation = &"fire"
+autoplay = "idle"
+frame = 23
+frame_progress = 1.0
