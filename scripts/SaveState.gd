@@ -1,6 +1,6 @@
 extends Node
 
-var chosen : Array[String]
+var chosen : Array[String] = ["Fire", "Fire", "Wind", "Earth"]
 var state : bool = false
 
 func save_chosen(_chosen : Array[String]):
