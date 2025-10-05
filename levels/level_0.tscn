@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="7_jum3j"]
 [ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="9_tfamw"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vgt4e"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dm5o4"]
 texture = ExtResource("2_foxie")
 1:0/0 = 0
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -3765,7 +3765,7 @@ custom_data_layer_1/name = "hazard"
 custom_data_layer_1/type = 1
 custom_data_layer_2/name = "pushable"
 custom_data_layer_2/type = 1
-sources/0 = SubResource("TileSetAtlasSource_vgt4e")
+sources/0 = SubResource("TileSetAtlasSource_dm5o4")
 sources/1 = SubResource("TileSetAtlasSource_obtcn")
 
 [node name="Level0" type="Node2D"]
