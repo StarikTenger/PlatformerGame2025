@@ -9,6 +9,7 @@ signal death_request(player: Node)
 
 @export var hazards_map: TileMapLayer
 @export var tiles_map: TileMapLayer
+@export var tiles_map_2: TileMapLayer
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
 
@@ -21,10 +22,50 @@ enum PlayerType {
 	UNKNOWN,
 }
 
+# Get all tile layers for operations
+func _get_tile_layers() -> Array[TileMapLayer]:
+	var layers: Array[TileMapLayer] = []
+	if tiles_map:
+		layers.append(tiles_map)
+	if tiles_map_2:
+		layers.append(tiles_map_2)
+	return layers
+
+# Check if a cell has a specific flag in any layer
+func _has_tile_with_flag(cell: Vector2i, flag_name: String, flag_value = true) -> bool:
+	for layer in _get_tile_layers():
+		if layer.get_cell_source_id(cell) == -1:
+			continue
+		var td: TileData = layer.get_cell_tile_data(cell)
+		if td != null and td.get_custom_data(flag_name) == flag_value:
+			return true
+	return false
+
+# Get the layer and tile data for a cell with a specific flag
+func _get_tile_with_flag(cell: Vector2i, flag_name: String, flag_value = true) -> Dictionary:
+	for layer in _get_tile_layers():
+		if layer.get_cell_source_id(cell) == -1:
+			continue
+		var td: TileData = layer.get_cell_tile_data(cell)
+		if td != null and td.get_custom_data(flag_name) == flag_value:
+			return {"layer": layer, "tile_data": td}
+	return {}
+
+# Check if a collision is with any of our tile layers
+func _is_collision_with_tile_layers(collision: KinematicCollision2D) -> TileMapLayer:
+	var collider = collision.get_collider()
+	for layer in _get_tile_layers():
+		if collider == layer:
+			return layer
+	return null
+
 func _ready() -> void:
 	if tiles_map == null:
 		var lvl := get_tree().current_scene
 		tiles_map = lvl.find_child("Tiles", true, false) as TileMapLayer
+	if tiles_map_2 == null:
+		var lvl := get_tree().current_scene
+		tiles_map_2 = lvl.find_child("Tiles 2", true, false) as TileMapLayer
 	add_to_group("liftable")
 	add_to_group("player")
 
@@ -327,17 +368,18 @@ func _physics_process(delta):
 	
 	for i in range(get_slide_collision_count()):
 		var col := get_slide_collision(i)
-		# интересуют только столкновения с нужным TileMapLayer
-		if tiles_map != null and col.get_collider() == tiles_map:
-			var cell := _cell_at_collision(tiles_map, col)
+		# Check if collision is with any of our tile layers
+		var tile_layer = _is_collision_with_tile_layers(col)
+		if tile_layer != null:
+			var cell := _cell_at_collision(tile_layer, col)
 			if cell != null:
-				var td := tiles_map.get_cell_tile_data(cell)
+				var td := tile_layer.get_cell_tile_data(cell)
 				if td != null:
 					if td.get_custom_data(hazard_flag_name) == true:
 						die()
 						return
 					elif td.get_custom_data(pushable_flag_name) == true:
-						_push_block(cell, col.get_normal())
+						_push_block(cell, col.get_normal(), tile_layer)
 					
 func _cell_at_collision(layer: TileMapLayer, col: KinematicCollision2D) -> Vector2i:
 	# берём точку чуть "внутрь" тайла (сдвигаемся на полпикселя по нормали)
@@ -345,16 +387,27 @@ func _cell_at_collision(layer: TileMapLayer, col: KinematicCollision2D) -> Vecto
 	var local_p: Vector2 = layer.to_local(world_p)
 	return layer.local_to_map(local_p)
 
-func _push_block(cell: Vector2i, normal: Vector2) -> void:
+func _push_block(cell: Vector2i, normal: Vector2, layer: TileMapLayer = null) -> void:
+	# Use provided layer or default to tiles_map
+	var target_layer = layer if layer != null else tiles_map
+	if target_layer == null:
+		return
+		
 	# вычисляем куда толкнуть
 	var target_cell := cell + Vector2i(round(-normal.x), round(-normal.y))
-	# проверяем что целевая пустая
-	if tiles_map.get_cell_source_id(target_cell) == -1:
-		var source_id := tiles_map.get_cell_source_id(cell)
-		var atlas_coords := tiles_map.get_cell_atlas_coords(cell)
+	# проверяем что целевая пустая (проверяем во всех слоях)
+	var target_occupied = false
+	for check_layer in _get_tile_layers():
+		if check_layer.get_cell_source_id(target_cell) != -1:
+			target_occupied = true
+			break
+			
+	if not target_occupied:
+		var source_id := target_layer.get_cell_source_id(cell)
+		var atlas_coords := target_layer.get_cell_atlas_coords(cell)
 		# переносим тайл
-		tiles_map.set_cell(target_cell, source_id, atlas_coords)
-		tiles_map.set_cell(cell, -1)
+		target_layer.set_cell(target_cell, source_id, atlas_coords)
+		target_layer.set_cell(cell, -1)
 
 
 func set_death_immunity(seconds: float = 0.5) -> void:
