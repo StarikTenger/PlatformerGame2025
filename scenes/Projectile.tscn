@@ -201,4 +201,4 @@ z_index = -5
 scale = Vector2(0.172222, 0.172222)
 sprite_frames = SubResource("SpriteFrames_1iq85")
 autoplay = "default"
-frame_progress = 0.0163906
+frame_progress = 0.0474299
