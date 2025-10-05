@@ -40,6 +40,9 @@ var is_dashing : bool = false
 var can_dash := true
 var is_on_the_wall := false  # Флаг состояния прилипания к стене
 var wall_climb_direction := 0  # Направление стены (-1 слева, 1 справа)
+var special_action_released := true
+var special_action_released_delay := 0.2
+var special_action_just_released_time_left := 0.0
 
 enum PlayerDirection {
 	RIGHT,
@@ -115,6 +118,16 @@ func _physics_process(delta):
 		return
 
 	var moving_down := Input.is_action_pressed("move_down")
+	if Input.is_action_pressed("special_action"):
+		special_action_just_released_time_left = special_action_released_delay
+		special_action_released = false
+	else:
+		special_action_just_released_time_left -= delta
+
+	if special_action_just_released_time_left <= 0.0:
+		special_action_released = true
+		special_action_just_released_time_left = 0.0
+
 
 	# Animation handling
 	var anim_player = $Sprite2D
@@ -134,6 +147,8 @@ func _physics_process(delta):
 			anim_player.play("jump_right")
 			anim_player.flip_h = input_direction < 0
 	else:
+		# Wall climb animation
+		# Направление определять по player_direction
 		anim_player.play("idle")
 
 	var velocity_desired = input_direction * speed
@@ -141,7 +156,7 @@ func _physics_process(delta):
 	var friction_k = 0.2 if is_on_floor() else 0.05
 
 	# Wall climb логика
-	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall and Input.is_action_pressed("dash"):
+	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall and Input.is_action_pressed("special_action"):
 		# Проверяем столкновения со стенами
 		# var wall_left = is_on_wall() and input_direction < 0
 		# var wall_right = is_on_wall() and input_direction > 0
@@ -182,7 +197,7 @@ func _physics_process(delta):
 	
 	# Инициируем новый dash (только в воздухе и только один раз до приземления)
 	if enabled_dash and not is_dashing and not is_on_floor() and can_dash:
-		if Input.is_action_just_pressed("dash"):
+		if Input.is_action_just_pressed("special_action"):
 			# TODO: анимация дэша
 			var dash_direction = 0
 			if player_direction == PlayerDirection.RIGHT:
@@ -233,7 +248,7 @@ func _physics_process(delta):
 			wall_climb_direction = 0
 
 	# Отпускаем стену при отпускании клавиши dash
-	if is_on_the_wall and Input.is_action_just_released("dash"):
+	if is_on_the_wall and special_action_released:
 		velocity.y = 0
 		is_on_the_wall = false
 		wall_climb_direction = 0
