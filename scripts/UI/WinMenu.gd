@@ -1,7 +1,8 @@
 extends Control
-signal apply_pressed
-signal skip_pressed
+
+signal next_pressed
 signal restart_pressed
+signal menu_pressed
 
 var _prev_mouse_mode: int = Input.get_mouse_mode()
 
@@ -16,23 +17,18 @@ func _ready() -> void:
 	offset_bottom = 0
 	
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	
-	# подключение кнопок
-	$Center/Panel/Margin/VBox/BtnApply.pressed.connect(func(): emit_signal("apply_pressed"))
-	$Center/Panel/Margin/VBox/BtnSkip.pressed.connect(func(): emit_signal("skip_pressed"))
+
+	$Center/Panel/Margin/VBox/BtnNext.pressed.connect(func(): emit_signal("next_pressed"))
 	$Center/Panel/Margin/VBox/BtnRestart.pressed.connect(func(): emit_signal("restart_pressed"))
-	
+	$Center/Panel/Margin/VBox/BtnMenu.pressed.connect(func(): emit_signal("menu_pressed"))
+
 	get_viewport().size_changed.connect(_center_panel)
 	visible = false
 	_center_panel()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if visible and Input.is_action_just_pressed("esc_menu"):
-		get_tree().root.set_input_as_handled()
-		print("Death menu: Escape pressed, closing menu")
-		close_menu()
-		# emit_signal("apply_pressed")
-
+	if visible and event.is_action_pressed("esc_menu"):
+		pass
 
 func open() -> void:
 	visible = true
@@ -41,7 +37,7 @@ func open() -> void:
 	get_tree().paused = true
 	await get_tree().process_frame
 	_center_panel()
-	$Center/Panel/Margin/VBox/BtnApply.grab_focus()
+	$Center/Panel/Margin/VBox/BtnNext.grab_focus()
 
 func close_menu() -> void:
 	# Закрывает меню И снимает паузу
@@ -59,18 +55,14 @@ func _center_panel() -> void:
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)  # используем position/size
 	panel.position = (vp - panel.size) * 0.5
 
-func set_context(allow_apply: bool, hint: String) -> void:
-	$Center/Panel/Margin/VBox/Title.text = hint
-	$Center/Panel/Margin/VBox/BtnApply.disabled = not allow_apply
+# func _on_btn_next_pressed() -> void:
+# 	emit_signal("next_pressed")
+# 	close_menu()
 
-func _on_btn_apply_pressed() -> void:
-	close_menu()
-	emit_signal("apply_pressed")
+# func _on_btn_restart_pressed() -> void:
+# 	emit_signal("restart_pressed")
+# 	close_menu()
 
-func _on_btn_skip_pressed() -> void:
-	close_menu()
-	emit_signal("skip_pressed")
-
-func _on_btn_restart_pressed() -> void:
-	close_menu()
-	emit_signal("restart_pressed")
+# func _on_btn_main_menu_pressed() -> void:
+# 	emit_signal("menu_pressed")
+# 	close_menu()
