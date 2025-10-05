@@ -210,7 +210,7 @@ func _physics_process(delta):
 	else:
 		# Wall climb animation
 		# Направление определять по player_direction
-		anim_player.play("idle")
+		anim_player.play("climb")
 		
 		# Play sound only when first starting to climb
 		if not is_climbing:
