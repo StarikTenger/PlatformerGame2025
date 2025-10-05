@@ -3,6 +3,7 @@ class_name MainCamera
 
 var player: PlayerBase = null
 var SHAKE_TIME: float = 0.7
+@export var zoom_factor: float = 2.0
 
 # === shake ===
 @export var shake_strength: float = 10.0
@@ -137,10 +138,10 @@ func _positioning(delta: float):
 	if _target_state != null:
 		var effective_state: CameraState = _target_state.get_effective_state(_follow_state)
 		global_position = effective_state.position
-		zoom = Vector2.ONE * effective_state.zoom
+		zoom = Vector2.ONE * effective_state.zoom * zoom_factor
 	else:
 		global_position = _follow_state.position
-		zoom = Vector2.ONE * _follow_state.zoom
+		zoom = Vector2.ONE * _follow_state.zoom * zoom_factor
 
 
 # === Публичные методы ===
