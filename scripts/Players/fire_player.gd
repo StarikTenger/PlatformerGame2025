@@ -47,21 +47,41 @@ func _erase_destructibles_around(world_pos: Vector2, radius_px: float) -> void:
 	var rx: int = int(ceil(radius_px / tile_size.x))
 	var ry: int = int(ceil(radius_px / tile_size.y))
 
+	var visited := {}
+	var queue := []
+
+	# Collect all cells within the radius
 	for cy in range(cell_center.y - ry, cell_center.y + ry + 1):
 		for cx in range(cell_center.x - rx, cell_center.x + rx + 1):
 			var cell: Vector2i = Vector2i(cx, cy)
 			if tiles_layer.get_cell_source_id(cell) == -1:
 				continue
-
-			# центр клетки → мировые координаты
 			var wc: Vector2 = tiles_layer.to_global(tiles_layer.map_to_local(cell) + tile_size * 0.5)
 			if wc.distance_to(world_pos) > radius_px:
 				continue
-
 			var td: TileData = tiles_layer.get_cell_tile_data(cell)
 			if td != null and td.get_custom_data(DESTRUCT_FLAG) == true:
-				tiles_layer.erase_cell(cell)
-				_spawn_explosion(wc)
+				queue.append(cell)
+				visited[cell] = true
+
+	# BFS to explode all reachable destructible tiles
+	while queue.size() > 0:
+		var current: Vector2i = queue.pop_front()
+		var wc: Vector2 = tiles_layer.to_global(tiles_layer.map_to_local(current) + tile_size * 0.5)
+		tiles_layer.erase_cell(current)
+		_spawn_explosion(wc)
+
+		# Check 4 neighbors
+		for dir in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1)]:
+			var neighbor = current + dir
+			if visited.has(neighbor):
+				continue
+			if tiles_layer.get_cell_source_id(neighbor) == -1:
+				continue
+			var n_td: TileData = tiles_layer.get_cell_tile_data(neighbor)
+			if n_td != null and n_td.get_custom_data(DESTRUCT_FLAG) == true:
+				queue.append(neighbor)
+				visited[neighbor] = true
 
 func get_player_type() -> PlayerType:
 	return PlayerType.FIRE
