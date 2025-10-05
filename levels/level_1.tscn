@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://dwgk0pf343bfs"]
+[gd_scene load_steps=7 format=4 uid="uid://bpwcebgeb5gh"]
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_btoec"]
 [ext_resource type="TileSet" uid="uid://cr3d0l0os2ax0" path="res://animation/tile_set.tres" id="2_btoec"]
@@ -38,4 +38,4 @@ position = Vector2(-600, 1600)
 script = ExtResource("5_08mmt")
 
 [node name="Exit" parent="." instance=ExtResource("6_5ot28")]
-position = Vector2(7400, 2600)
+position = Vector2(849, 1204)
