@@ -26,19 +26,19 @@ func _ready() -> void:
 	add_to_group("liftable")
 	add_to_group("player")
 
-const TILE_SIZE := 100.0
+const TILE_SIZE := 200.0
 
 var hp : int = 1
 
 var dash_speed : float = 2000.0
-var jump_height : float = 2.5 * TILE_SIZE
+var jump_height : float = 1.5 * TILE_SIZE
 var double_jump_height : float = jump_height
 var delay_between_jumps : float = 0.25
 var time_since_last_jump : float = 0.0
 var can_double_jump := true
 
 # var speed : float = 3.0 * TILE_SIZE / sqrt(2 * jump_height / ProjectSettings.get_setting("physics/2d/default_gravity"))
-var speed : float = 520
+var speed : float = TILE_SIZE * 4
 
 var dash_duration : float = 0.15  # Продолжительность dash в секундах
 var dash_time_left : float = 0.0

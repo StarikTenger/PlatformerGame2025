@@ -12,7 +12,7 @@ func _death_effect() -> void:
 func _ready() -> void:
 	super()
 	enabled_wall_climb = true
-	jump_height = 2.2 * TILE_SIZE
+	jump_height = 1.2 * TILE_SIZE
 	speed = 600.0
 	platform_scene = preload("res://scenes/Platform.tscn")
 
