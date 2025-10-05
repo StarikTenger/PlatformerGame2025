@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5i8ejqe05u3s"]
+[gd_scene load_steps=3 format=3 uid="uid://bway7vvuot8g3"]
 
-[ext_resource type="Script" uid="uid://bt00kn0gecaa6" path="res://scripts/eye.gd" id="1_uv56g"]
+[ext_resource type="Script" path="res://scripts/eye.gd" id="1_uv56g"]
 [ext_resource type="SpriteFrames" uid="uid://bewhjw5r0modm" path="res://animation/eye.tres" id="2_ifnh4"]
 
 [node name="Eye" type="AnimatedSprite2D"]
