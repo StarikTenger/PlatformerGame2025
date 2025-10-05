@@ -222,6 +222,11 @@ func _physics_process(delta):
 	if enabled_dash and not is_dashing and not is_on_floor() and can_dash:
 		if Input.is_action_just_pressed("special_action"):
 			# TODO: анимация дэша
+
+			# Dash sound
+			audio_player.stream = load("res://sounds/FIRE_GUY_DASH.mp3")
+			audio_player.play()
+
 			var dash_direction = 0
 			if player_direction == PlayerDirection.RIGHT:
 				dash_direction = 1
@@ -265,6 +270,10 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
+			# Double jump sound
+			audio_player.stream = load("res://sounds/WIND_GUY_DOUBLE_JUMP.mp3")
+			audio_player.play()
+
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
 			can_double_jump = false
