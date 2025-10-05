@@ -33,6 +33,7 @@ func _on_focus_exited() -> void:
 
 func _process(delta: float) -> void:
 	is_opened = LevelManager.max_opened_level >= level_id
+	pass
 
 	if not is_opened:
 		modulate.a = 0.3
