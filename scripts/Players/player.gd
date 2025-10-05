@@ -9,8 +9,11 @@ signal death_request(player: Node)
 
 @export var hazards_map: TileMapLayer
 @export var tiles_map: TileMapLayer
+@export var tiles_map_2: TileMapLayer
 @export var hazard_flag_name := "hazard"
 @export var pushable_flag_name := "pushable"
+
+@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 enum PlayerType {
 	FIRE,
@@ -19,10 +22,50 @@ enum PlayerType {
 	UNKNOWN,
 }
 
+# Get all tile layers for operations
+func _get_tile_layers() -> Array[TileMapLayer]:
+	var layers: Array[TileMapLayer] = []
+	if tiles_map:
+		layers.append(tiles_map)
+	if tiles_map_2:
+		layers.append(tiles_map_2)
+	return layers
+
+# Check if a cell has a specific flag in any layer
+func _has_tile_with_flag(cell: Vector2i, flag_name: String, flag_value = true) -> bool:
+	for layer in _get_tile_layers():
+		if layer.get_cell_source_id(cell) == -1:
+			continue
+		var td: TileData = layer.get_cell_tile_data(cell)
+		if td != null and td.get_custom_data(flag_name) == flag_value:
+			return true
+	return false
+
+# Get the layer and tile data for a cell with a specific flag
+func _get_tile_with_flag(cell: Vector2i, flag_name: String, flag_value = true) -> Dictionary:
+	for layer in _get_tile_layers():
+		if layer.get_cell_source_id(cell) == -1:
+			continue
+		var td: TileData = layer.get_cell_tile_data(cell)
+		if td != null and td.get_custom_data(flag_name) == flag_value:
+			return {"layer": layer, "tile_data": td}
+	return {}
+
+# Check if a collision is with any of our tile layers
+func _is_collision_with_tile_layers(collision: KinematicCollision2D) -> TileMapLayer:
+	var collider = collision.get_collider()
+	for layer in _get_tile_layers():
+		if collider == layer:
+			return layer
+	return null
+
 func _ready() -> void:
 	if tiles_map == null:
 		var lvl := get_tree().current_scene
 		tiles_map = lvl.find_child("Tiles", true, false) as TileMapLayer
+	if tiles_map_2 == null:
+		var lvl := get_tree().current_scene
+		tiles_map_2 = lvl.find_child("Tiles 2", true, false) as TileMapLayer
 	add_to_group("liftable")
 	add_to_group("player")
 
@@ -49,6 +92,8 @@ var wall_climb_direction := 0  # Направление стены (-1 слев�
 var special_action_released := true
 var special_action_released_delay := 0.2
 var special_action_just_released_time_left := 0.0
+var is_walking := false
+var is_climbing := false
 
 enum PlayerDirection {
 	RIGHT,
@@ -138,10 +183,22 @@ func _physics_process(delta):
 	if is_on_floor():
 		if input_direction == 0:
 			anim_player.play("idle")
+			# Stop walking sound when not moving
+			if is_walking:
+				audio_player.stop()
+				is_walking = false
 		else:
 			anim_player.play("walk")
+			# Start walking sound only if not already playing
+			if not is_walking:
+				audio_player.stream = load("res://sounds/PLAYER_WALK_LOOP.mp3")
+				audio_player.play()
+				is_walking = true
+			
 			anim_player.flip_h = input_direction < 0
 	elif not is_on_the_wall:
+		if is_walking:
+			is_walking = false
 		if input_direction == 0:
 			if velocity.y < 0:
 				anim_player.play("jump_up")
@@ -154,7 +211,15 @@ func _physics_process(delta):
 		# Wall climb animation
 		# Направление определять по player_direction
 		anim_player.play("idle")
-
+		
+		# Play sound only when first starting to climb
+		if not is_climbing:
+			audio_player.stream = load("res://sounds/EARTH_GUY_HEAVY.mp3")
+			audio_player.play()
+			is_climbing = true
+		
+		if is_walking:
+			is_walking = false
 	var velocity_desired = input_direction * speed
 
 	var friction_k = 0.2 if is_on_floor() else 0.05
@@ -203,6 +268,11 @@ func _physics_process(delta):
 	if enabled_dash and not is_dashing and not is_on_floor() and can_dash:
 		if Input.is_action_just_pressed("special_action"):
 			# TODO: анимация дэша
+
+			# Dash sound
+			audio_player.stream = load("res://sounds/FIRE_GUY_DASH.mp3")
+			audio_player.play()
+
 			var dash_direction = 0
 			if player_direction == PlayerDirection.RIGHT:
 				dash_direction = 1
@@ -228,17 +298,31 @@ func _physics_process(delta):
 			if not _emitted_move:
 				_emitted_move = true
 				emit_signal("moved_once")
+		
+			# Play sound
+			audio_player.stream = load("res://sounds/PLAYER_JUMP.mp3")
+			audio_player.play()
+
 		elif is_on_the_wall:  # Прыжок со стены
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			# Добавляем небольшой импульс в сторону от стены
 			velocity.x = -wall_climb_direction * speed * 0.6
 			time_since_last_jump = 0.0
 			is_on_the_wall = false  # Отключаем wall climb
+			is_climbing = false  # Reset climbing state
 			wall_climb_direction = 0
+
+			# Play sound
+			audio_player.stream = load("res://sounds/EARTH_GUY_LIGHT.mp3")
+			audio_player.play()
 		
 	if Input.is_action_just_pressed("jump"):
 		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
+			# Double jump sound
+			audio_player.stream = load("res://sounds/WIND_GUY_DOUBLE_JUMP.mp3")
+			audio_player.play()
+
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
 			can_double_jump = false
@@ -249,12 +333,14 @@ func _physics_process(delta):
 		if is_on_the_wall:
 			velocity.y = 0
 			is_on_the_wall = false
+			is_climbing = false  # Reset climbing state
 			wall_climb_direction = 0
 
 	# Отпускаем стену при отпускании клавиши dash
 	if is_on_the_wall and special_action_released:
 		velocity.y = 0
 		is_on_the_wall = false
+		is_climbing = false  # Reset climbing state
 		wall_climb_direction = 0
 
 	# Применяем гравитацию только если не в состоянии dash или wall climb
@@ -277,21 +363,23 @@ func _physics_process(delta):
 		can_dash = true
 		# На земле отключаем wall climb
 		is_on_the_wall = false
+		is_climbing = false  # Reset climbing state
 		wall_climb_direction = 0
 	
 	for i in range(get_slide_collision_count()):
 		var col := get_slide_collision(i)
-		# интересуют только столкновения с нужным TileMapLayer
-		if tiles_map != null and col.get_collider() == tiles_map:
-			var cell := _cell_at_collision(tiles_map, col)
+		# Check if collision is with any of our tile layers
+		var tile_layer = _is_collision_with_tile_layers(col)
+		if tile_layer != null:
+			var cell := _cell_at_collision(tile_layer, col)
 			if cell != null:
-				var td := tiles_map.get_cell_tile_data(cell)
+				var td := tile_layer.get_cell_tile_data(cell)
 				if td != null:
 					if td.get_custom_data(hazard_flag_name) == true:
 						die()
 						return
 					elif td.get_custom_data(pushable_flag_name) == true:
-						_push_block(cell, col.get_normal())
+						_push_block(cell, col.get_normal(), tile_layer)
 					
 func _cell_at_collision(layer: TileMapLayer, col: KinematicCollision2D) -> Vector2i:
 	# берём точку чуть "внутрь" тайла (сдвигаемся на полпикселя по нормали)
@@ -299,16 +387,27 @@ func _cell_at_collision(layer: TileMapLayer, col: KinematicCollision2D) -> Vecto
 	var local_p: Vector2 = layer.to_local(world_p)
 	return layer.local_to_map(local_p)
 
-func _push_block(cell: Vector2i, normal: Vector2) -> void:
+func _push_block(cell: Vector2i, normal: Vector2, layer: TileMapLayer = null) -> void:
+	# Use provided layer or default to tiles_map
+	var target_layer = layer if layer != null else tiles_map
+	if target_layer == null:
+		return
+		
 	# вычисляем куда толкнуть
 	var target_cell := cell + Vector2i(round(-normal.x), round(-normal.y))
-	# проверяем что целевая пустая
-	if tiles_map.get_cell_source_id(target_cell) == -1:
-		var source_id := tiles_map.get_cell_source_id(cell)
-		var atlas_coords := tiles_map.get_cell_atlas_coords(cell)
+	# проверяем что целевая пустая (проверяем во всех слоях)
+	var target_occupied = false
+	for check_layer in _get_tile_layers():
+		if check_layer.get_cell_source_id(target_cell) != -1:
+			target_occupied = true
+			break
+			
+	if not target_occupied:
+		var source_id := target_layer.get_cell_source_id(cell)
+		var atlas_coords := target_layer.get_cell_atlas_coords(cell)
 		# переносим тайл
-		tiles_map.set_cell(target_cell, source_id, atlas_coords)
-		tiles_map.set_cell(cell, -1)
+		target_layer.set_cell(target_cell, source_id, atlas_coords)
+		target_layer.set_cell(cell, -1)
 
 
 func set_death_immunity(seconds: float = 0.5) -> void:

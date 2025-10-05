@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://beqf7wn7hi4v4"]
+[gd_scene load_steps=6 format=3 uid="uid://beqf7wn7hi4v4"]
 
 [ext_resource type="Script" uid="uid://bs2lx78e4gm3l" path="res://scripts/parallax_layer.gd" id="1_000os"]
+[ext_resource type="Script" uid="uid://162pyg6qtu4m" path="res://scripts/parallax_background.gd" id="1_k475d"]
 [ext_resource type="Texture2D" uid="uid://ceksrb5epkyod" path="res://resources/background-3.png" id="1_ubp2u"]
 [ext_resource type="Texture2D" uid="uid://cikj32ojri2s0" path="res://resources/background-2.png" id="2_000os"]
 [ext_resource type="Texture2D" uid="uid://le7p0ybm5dt2" path="res://resources/background-1.png" id="3_k475d"]
 
 [node name="ParallaxBackground" type="ParallaxBackground"]
+script = ExtResource("1_k475d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(587, 344)
