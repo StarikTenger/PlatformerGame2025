@@ -141,14 +141,14 @@ func _physics_process(delta):
 	var friction_k = 0.2 if is_on_floor() else 0.05
 
 	# Wall climb логика
-	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall:
+	if enabled_wall_climb and not is_on_floor() and not is_on_the_wall and Input.is_action_pressed("dash"):
 		# Проверяем столкновения со стенами
-		var wall_left = is_on_wall() and input_direction < 0
-		var wall_right = is_on_wall() and input_direction > 0
+		# var wall_left = is_on_wall() and input_direction < 0
+		# var wall_right = is_on_wall() and input_direction > 0
 
 		# Если хотим чтобы персонаж прилипал к стене без нахятия клавиши движения
-		# var wall_left = is_on_wall() and player_direction == PlayerDirection.LEFT
-		# var wall_right = is_on_wall() and player_direction == PlayerDirection.RIGHT
+		var wall_left = is_on_wall() and player_direction == PlayerDirection.LEFT
+		var wall_right = is_on_wall() and player_direction == PlayerDirection.RIGHT
 
 		if wall_left or wall_right:
 			# Начинаем wall climb
@@ -228,10 +228,15 @@ func _physics_process(delta):
 	if moving_down:
 		# Отпустить стену если игрок на ней висит
 		if is_on_the_wall:
-			print("Отпустить стену")
 			velocity.y = 0
 			is_on_the_wall = false
 			wall_climb_direction = 0
+
+	# Отпускаем стену при отпускании клавиши dash
+	if is_on_the_wall and Input.is_action_just_released("dash"):
+		velocity.y = 0
+		is_on_the_wall = false
+		wall_climb_direction = 0
 
 	# Применяем гравитацию только если не в состоянии dash или wall climb
 	if not is_dashing and not is_on_the_wall:
