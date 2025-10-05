@@ -319,7 +319,8 @@ func _death_restart_pressed():
 func _death_main_menu_pressed():
 	SaveState.set_restarted(false)
 	_show_death_menu(false)
-	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
+	get_tree().root.get_node("LevelManager").get_focus()
+	get_tree().root.get_node("Level").queue_free()
 
 func _win_restart_pressed():
 	_show_win_menu(false)
@@ -327,7 +328,8 @@ func _win_restart_pressed():
 
 func _win_menu_pressed():
 	_show_win_menu(false)
-	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
+	get_tree().root.get_node("LevelManager").get_focus()
+	get_tree().root.get_node("Level").queue_free()
 
 func _show_death_menu(show: bool):
 	if show:
@@ -342,6 +344,8 @@ func _show_win_menu(show: bool):
 		win_menu.close_menu()
 
 func _next_level():
+	print("Level next pressed")
+	SaveState.set_restarted(false)
 	_show_win_menu(false)
 	LevelManager.next_level()
 
