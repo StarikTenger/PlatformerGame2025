@@ -103,13 +103,11 @@ func _physics_process(delta):
 	var input_direction = 0
 	if Input.is_action_pressed("move_right"):
 		input_direction += 1
-		player_direction = PlayerDirection.RIGHT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
 	if Input.is_action_pressed("move_left"):
 		input_direction -= 1
-		player_direction = PlayerDirection.LEFT
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
@@ -228,7 +226,6 @@ func _physics_process(delta):
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			# Добавляем небольшой импульс в сторону от стены
 			velocity.x = -wall_climb_direction * speed * 0.6
-			player_direction = PlayerDirection.RIGHT if wall_climb_direction < 0 else PlayerDirection.LEFT
 			time_since_last_jump = 0.0
 			is_on_the_wall = false  # Отключаем wall climb
 			wall_climb_direction = 0
@@ -259,6 +256,12 @@ func _physics_process(delta):
 		# Ускоренное падение вниз при зажатии вниз
 		if moving_down and not is_on_floor():
 			velocity.y += gravity * delta
+
+	# Определяем направление движения
+	if velocity.x > 0:
+		player_direction = PlayerDirection.RIGHT
+	elif velocity.x < 0:
+		player_direction = PlayerDirection.LEFT
 	
 	move_and_slide()
 	
