@@ -5,6 +5,9 @@ class_name FirePlayer
 var explosion_radius_px = explosion_radius * 100.0
 const DESTRUCT_FLAG := "destruct_fire"
 
+# Audio for explosion
+var explosion_player := AudioStreamPlayer2D.new()
+
 var tiles_layer: TileMapLayer
 
 
@@ -20,6 +23,13 @@ func _ready() -> void:
 
 var explosion_scene : PackedScene
 func _spawn_explosion(pos: Vector2) -> void:
+
+	# Play sound
+	explosion_player.stream = load("res://sounds/FIRE_GUY_DEATH.mp3")
+	explosion_player.position = pos
+	get_parent().add_child(explosion_player)
+	explosion_player.play()
+
 	var explosion = explosion_scene.instantiate()
 	explosion.global_position = pos
 	get_parent().add_child(explosion)
