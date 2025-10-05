@@ -4,17 +4,17 @@
 [ext_resource type="SpriteFrames" uid="uid://dt5lph8dhq4ox" path="res://animation/Exit.tres" id="2_c8tsr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c4vl1"]
-size = Vector2(85.25, 129)
+size = Vector2(164.625, 262.5)
 
 [node name="Exit" type="Area2D"]
 script = ExtResource("1_c8tsr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(1, -14)
-scale = Vector2(0.7425, 0.7425)
+position = Vector2(6, -141)
+scale = Vector2(1.51562, 1.51562)
 sprite_frames = ExtResource("2_c8tsr")
-frame_progress = 0.154595
+frame_progress = 0.790262
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.625, -10.5)
+position = Vector2(2, -133)
 shape = SubResource("RectangleShape2D_c4vl1")
