@@ -38,7 +38,7 @@ func populate_levels():
 	if not grid:
 		print("ERROR: Cannot populate levels - GridContainer is null")
 		return
-		
+	
 	level_button_scene = preload("res://scenes/UI/LevelButton.tscn")
 	for i in range(level_scenes.size()):
 		var btn = level_button_scene.instantiate()
@@ -50,6 +50,9 @@ func populate_levels():
 	_update_level_buttons()
 
 	print("Populated ", level_scenes.size(), " level buttons")
+
+func get_focus():
+	grid.get_child(0).grab_focus()
 
 func _launch_level(level_id: int):
 	current_level = level_id
@@ -70,5 +73,4 @@ func next_level():
 	_launch_level(current_level)
 
 func _process(delta: float) -> void:
-	print("level var - " + str(current_level))
 	pass

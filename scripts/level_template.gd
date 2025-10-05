@@ -319,6 +319,7 @@ func _death_restart_pressed():
 func _death_main_menu_pressed():
 	SaveState.set_restarted(false)
 	_show_death_menu(false)
+	get_tree().root.get_node("LevelManager").get_focus()
 	get_tree().root.get_node("Level").queue_free()
 
 func _win_restart_pressed():
@@ -327,6 +328,7 @@ func _win_restart_pressed():
 
 func _win_menu_pressed():
 	_show_win_menu(false)
+	get_tree().root.get_node("LevelManager").get_focus()
 	get_tree().root.get_node("Level").queue_free()
 
 func _show_death_menu(show: bool):
