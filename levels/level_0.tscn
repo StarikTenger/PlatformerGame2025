@@ -1,15 +1,15 @@
-[gd_scene load_steps=14 format=4 uid="uid://bls4mqr18oq6x"]
+[gd_scene load_steps=12 format=4 uid="uid://3cuxwomim7ev"]
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_yi3jx"]
 [ext_resource type="Texture2D" uid="uid://blcrbxcv3ix0g" path="res://resources/platformer-tiles.png" id="2_foxie"]
 [ext_resource type="PackedScene" uid="uid://c02kgqghm6xo1" path="res://scenes/Dispenser.tscn" id="3_7d3si"]
 [ext_resource type="Texture2D" uid="uid://rpe3t0ry3iso" path="res://resources/tiles.png" id="3_dm5o4"]
 [ext_resource type="PackedScene" uid="uid://bqeykxs2dl2yd" path="res://scenes/Projectile.tscn" id="4_jum3j"]
-[ext_resource type="PackedScene" uid="uid://cdpe0vowoxnfi" path="res://scenes/door.tscn" id="5_7d3si"]
-[ext_resource type="PackedScene" path="res://scenes/Eye.tscn" id="5_foxie"]
-[ext_resource type="PackedScene" uid="uid://cvdkrw1btgn2q" path="res://scenes/switch.tscn" id="6_jum3j"]
-[ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="7_jum3j"]
-[ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="9_tfamw"]
+[ext_resource type="PackedScene" path="res://scenes/door.tscn" id="5_7d3si"]
+[ext_resource type="PackedScene" uid="uid://bway7vvuot8g3" path="res://scenes/Eye.tscn" id="5_foxie"]
+[ext_resource type="PackedScene" path="res://scenes/switch.tscn" id="6_jum3j"]
+[ext_resource type="PackedScene" path="res://scenes/Exit.tscn" id="7_jum3j"]
+[ext_resource type="Script" path="res://scripts/level_overview_node.gd" id="9_tfamw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dm5o4"]
 texture = ExtResource("2_foxie")
