@@ -6,6 +6,7 @@
 
 [node name="LevelButton" type="TextureButton"]
 modulate = Color(1, 1, 1, 0.223529)
+z_index = 1
 custom_minimum_size = Vector2(51.2, 51.2)
 layout_direction = 2
 offset_right = 51.2
