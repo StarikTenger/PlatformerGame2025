@@ -153,7 +153,9 @@ func _ready():
 	# camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
 	# camera_node.hard_reset_target_state()
 	camera_node.global_position = level_overview_position
-	camera_node.zoom = Vector2.ONE * 0.3
+	var window_size: Vector2 = get_viewport_rect().size
+	var zoom_factor = window_size.y / 720.0
+	camera_node.zoom = Vector2.ONE * zoom_factor * level_overview_zoom
 
 
 func _start_game():
