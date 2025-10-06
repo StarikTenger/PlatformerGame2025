@@ -3,7 +3,7 @@ extends Control
 @export var level_button_scene: PackedScene
 @onready var grid: GridContainer = $VBoxContainer/GridContainer
 var current_level: int = 0
-var max_opened_level: int = 2
+var max_opened_level: int = 10
 var parallax_time: float = 0.0  # Accumulated time for parallax animation
 var parallax_velocity: Vector2 = Vector2.ZERO  # Current velocity for smooth movement
 var parallax_position: Vector2 = Vector2.ZERO  # Current position
@@ -12,9 +12,6 @@ var level_scenes: Array[String] = [
 	"res://levels/level_1.tscn",
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
-	"res://levels/level_4.tscn",
-	"res://levels/level_5.tscn",
-	"res://levels/level_6.tscn",
 ]
 
 var levels_by_id: Dictionary = {}
