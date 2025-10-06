@@ -3,7 +3,7 @@ extends Control
 @export var level_button_scene: PackedScene
 @onready var grid: GridContainer = $GridContainer
 var current_level: int = 0
-var max_opened_level: int = 0
+var max_opened_level: int = 2
 
 var level_scenes: Array[String] = [
 	"res://levels/level_1.tscn",
