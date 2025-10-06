@@ -6,15 +6,17 @@
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f0mf6"]
 particle_flag_disable_z = true
 emission_shape_offset = Vector3(1, 1, 1)
-emission_shape = 3
-emission_box_extents = Vector3(20, 20, 20)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 100.0
+emission_ring_radius = 100.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
 angle_min = -180.0
 angle_max = 180.0
 direction = Vector3(0, 0, 0)
 spread = 180.0
-initial_velocity_min = -5.0
-initial_velocity_max = 5.0
-gravity = Vector3(0, 98, 0)
+gravity = Vector3(0, 0, 0)
 scale_min = 0.1
 scale_max = 0.2
 turbulence_enabled = true
@@ -33,8 +35,11 @@ collision_mask = 3
 script = ExtResource("1_v6fml")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-scale = Vector2(-0.278334, 0.481974)
-amount = 10
+position = Vector2(-5, -4)
+rotation = -3.14159
+scale = Vector2(0.278334, -0.481974)
+amount = 5
+amount_ratio = 0.5
 texture = ExtResource("2_d0tyu")
 lifetime = 2.0
 process_material = SubResource("ParticleProcessMaterial_f0mf6")
