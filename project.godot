@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 SaveState="*res://scripts/SaveState.gd"
 LevelManager="*res://scenes/UI/LevelManager.tscn"
+Music="*res://scripts/UI/Music.gd"
 
 [input]
 
