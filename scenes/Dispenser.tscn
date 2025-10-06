@@ -19,7 +19,6 @@ texture = ExtResource("1_yuh73")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2.27374e-13, -1)
 rotation = -1.5708
-scale = Vector2(0.104451, 0.104451)
 sprite_frames = ExtResource("3_qd80i")
 animation = &"fire"
 autoplay = "idle"
