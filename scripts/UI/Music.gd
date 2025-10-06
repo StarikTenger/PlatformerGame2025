@@ -35,10 +35,19 @@ func _ready():
 	print("Persistent music player initialized")
 
 func _setup_audio_effects():
-	# Create a dedicated music bus for better control
-	AudioServer.add_bus(1)
-	AudioServer.set_bus_name(1, "Music")
-	AudioServer.set_bus_send(1, "Master")
+	# Check if Music bus already exists, if not create it
+	var music_bus_index = AudioServer.get_bus_index("Music")
+	if music_bus_index == -1:
+		# Create a dedicated music bus for better control
+		AudioServer.add_bus(1)
+		AudioServer.set_bus_name(1, "Music")
+		AudioServer.set_bus_send(1, "Master")
+		music_bus_index = 1
+	
+	# Clear any existing effects on the music bus to prevent doubling
+	var effect_count = AudioServer.get_bus_effect_count(music_bus_index)
+	for i in range(effect_count - 1, -1, -1):
+		AudioServer.remove_bus_effect(music_bus_index, i)
 	
 	# Set the music player to use the music bus
 	music_player.bus = "Music"
@@ -47,7 +56,7 @@ func _setup_audio_effects():
 	var lowpass_effect = AudioEffectLowPassFilter.new()
 	lowpass_effect.cutoff_hz = 8000.0  # Mild low-pass at 8kHz
 	lowpass_effect.resonance = 0.7     # Slight resonance for smoothness
-	AudioServer.add_bus_effect(1, lowpass_effect)
+	AudioServer.add_bus_effect(music_bus_index, lowpass_effect)
 	
 	# Add EQ for background music (more atmospheric settings)
 	var eq_effect = AudioEffectEQ10.new()
@@ -64,7 +73,7 @@ func _setup_audio_effects():
 	eq_effect.set_band_gain_db(8, -2.5)   # 8 kHz - reduction (works with low-pass)
 	eq_effect.set_band_gain_db(9, -4.0)   # 16 kHz - significant reduction (atmospheric)
 	
-	AudioServer.add_bus_effect(1, eq_effect)
+	AudioServer.add_bus_effect(music_bus_index, eq_effect)
 
 func _process(delta):
 	# Auto-detect gameplay vs menu based on current scene
