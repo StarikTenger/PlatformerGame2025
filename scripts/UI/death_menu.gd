@@ -4,6 +4,25 @@ signal skip_pressed
 signal restart_pressed
 
 var _prev_mouse_mode: int = Input.get_mouse_mode()
+var tex: Texture2D = preload("res://resources/ui/buttons.png")
+
+func get_atlas_texture(line: int, color=0):
+	# Add texture depending on level 1-5 first line, 6-10 second line, etc.
+	var colors: int = 3
+	var rows: int = 10
+	var row_offset: int = 0
+	var color_offset: int = color
+	var cell_w: int = tex.get_width() / colors
+	var cell_h: int = tex.get_height() / rows
+	var y: int = line
+	
+	# Create an AtlasTexture for the specific region
+	var atlas_tex = AtlasTexture.new()
+	atlas_tex.atlas = tex
+	atlas_tex.region = Rect2(color_offset * cell_w,
+							 (y + row_offset) * cell_h,
+							  cell_w, cell_h)
+	return atlas_tex
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
@@ -22,6 +41,32 @@ func _ready() -> void:
 	$Center/Panel/Margin/VBox/BtnSkip.pressed.connect(func(): emit_signal("skip_pressed"))
 	$Center/Panel/Margin/VBox/BtnRestart.pressed.connect(func(): emit_signal("restart_pressed"))
 	
+	# Textures and alignment
+	var apply_btn = $Center/Panel/Margin/VBox/BtnApply
+	apply_btn.stretch_mode = 3
+	apply_btn.texture_normal = get_atlas_texture(3, 0)
+	apply_btn.texture_hover = get_atlas_texture(3, 1)
+	apply_btn.texture_pressed = get_atlas_texture(3, 2)
+	apply_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	
+	var skip_btn = $Center/Panel/Margin/VBox/BtnSkip
+	skip_btn.stretch_mode = 3
+	skip_btn.texture_normal = get_atlas_texture(1, 0)
+	skip_btn.texture_hover = get_atlas_texture(1, 1)
+	skip_btn.texture_pressed = get_atlas_texture(1, 2)
+	skip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	
+	var restart_btn = $Center/Panel/Margin/VBox/BtnRestart
+	restart_btn.stretch_mode = 3
+	restart_btn.texture_normal = get_atlas_texture(2, 0)
+	restart_btn.texture_hover = get_atlas_texture(2, 1)
+	restart_btn.texture_pressed = get_atlas_texture(2, 2)
+	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+
+	# Fix MarginContainer sizing - it should fill the Panel
+	var margin = $Center/Panel/Margin
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
 	get_viewport().size_changed.connect(_center_panel)
 	visible = false
 	_center_panel()
