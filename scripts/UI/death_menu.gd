@@ -89,7 +89,13 @@ func open() -> void:
 	get_tree().paused = true
 	await get_tree().process_frame
 	_center_panel()
-	$Center/Panel/Margin/VBox/BtnApply.grab_focus()
+	var vbox = $Center/Panel/Margin/VBox as Control
+	var apply_btn = vbox.get_node_or_null("BtnApply")
+	var skip_btn = vbox.get_node_or_null("BtnSkip")
+	if apply_btn and apply_btn.visible and not apply_btn.disabled:
+		apply_btn.grab_focus()
+	elif skip_btn:
+		skip_btn.grab_focus()
 
 func close_menu() -> void:
 	# Закрывает меню И снимает паузу
@@ -107,9 +113,17 @@ func _center_panel() -> void:
 	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)  # используем position/size
 	panel.position = (vp - panel.size) * 0.5
 
-func set_context(allow_apply: bool, hint: String) -> void:
+func set_context(allow_resume: bool, hint: String) -> void:
 	$Center/Panel/Margin/VBox/Title.text = hint
-	$Center/Panel/Margin/VBox/BtnApply.disabled = not allow_apply
+	var vbox = $Center/Panel/Margin/VBox as Control
+	var btn = vbox.get_node_or_null("BtnApply")
+	if btn:
+		btn.disabled = not allow_resume
+		# properly toggle visibility
+		btn.visible = allow_resume
+		# if made visible and menu is already open, focus it
+		if allow_resume and visible:
+			btn.grab_focus()
 
 func _on_btn_apply_pressed() -> void:
 	close_menu()

@@ -259,6 +259,7 @@ func _on_player_death_request(player: PlayerBase):
 	_pending_player = player
 	_pending_scene_idx = character_deck_idx
 	
+	# Legacy code: allow_apply is basically death
 	var allow_apply: bool = characters_on_deck() > 1
 	var hint: String
 	if allow_apply:
