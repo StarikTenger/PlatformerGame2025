@@ -9,6 +9,8 @@ var level_scenes: Array[String] = [
 	"res://levels/level_1.tscn",
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
+	"res://levels/level_4.tscn",
+	"res://levels/level_5.tscn",
 ]
 
 var levels_by_id: Dictionary = {}
