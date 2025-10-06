@@ -38,6 +38,7 @@ func setup(id: int, color: int = 0):
 							 (y + row_offset) * cell_h,
 							  cell_w, cell_h)
 	texture_hover = atlas_tex
+	texture_focused = atlas_tex
 	
 	color_offset = 2
 	atlas_tex = AtlasTexture.new()

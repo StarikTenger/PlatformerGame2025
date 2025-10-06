@@ -40,15 +40,11 @@ layout_mode = 2
 text = "Level Complete!"
 horizontal_alignment = 1
 
-[node name="BtnNext" type="Button" parent="Center/Panel/Margin/VBox"]
-custom_minimum_size = Vector2(420, 0)
+[node name="BtnNext" type="TextureButton" parent="Center/Panel/Margin/VBox"]
 layout_mode = 2
-text = "NEXT LEVEL"
 
-[node name="BtnRestart" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="BtnRestart" type="TextureButton" parent="Center/Panel/Margin/VBox"]
 layout_mode = 2
-text = "RESTART THIS LEVEL"
 
-[node name="BtnMenu" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="BtnMenu" type="TextureButton" parent="Center/Panel/Margin/VBox"]
 layout_mode = 2
-text = "MAIN MENU"
