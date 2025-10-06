@@ -58,6 +58,8 @@ func _launch_level(level_id: int):
 	current_level = level_id
 	print("Launching level ", level_id)
 	var level_scene = level_scenes[level_id]
+	
+	get_tree().root.get_node("LevelManager").hide()
 
 	get_tree().change_scene_to_file(level_scene)
 

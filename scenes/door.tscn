@@ -354,7 +354,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"open",
-"speed": 24.0
+"speed": 12.0
 }]
 
 [node name="Door" type="StaticBody2D"]
@@ -374,6 +374,5 @@ z_as_relative = false
 position = Vector2(1, 2.5034e-06)
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_mgd4q")
-animation = &"idle"
+animation = &"open"
 autoplay = "idle"
-frame_progress = 0.50283
