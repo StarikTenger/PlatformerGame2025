@@ -36,18 +36,20 @@ func _ready():
 	$Margin/MainMenuButton.pressed.connect(_on_main_menu_button_pressed)
 	var max_height = 0
 	for slot in hbox.get_children():
-		var tex = slot.sprite.sprite_frames.get_frame_texture("idle", 0)
-		max_height = max(max_height, tex.get_size().y * slot.sprite.scale.y)
+		var slot_tex = slot.sprite.sprite_frames.get_frame_texture("idle", 0)
+		max_height = max(max_height, slot_tex.get_size().y * slot.sprite.scale.y)
 	$Margin/Spacer.custom_minimum_size = Vector2(0, max_height)
 	
 	$Margin/StartButton.stretch_mode = 3
 	$Margin/StartButton.texture_normal = get_atlas_texture(4, 0)
 	$Margin/StartButton.texture_hover = get_atlas_texture(4, 1)
+	$Margin/StartButton.texture_focused = get_atlas_texture(4, 1)
 	$Margin/StartButton.texture_pressed = get_atlas_texture(4, 2)
 
 	$Margin/MainMenuButton.stretch_mode = 3
 	$Margin/MainMenuButton.texture_normal = get_atlas_texture(2, 0)
 	$Margin/MainMenuButton.texture_hover = get_atlas_texture(2, 1)
+	$Margin/MainMenuButton.texture_focused = get_atlas_texture(2, 1)
 	$Margin/MainMenuButton.texture_pressed = get_atlas_texture(2, 2)
 	
 	if not SaveState.get_restarted():
