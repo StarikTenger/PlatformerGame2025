@@ -55,6 +55,7 @@ func setup(id: int, color: int = 0):
 func _pressed():
 	if is_opened:
 		emit_signal("level_selected", level_id)
+		LevelManager.current_level = level_id
 
 
 func _on_focus_entered() -> void:

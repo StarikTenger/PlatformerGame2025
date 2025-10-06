@@ -3,7 +3,7 @@ extends Control
 @export var level_button_scene: PackedScene
 @onready var grid: GridContainer = $VBoxContainer/GridContainer
 var current_level: int = 0
-var max_opened_level: int = 10
+var max_opened_level: int = 0
 var parallax_time: float = 0.0  # Accumulated time for parallax animation
 var parallax_velocity: Vector2 = Vector2.ZERO  # Current velocity for smooth movement
 var parallax_position: Vector2 = Vector2.ZERO  # Current position
@@ -74,6 +74,16 @@ func next_level():
 	current_level = (current_level + 1) % level_scenes.size()
 	max_opened_level = max(max_opened_level, current_level)
 	_launch_level(current_level)
+
+func open_all_levels():
+	print("Opening all levels")
+	max_opened_level = 100
+	_update_level_buttons()
+
+func _unhandled_input(event):
+	# Handle open-all-levels action
+	if Input.is_action_pressed("open-all-levels"):
+		open_all_levels()
 
 func _process(delta: float) -> void:
 	# Accumulate time for smooth parallax animation
