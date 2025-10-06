@@ -170,7 +170,7 @@ func _unhandled_input(event):
 		_switch_next()
 	if not character_menu.visible and not get_tree().paused and Input.is_action_just_pressed("esc_menu"):
 		print("Pause menu requested")
-		death_menu.set_context(true, "Game on pause")
+		death_menu.set_context(true, "Game paused")
 		_show_death_menu(true)
 	if event.is_action_pressed("level_overview"):
 		if level_overview_zoom != 0 and player_alive:
