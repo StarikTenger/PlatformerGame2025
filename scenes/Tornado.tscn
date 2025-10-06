@@ -12,7 +12,8 @@ size = Vector2(137, 682.5)
 script = ExtResource("1_j3qay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(-3, -104)
+position = Vector2(-3, -373)
+scale = Vector2(1, 2.76974)
 sprite_frames = ExtResource("2_j3qay")
 autoplay = "default"
 frame_progress = 0.892044

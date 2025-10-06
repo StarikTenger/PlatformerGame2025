@@ -84,19 +84,7 @@ func get_chosen():
 	return chosen
 
 func _get_current_level_number() -> int:
-	# Extract level number from current scene filename
-	var scene_file = get_tree().current_scene.scene_file_path
-	if "level_1" in scene_file:
-		return 1
-	elif "level_2" in scene_file:
-		return 2
-	elif "level_3" in scene_file:
-		return 3
-	elif "level_4" in scene_file:
-		return 4
-	elif "level_5" in scene_file:
-		return 5
-	return 1  # Default to level 1
+	return LevelManager.current_level + 1
 
 func set_level_number(level_num: int):
 	current_level_number = level_num
