@@ -46,6 +46,7 @@ func _ready() -> void:
 	apply_btn.stretch_mode = 3
 	apply_btn.texture_normal = get_atlas_texture(3, 0)
 	apply_btn.texture_hover = get_atlas_texture(3, 1)
+	apply_btn.texture_focused = get_atlas_texture(3, 1)
 	apply_btn.texture_pressed = get_atlas_texture(3, 2)
 	apply_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	
@@ -53,6 +54,7 @@ func _ready() -> void:
 	skip_btn.stretch_mode = 3
 	skip_btn.texture_normal = get_atlas_texture(1, 0)
 	skip_btn.texture_hover = get_atlas_texture(1, 1)
+	skip_btn.texture_focused = get_atlas_texture(1, 1)
 	skip_btn.texture_pressed = get_atlas_texture(1, 2)
 	skip_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	
@@ -60,6 +62,7 @@ func _ready() -> void:
 	restart_btn.stretch_mode = 3
 	restart_btn.texture_normal = get_atlas_texture(2, 0)
 	restart_btn.texture_hover = get_atlas_texture(2, 1)
+	restart_btn.texture_focused = get_atlas_texture(2, 1)
 	restart_btn.texture_pressed = get_atlas_texture(2, 2)
 	restart_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 

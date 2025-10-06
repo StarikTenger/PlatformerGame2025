@@ -43,11 +43,13 @@ func _ready():
 	$Margin/StartButton.stretch_mode = 3
 	$Margin/StartButton.texture_normal = get_atlas_texture(4, 0)
 	$Margin/StartButton.texture_hover = get_atlas_texture(4, 1)
+	$Margin/StartButton.texture_focused = get_atlas_texture(4, 1)
 	$Margin/StartButton.texture_pressed = get_atlas_texture(4, 2)
 
 	$Margin/MainMenuButton.stretch_mode = 3
 	$Margin/MainMenuButton.texture_normal = get_atlas_texture(2, 0)
 	$Margin/MainMenuButton.texture_hover = get_atlas_texture(2, 1)
+	$Margin/MainMenuButton.texture_focused = get_atlas_texture(2, 1)
 	$Margin/MainMenuButton.texture_pressed = get_atlas_texture(2, 2)
 	
 	if not SaveState.get_restarted():
