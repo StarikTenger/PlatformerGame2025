@@ -22,6 +22,6 @@ func _physics_process(delta):
 			audio_player.stream = load("res://sounds/FLOURISH.mp3")
 			audio_player.play()
 			
-			get_parent().camera_node.set_target_state(global_position, 2, 1, 0)
+			get_parent().camera_node.set_target_state(global_position, 1.3, 1, 0)
 			await get_tree().create_timer(1.0).timeout
 			get_parent()._show_win_menu(true)

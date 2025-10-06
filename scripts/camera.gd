@@ -165,6 +165,10 @@ func hard_reset_target_state() -> void:
 	print("HARD_RESET_TARGET_STATE")
 	_target_state = null
 
+func hard_move_to_target_state() -> void:
+	global_position = _target_state.position
+	zoom = Vector2.ONE * _target_state.zoom * zoom_factor
+
 func _process(delta: float) -> void:
 	var window_size: Vector2 = get_viewport_rect().size
 	zoom_factor = window_size.y / 720.0

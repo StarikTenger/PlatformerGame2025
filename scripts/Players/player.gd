@@ -210,11 +210,12 @@ func _physics_process(delta):
 	else:
 		# Wall climb animation
 		# Направление определять по player_direction
-		anim_player.play("idle")
+		anim_player.play("climb")
 		
 		# Play sound only when first starting to climb
 		if not is_climbing:
 			audio_player.stream = load("res://sounds/EARTH_GUY_HEAVY.mp3")
+			audio_player.volume_db = -10  # Lower volume (negative values reduce volume)
 			audio_player.play()
 			is_climbing = true
 		
@@ -313,6 +314,7 @@ func _physics_process(delta):
 			wall_climb_direction = 0
 
 			# Play sound
+			audio_player.volume_db = 0  # Restore volume
 			audio_player.stream = load("res://sounds/EARTH_GUY_LIGHT.mp3")
 			audio_player.play()
 		

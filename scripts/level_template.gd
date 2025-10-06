@@ -51,6 +51,11 @@ var _prev_mouse_mode: int = Input.get_mouse_mode()
 var level_overview_position: Vector2 = Vector2.ZERO
 var level_overview_zoom: float = 0
 
+
+func _cam_on_level_overview():
+	if level_overview_zoom != 0 and player_alive:
+		camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+
 func _ready():
 	var start_roster = $StartRoster
 	
@@ -135,7 +140,6 @@ func _ready():
 	deck_update.connect(hud._on_deck_update)
 
 	
-	
 
 
 	var level_overview_position_node: Variant = get_node_or_null("LevelOverview")
@@ -144,8 +148,17 @@ func _ready():
 			level_overview_position = level_overview_position_node.global_position
 			level_overview_zoom = level_overview_position_node.zoom
 
+	# Camera overview
+	# camera_node.process_mode = Node.PROCESS_MODE_ALWAYS
+	# camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+	# camera_node.hard_reset_target_state()
+	camera_node.global_position = level_overview_position
+	camera_node.zoom = Vector2.ONE * level_overview_zoom
+
 
 func _start_game():
+
+	
 	var chosen : Array[String]
 	SaveState.save_chosen(character_menu.get_chosen())
 	character_menu.visible = false
@@ -163,6 +176,8 @@ func _start_game():
 
 	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 
+
+
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
 	if can_switch and event.is_action_pressed("switch_char"):
@@ -173,8 +188,7 @@ func _unhandled_input(event):
 		death_menu.set_context(true, "Game on pause")
 		_show_death_menu(true)
 	if event.is_action_pressed("level_overview"):
-		if level_overview_zoom != 0 and player_alive:
-			camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+		_cam_on_level_overview()
 	elif event.is_action_released("level_overview"):
 		if player_alive:
 			camera_node.reset_target_state()
