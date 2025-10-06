@@ -37,7 +37,7 @@ mouse_filter = 2
 
 [node name="Title" type="Label" parent="Margin"]
 layout_mode = 2
-text = "CHOOSE CHARACTERS"
+text = "CHOOSE ELEMENTALS BY CLICKING"
 label_settings = SubResource("LabelSettings_evv6q")
 horizontal_alignment = 1
 

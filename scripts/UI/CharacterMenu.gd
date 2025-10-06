@@ -4,6 +4,7 @@ extends Control
 @export var character_slot_scene: PackedScene
 @export var num_slots := 4
 var chosen : Array[String]
+var current_level_number: int = 1
 signal start_pressed
 
 var tex: Texture2D = preload("res://resources/ui/buttons.png")
@@ -28,6 +29,18 @@ func get_atlas_texture(line: int, color=0):
 
 func _ready():
 	process_mode =Node.PROCESS_MODE_ALWAYS
+	
+	# Get level number safely and handle title visibility
+	current_level_number = _get_current_level_number()
+	print("CharacterMenu: Detected level ", current_level_number)
+	
+	# If tutorial level, hide the title text
+	if current_level_number <= 3:
+		var title_node = get_node_or_null("Margin/Title")
+		if title_node:
+			# title_node.hide()
+			title_node.text = "TUTORIAL " + str(current_level_number)
+	
 	# Создаем нужное количество слотов
 	for i in range(num_slots):
 		var slot = character_slot_scene.instantiate()
@@ -69,6 +82,31 @@ func _on_start_pressed():
 
 func get_chosen():
 	return chosen
+
+func _get_current_level_number() -> int:
+	# Extract level number from current scene filename
+	var scene_file = get_tree().current_scene.scene_file_path
+	if "level_1" in scene_file:
+		return 1
+	elif "level_2" in scene_file:
+		return 2
+	elif "level_3" in scene_file:
+		return 3
+	elif "level_4" in scene_file:
+		return 4
+	elif "level_5" in scene_file:
+		return 5
+	return 1  # Default to level 1
+
+func set_level_number(level_num: int):
+	current_level_number = level_num
+	print("CharacterMenu: Set to level ", level_num)
+	
+	# If tutorial level, hide the title text
+	if current_level_number <= 2:
+		var title_node = get_node_or_null("Margin/Title")
+		if title_node:
+			title_node.hide()
 
 func load_chosen(_chosen : Array[String]):
 	chosen = _chosen

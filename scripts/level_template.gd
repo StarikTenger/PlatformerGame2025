@@ -266,7 +266,7 @@ func _on_player_death_request(player: PlayerBase):
 		else:
 			hint = "This character will leave an effect upon death"
 	else:
-		hint = "The characters are over"
+		hint = "You have no more elementals"
 	
 	death_menu.set_context(allow_apply, hint)
 
