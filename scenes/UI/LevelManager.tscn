@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://e8g31e6ejare" path="res://scripts/UI/LevelManager.gd" id="1_va7qb"]
 [ext_resource type="PackedScene" uid="uid://c2f8bjsqjtmdb" path="res://scenes/UI/LevelButton.tscn" id="2_aorrh"]
-[ext_resource type="PackedScene" path="res://scenes/ParallaxBackground.tscn" id="3_aorrh"]
+[ext_resource type="PackedScene" uid="uid://beqf7wn7hi4v4" path="res://scenes/ParallaxBackground.tscn" id="3_aorrh"]
 
 [node name="LvlManager" type="Control"]
 layout_mode = 3

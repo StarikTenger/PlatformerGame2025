@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=4 uid="uid://g1lor13pj727"]
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_hldmh"]
-[ext_resource type="TileSet" uid="uid://b3peoecox56is" path="res://animation/tile_set.tres" id="2_20opy"]
+[ext_resource type="TileSet" uid="uid://cil1oay7r701q" path="res://animation/tile_set.tres" id="2_20opy"]
 [ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="3_8l0e1"]
 [ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="4_lfnxh"]
 [ext_resource type="FontFile" uid="uid://dwq4psxatm3vh" path="res://fonts/Impact.otf" id="5_lfnxh"]

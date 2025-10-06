@@ -4,8 +4,8 @@
 [ext_resource type="TileSet" uid="uid://cil1oay7r701q" path="res://animation/tile_set.tres" id="2_btoec"]
 [ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="5_08mmt"]
 [ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="6_5ot28"]
-[ext_resource type="PackedScene" path="res://scenes/ParallaxBackground.tscn" id="6_btoec"]
-[ext_resource type="PackedScene" path="res://scenes/StartRoster.tscn" id="7_gwceb"]
+[ext_resource type="PackedScene" uid="uid://beqf7wn7hi4v4" path="res://scenes/ParallaxBackground.tscn" id="6_btoec"]
+[ext_resource type="PackedScene" uid="uid://c5q0a6hls7u0v" path="res://scenes/StartRoster.tscn" id="7_gwceb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_n46q3"]
 font_size = 62

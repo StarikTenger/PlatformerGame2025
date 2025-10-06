@@ -1,15 +1,17 @@
-[gd_scene load_steps=10 format=4 uid="uid://brdeqog348034"]
+[gd_scene load_steps=11 format=4 uid="uid://brdeqog348034"]
 
 [ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_t6q73"]
-[ext_resource type="TileSet" uid="uid://b3peoecox56is" path="res://animation/tile_set.tres" id="2_hokjj"]
+[ext_resource type="TileSet" uid="uid://cil1oay7r701q" path="res://animation/tile_set.tres" id="2_hokjj"]
 [ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="3_0fd8o"]
 [ext_resource type="PackedScene" uid="uid://c5q0a6hls7u0v" path="res://scenes/StartRoster.tscn" id="4_dmnu2"]
+[ext_resource type="FontFile" uid="uid://dwq4psxatm3vh" path="res://fonts/Impact.otf" id="5_ng40l"]
 [ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="5_sc6c1"]
 [ext_resource type="PackedScene" uid="uid://cvdkrw1btgn2q" path="res://scenes/switch.tscn" id="6_0fd8o"]
 [ext_resource type="PackedScene" uid="uid://yf0f760m6xxh" path="res://scenes/door.tscn" id="7_dmnu2"]
 [ext_resource type="PackedScene" uid="uid://beqf7wn7hi4v4" path="res://scenes/ParallaxBackground.tscn" id="8_dmnu2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5722l"]
+font = ExtResource("5_ng40l")
 font_size = 62
 
 [node name="Level" type="Node2D"]
@@ -31,23 +33,20 @@ script = ExtResource("3_0fd8o")
 position = Vector2(-1126, 419)
 
 [node name="Hint_1" type="Label" parent="."]
-visible = false
-offset_left = -1601.0
-offset_top = 870.0
-offset_right = -252.0
-offset_bottom = 1045.0
-text = "The earth character can stick to the wall 
-with the SHIFT key pressed"
+offset_left = -2246.0
+offset_top = 1866.0
+offset_right = -897.0
+offset_bottom = 2041.0
+text = "What's up there?"
 label_settings = SubResource("LabelSettings_5722l")
 horizontal_alignment = 1
 
 [node name="Hint_2" type="Label" parent="."]
-visible = false
-offset_left = 1199.0
-offset_top = -330.0
-offset_right = 2548.0
-offset_bottom = -244.0
-text = "So deep here..."
+offset_left = 2198.0
+offset_top = 1803.0
+offset_right = 3547.0
+offset_bottom = 1889.0
+text = "Knock, knock"
 label_settings = SubResource("LabelSettings_5722l")
 horizontal_alignment = 1
 
