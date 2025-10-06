@@ -162,7 +162,7 @@ func _physics_process(delta):
 		if not _emitted_move:
 			_emitted_move = true
 			emit_signal("moved_once")
-	if Input.is_action_just_pressed("ctrl"):
+	if Input.is_action_just_pressed("suicide"):
 		die()
 		return
 
