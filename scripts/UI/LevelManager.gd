@@ -5,6 +5,8 @@ extends Control
 var current_level: int = 0
 var max_opened_level: int = 2
 var parallax_time: float = 0.0  # Accumulated time for parallax animation
+var parallax_velocity: Vector2 = Vector2.ZERO  # Current velocity for smooth movement
+var parallax_position: Vector2 = Vector2.ZERO  # Current position
 
 var level_scenes: Array[String] = [
 	"res://levels/level_1.tscn",
@@ -89,25 +91,34 @@ func _process(delta: float) -> void:
 		var mouse_offset = (mouse_pos - screen_center) / screen_center
 		mouse_offset = mouse_offset.clamp(Vector2(-1, -1), Vector2(1, 1))
 		
-		# Automatic horizontal figure-8 motion using accumulated delta time
+		# Calculate target position based on automatic figure-8 and mouse input
 		var speed = 0.6  # Speed multiplier for parallax movement
-		var auto_offset = Vector2(
+		var auto_target = Vector2(
 			sin(parallax_time * 0.5 * speed) * 60,  # Horizontal movement
 			sin(parallax_time * 1.0 * speed) * 20   # Vertical creates figure-8 when combined
 		)
+		var mouse_target = mouse_offset * 30  # Mouse influence on target position
+		var target_position = auto_target + mouse_target
 		
-		# Combine automatic movement with mouse-based parallax (increase strength)
-		var mouse_parallax = mouse_offset * 80  # Much stronger cursor response
-		var final_offset = auto_offset + mouse_parallax
+		# Apply smooth acceleration towards target position
+		var position_diff = target_position - parallax_position
+		var acceleration = position_diff * 3.0  # Acceleration strength
 		
-		# Apply the offset to the parallax background using scroll_offset
-		parallax_bg.scroll_offset = final_offset
+		# Apply acceleration to velocity with damping
+		parallax_velocity += acceleration * delta
+		parallax_velocity *= 0.85  # Damping factor for smooth deceleration  
 		
-		# Also try moving individual parallax layers for more visible effect
+		# Update position using velocity
+		parallax_position += parallax_velocity * delta
+		
+		# Apply the smooth position to the parallax background
+		parallax_bg.scroll_offset = parallax_position
+		
+		# Also apply to individual parallax layers for more visible effect
 		var layer3 = parallax_bg.get_node_or_null("ParallaxLayer3")
 		var layer4 = parallax_bg.get_node_or_null("ParallaxLayer4")
 		
 		if layer3:
-			layer3.scroll_offset = final_offset * 0.5
+			layer3.scroll_offset = parallax_position * 0.5
 		if layer4:
-			layer4.scroll_offset = final_offset * 0.8
+			layer4.scroll_offset = parallax_position * 0.8
