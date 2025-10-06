@@ -9,6 +9,8 @@ var level_scenes: Array[String] = [
 	"res://levels/level_1.tscn",
 	"res://levels/level_2.tscn",
 	"res://levels/level_3.tscn",
+	"res://levels/level_4.tscn",
+	"res://levels/level_5.tscn",
 ]
 
 var levels_by_id: Dictionary = {}
@@ -58,6 +60,8 @@ func _launch_level(level_id: int):
 	current_level = level_id
 	print("Launching level ", level_id)
 	var level_scene = level_scenes[level_id]
+	
+	get_tree().root.get_node("LevelManager").hide()
 
 	get_tree().change_scene_to_file(level_scene)
 

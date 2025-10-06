@@ -81,5 +81,6 @@ func load_chosen(_chosen : Array[String]):
 
 func _on_main_menu_button_pressed() -> void:
 	SaveState.set_restarted(false)
+	get_tree().root.get_node("LevelManager").show()
 	get_tree().root.get_node("LevelManager").get_focus()
 	get_tree().root.get_node("Level").queue_free()
