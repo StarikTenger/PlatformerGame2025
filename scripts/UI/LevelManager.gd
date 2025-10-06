@@ -1,7 +1,7 @@
 extends Control
 
 @export var level_button_scene: PackedScene
-@onready var grid: GridContainer = $GridContainer
+@onready var grid: GridContainer = $VBoxContainer/GridContainer
 var current_level: int = 0
 var max_opened_level: int = 2
 var parallax_time: float = 0.0  # Accumulated time for parallax animation
@@ -39,8 +39,6 @@ func _ready():
 	populate_levels()
 
 func populate_levels():
-	grid = get_node("GridContainer")
-	
 	if not grid:
 		print("ERROR: Cannot populate levels - GridContainer is null")
 		return
