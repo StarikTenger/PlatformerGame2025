@@ -6,19 +6,19 @@
 [ext_resource type="AudioStream" uid="uid://dum116umeykfy" path="res://sounds/WIND_GUY_DEATH.mp3" id="4_igt4f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_igt4f"]
-size = Vector2(95.5, 199.5)
+size = Vector2(137, 682.5)
 
 [node name="Tornado" type="Area2D"]
 script = ExtResource("1_j3qay")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(-25, -103)
+position = Vector2(-3, -104)
 sprite_frames = ExtResource("2_j3qay")
 autoplay = "default"
 frame_progress = 0.892044
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.25, -100.25)
+position = Vector2(1.5, -341.75)
 shape = SubResource("RectangleShape2D_igt4f")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="CollisionShape2D"]

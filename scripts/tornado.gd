@@ -1,6 +1,6 @@
 extends Area2D
 
-var lift_acceleration := 5000.0
+var lift_acceleration := 1000.0
 var direction := Vector2.UP
 
 @onready var death_sound_player: AudioStreamPlayer2D = $CollisionShape2D/AudioStreamPlayer2D
@@ -19,4 +19,8 @@ func _on_death_sound_finished():
 func _physics_process(delta):
 	for body in get_overlapping_bodies():
 		if body.is_in_group("liftable"):
-			body.velocity.y -= lift_acceleration * delta
+			var delta_y: float = body.global_position.y - global_position.y
+			if delta_y < 650:
+				body.velocity.y = -lift_acceleration
+			else:
+				body.velocity.y = max(0, (700 - delta_y) / 50 * lift_acceleration)
