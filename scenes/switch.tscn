@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvdkrw1btgn2q"]
+[gd_scene load_steps=6 format=3 uid="uid://cvdkrw1btgn2q"]
 
 [ext_resource type="Script" uid="uid://s5d2w4v116v8" path="res://scripts/switch.gd" id="1_1i7pn"]
 [ext_resource type="Texture2D" uid="uid://bwxpe6qad84pf" path="res://resources/switch_off.png" id="2_nnoiq"]
 [ext_resource type="Texture2D" uid="uid://85khun4rv6lq" path="res://resources/switch_on.png" id="3_4m6b1"]
+[ext_resource type="SpriteFrames" uid="uid://blkthx6rp78xd" path="res://animation/switch.tres" id="4_4m6b1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w78pk"]
 size = Vector2(192, 96)
@@ -17,3 +18,9 @@ position = Vector2(0, 48)
 shape = SubResource("RectangleShape2D_w78pk")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, 2)
+sprite_frames = ExtResource("4_4m6b1")
+animation = &"off"
+frame_progress = 0.423158

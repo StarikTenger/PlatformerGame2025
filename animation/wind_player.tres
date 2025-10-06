@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=127 format=3 uid="uid://h2rpunkpwqy"]
+[gd_resource type="SpriteFrames" load_steps=126 format=3 uid="uid://h2rpunkpwqy"]
 
 [ext_resource type="Texture2D" uid="uid://bu1kfeg7b1jty" path="res://resources/wind_player_fall.png" id="1_bh4d6"]
 [ext_resource type="Texture2D" uid="uid://ctql3p5ftr5pf" path="res://resources/wind_player_idle.png" id="1_t6lqt"]
@@ -101,10 +101,6 @@ region = Rect2(960, 1080, 480, 270)
 [sub_resource type="AtlasTexture" id="AtlasTexture_7g80x"]
 atlas = ExtResource("1_bh4d6")
 region = Rect2(1440, 1080, 480, 270)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sn7fv"]
-atlas = ExtResource("1_bh4d6")
-region = Rect2(1920, 1080, 480, 270)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bh4d6"]
 atlas = ExtResource("1_t6lqt")
@@ -564,9 +560,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_7g80x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sn7fv")
 }],
 "loop": true,
 "name": &"fall",

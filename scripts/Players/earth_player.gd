@@ -3,7 +3,16 @@ class_name EarthPlayer
 
 var platform_scene : PackedScene
 
+# Audio for creating platform
+var earth_death_player := AudioStreamPlayer2D.new()
+
 func _death_effect() -> void:
+	# Play sound
+	earth_death_player.stream = load("res://sounds/EARTH_GUY_DEATH.mp3")
+	earth_death_player.position = global_position
+	get_parent().add_child(earth_death_player)
+	earth_death_player.play()
+	
 	# Spawn platform at player's position
 	var platform = platform_scene.instantiate()
 	platform.global_position = global_position
@@ -11,9 +20,9 @@ func _death_effect() -> void:
 
 func _ready() -> void:
 	super()
-	jump_height = 210.0
+	enabled_wall_climb = true
+	jump_height = 1.2 * TILE_SIZE
 	speed = 600.0
-	delay_between_jumps = 0.7
 	platform_scene = preload("res://scenes/Platform.tscn")
 
 func death_hint() -> String:

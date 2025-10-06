@@ -26,6 +26,13 @@ func _ready() -> void:
 		_timer.start()
 
 func _fire() -> void:
+	# Animation
+	var anim: AnimatedSprite2D = $AnimatedSprite2D
+	anim.play("fire")
+
+	# Wait to the end of animation
+	await anim.animation_finished
+
 	if projectile_scene == null:
 		push_error("Dispenser: projectile_scene not set")
 		return
@@ -48,6 +55,7 @@ func _fire() -> void:
 
 	# добавляем в ту же сцену, что и диспенсер
 	get_parent().add_child(p)
+
 
 func _find_player() -> Node2D:
 	# запасной — берём первого CharacterBody2D в сцене с методом die()

@@ -9,6 +9,7 @@ const CHAR_SCENES := {
 const SPAWN_NAME := "Spawn"               # Marker2D
 const CAMERA_SCENE := preload("res://scenes/Camera.tscn")
 const DEATH_MENU_SCENE := preload("res://scenes/UI/DeathMenu.tscn")
+const WIN_MENU_SCENE := preload("res://scenes/UI/WinMenu.tscn")
 const CHARACTER_MENU_SCENE := preload("res://scenes/UI/CharacterMenu.tscn")
 const HUD_SCENE := preload("res://scenes/UI/HUD.tscn")
 
@@ -33,6 +34,9 @@ var death_layer: CanvasLayer = null
 var hud : Control = null
 var hud_layer: CanvasLayer = null
 
+var win_menu : Control = null
+var win_layer: CanvasLayer = null
+
 var character_menu : Control = null
 var character_layer: CanvasLayer = null
 
@@ -47,7 +51,16 @@ var _prev_mouse_mode: int = Input.get_mouse_mode()
 var level_overview_position: Vector2 = Vector2.ZERO
 var level_overview_zoom: float = 0
 
+
+func _cam_on_level_overview():
+	if level_overview_zoom != 0 and player_alive:
+		camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+
 func _ready():
+	var start_roster = $StartRoster
+	
+	if start_roster and not SaveState.get_restarted():
+		SaveState.save_chosen(start_roster.get_roster())
 	
 	# Инициализация Spawn
 	var spawn := get_node_or_null(SPAWN_NAME)
@@ -65,6 +78,8 @@ func _ready():
 		camera_node = CAMERA_SCENE.instantiate()
 		add_child(camera_node)
 		
+	#### Instantiate Character Menu ####
+
 	character_layer = CanvasLayer.new()
 	character_layer.layer = 101
 	character_layer.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
@@ -77,8 +92,9 @@ func _ready():
 	
 	character_menu.start_pressed.connect(_start_game)
 	character_menu.load_chosen(SaveState.get_chosen())
-	
-	# инстансим меню один раз
+
+	#### Instantiate Death Menu (no longer in use!) ####
+
 	death_layer = CanvasLayer.new()
 	death_layer.layer = 100
 	death_layer.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
@@ -89,7 +105,28 @@ func _ready():
 	death_menu.visible = false
 	death_layer.add_child(death_menu)
 
-	# Instantiate HUD overlay
+	# signals
+	death_menu.apply_pressed.connect(_continue_from_death_menu)
+	death_menu.skip_pressed.connect(_death_restart_pressed)
+	death_menu.restart_pressed.connect(_death_main_menu_pressed)
+
+	##### Instantiate Win Menu ####
+
+	win_layer = CanvasLayer.new()
+	win_layer.layer = 102
+	win_layer.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	add_child(win_layer)
+
+	win_menu = WIN_MENU_SCENE.instantiate()
+	win_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	win_menu.visible = false
+	win_layer.add_child(win_menu)
+
+	win_menu.next_pressed.connect(_next_level)
+	win_menu.restart_pressed.connect(_win_restart_pressed)
+	win_menu.menu_pressed.connect(_win_menu_pressed)
+
+	##### Instantiate HUD overlay ####
 	hud_layer = CanvasLayer.new()
 	hud_layer.layer = 50
 	hud_layer.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -103,10 +140,6 @@ func _ready():
 	deck_update.connect(hud._on_deck_update)
 
 	
-	# сигналы меню
-	death_menu.apply_pressed.connect(_continue_from_death_menu)
-	death_menu.skip_pressed.connect(_death_restart_pressed)
-	death_menu.restart_pressed.connect(_death_main_menu_pressed)
 
 
 	var level_overview_position_node: Variant = get_node_or_null("LevelOverview")
@@ -115,8 +148,17 @@ func _ready():
 			level_overview_position = level_overview_position_node.global_position
 			level_overview_zoom = level_overview_position_node.zoom
 
+	# Camera overview
+	# camera_node.process_mode = Node.PROCESS_MODE_ALWAYS
+	# camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+	# camera_node.hard_reset_target_state()
+	camera_node.global_position = level_overview_position
+	camera_node.zoom = Vector2.ONE * level_overview_zoom
+
 
 func _start_game():
+
+	
 	var chosen : Array[String]
 	SaveState.save_chosen(character_menu.get_chosen())
 	character_menu.visible = false
@@ -134,17 +176,19 @@ func _start_game():
 
 	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 
+
+
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
 	if can_switch and event.is_action_pressed("switch_char"):
 		print("test11")
 		_switch_next()
-	if not character_menu.visible and not get_tree().paused and event.is_action_pressed("esc_menu"):
-		death_menu.set_context(true, "Game on pause")
+	if not character_menu.visible and not get_tree().paused and Input.is_action_just_pressed("esc_menu"):
+		print("Pause menu requested")
+		death_menu.set_context(true, "Game paused")
 		_show_death_menu(true)
 	if event.is_action_pressed("level_overview"):
-		if level_overview_zoom != 0 and player_alive:
-			camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
+		_cam_on_level_overview()
 	elif event.is_action_released("level_overview"):
 		if player_alive:
 			camera_node.reset_target_state()
@@ -222,7 +266,7 @@ func _on_player_death_request(player: PlayerBase):
 		else:
 			hint = "This character will leave an effect upon death"
 	else:
-		hint = "The characters are over"
+		hint = "You have no more elementals"
 	
 	death_menu.set_context(allow_apply, hint)
 
@@ -289,14 +333,38 @@ func _death_restart_pressed():
 func _death_main_menu_pressed():
 	SaveState.set_restarted(false)
 	_show_death_menu(false)
-	get_tree().change_scene_to_file("res://scenes/UI/LevelManager.tscn")
+	get_tree().root.get_node("LevelManager").show()
+	get_tree().root.get_node("LevelManager").get_focus()
+	get_tree().root.get_node("Level").queue_free()
+
+func _win_restart_pressed():
+	_show_win_menu(false)
+	_restart_level()
+
+func _win_menu_pressed():
+	_show_win_menu(false)
+	get_tree().root.get_node("LevelManager").show()
+	get_tree().root.get_node("LevelManager").get_focus()
+	get_tree().root.get_node("Level").queue_free()
 
 func _show_death_menu(show: bool):
 	if show:
 		death_menu.open()
 	else:
 		death_menu.close_menu()
-		
+
+func _show_win_menu(show: bool):
+	if show:
+		win_menu.open()
+	else:
+		win_menu.close_menu()
+
+func _next_level():
+	print("Level next pressed")
+	SaveState.set_restarted(false)
+	_show_win_menu(false)
+	LevelManager.next_level()
+
 func _show_character_menu(show: bool):
 	get_tree().paused = show
 	death_menu.visible = show
@@ -313,6 +381,3 @@ func _restart_level():
 	var ml := Engine.get_main_loop()
 	if ml is SceneTree:
 		(ml as SceneTree).reload_current_scene()
-
-func _on_player_died():
-	pass

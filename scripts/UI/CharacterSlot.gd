@@ -27,6 +27,8 @@ func set_character(name: String):
 			break
 
 func _on_button_pressed() -> void:
+	if not get_node_or_null("/root/Level/StartRoster").is_can_change():
+		return
 	char_idx = (char_idx + 1) % characters.size()
 	_on_character_selected(char_idx)
 

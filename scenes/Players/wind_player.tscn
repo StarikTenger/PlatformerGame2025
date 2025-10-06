@@ -8,8 +8,8 @@
 script = ExtResource("2_6uy08")
 
 [node name="Sprite2D" parent="." index="0"]
-position = Vector2(-1, -18)
-scale = Vector2(0.753879, 0.707407)
+position = Vector2(0, -18)
+scale = Vector2(0.754, 0.708)
 sprite_frames = ExtResource("3_6uy08")
 animation = &"walk"
 autoplay = "idle"

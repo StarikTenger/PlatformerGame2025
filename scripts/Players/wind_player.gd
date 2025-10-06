@@ -12,7 +12,8 @@ func _death_effect() -> void:
 func _ready() -> void:
 	super()
 	enabled_double_jumps = true
-	jump_height = 300.0
+	jump_height = 1.7 * TILE_SIZE
+	double_jump_height = jump_height
 	
 	tornado_scene = preload("res://scenes/Tornado.tscn")
 

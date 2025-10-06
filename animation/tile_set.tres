@@ -1,0 +1,87 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cil1oay7r701q"]
+
+[ext_resource type="Texture2D" uid="uid://rpe3t0ry3iso" path="res://resources/tiles.png" id="1_3imnp"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3imnp"]
+texture = ExtResource("1_3imnp")
+texture_region_size = Vector2i(200, 200)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+4:9/0 = 0
+5:9/0 = 0
+6:9/0 = 0
+7:9/0 = 0
+
+[resource]
+resource_local_to_scene = true
+tile_size = Vector2i(200, 200)
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_priority = 1.175
+custom_data_layer_0/name = "destruct_fire"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "hazard"
+custom_data_layer_1/type = 1
+custom_data_layer_2/name = "pushable"
+custom_data_layer_2/type = 1
+sources/0 = SubResource("TileSetAtlasSource_3imnp")

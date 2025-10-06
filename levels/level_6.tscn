@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=4 uid="uid://b8xupidesvfn1"]
+
+[ext_resource type="Script" uid="uid://bhf22l7xmw2fs" path="res://scripts/level_template.gd" id="1_xn6mk"]
+[ext_resource type="TileSet" uid="uid://dyusnplihbffc" path="res://animation/tiles.tres" id="2_fpvgn"]
+[ext_resource type="Script" uid="uid://btbawuvajr87s" path="res://scripts/level_overview_node.gd" id="3_v2dqh"]
+[ext_resource type="PackedScene" uid="uid://c5q0a6hls7u0v" path="res://scenes/StartRoster.tscn" id="4_nu44e"]
+[ext_resource type="FontFile" uid="uid://dwq4psxatm3vh" path="res://fonts/Impact.otf" id="5_fpvgn"]
+[ext_resource type="PackedScene" uid="uid://nmj6xwob58pt" path="res://scenes/Exit.tscn" id="5_kx1xp"]
+[ext_resource type="PackedScene" uid="uid://beqf7wn7hi4v4" path="res://scenes/ParallaxBackground.tscn" id="6_m516p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5722l"]
+font = ExtResource("5_fpvgn")
+font_size = 62
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_xn6mk")
+
+[node name="Tiles" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD4/w8AAAAAAAAAAAD5/w8AAAAAAAAAAAD5/xAAAAAAAAAAAAD6/xAAAAAAAAAAAAD6/xEAAAAAAAAAAAD6/xIAAAAAAAAAAAD7/xMAAAAAAAAAAAD7/xQAAAAAAAAAAAD7/xUAAAAAAAAAAAD8/xYAAAAAAAAAAAD8/xcAAAAAAAAAAAD8/xgAAAAAAAAAAAD9/xkAAAAAAAAAAAD9/xoAAAAAAAAAAAD9/xsAAAAAAAAAAAD+/xwAAAAAAAAAAAD+/x0AAAAAAAAAAAD+/x4AAAAAAAAAAAD+/x8AAAAAAAAAAAD//x8AAAAAAAAAAAD//yAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAB0AAAAAAAAAAAAAABwAAAAAAAAAAAABABsAAAAAAAAAAAABABoAAAAAAAAAAAABABkAAAAAAAAAAAACABgAAAAAAAAAAAADABcAAAAAAAAAAAADABYAAAAAAAAAAAADABUAAAAAAAAAAAAEABQAAAAAAAAAAAAEABMAAAAAAAAAAAAFABIAAAAAAAAAAAAGABEAAAAAAAAAAAAHABAAAAAAAAAAAAAHAA8AAAAAAAAAAAAIAA4AAAAAAAAAAAAIAA0AAAAAAAAAAAAJAA0AAAAAAAAAAAAJAAwAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAsAAAAAAAAAAAAOAAsAAAAAAAAAAAAOAAwAAAAAAAAAAAAOAA0AAAAAAAAAAAAOAA4AAAAAAAAAAAAOAA8AAAAAAAAAAAAOABAAAAAAAAAAAAAOABEAAAAAAAAAAAAOABIAAAAAAAAAAAAOABMAAAAAAAAAAAAOABQAAAAAAAAAAAAOABUAAAAAAAAAAAAOABYAAAAAAAAAAAAOABcAAAAAAAAAAAAOABgAAAAAAAAAAAANABkAAAAAAAAAAAANABoAAAAAAAAAAAANABsAAAAAAAAAAAANABwAAAAAAAAAAAANAB0AAAAAAAAAAAAMAB0AAAAAAAAAAAAMAB4AAAAAAAAAAAAMAB8AAAAAAAAAAAAMACAAAAAAAAAAAAAMACEAAAAAAAAAAAA=")
+tile_set = ExtResource("2_fpvgn")
+
+[node name="Spawn" type="Marker2D" parent="."]
+position = Vector2(6200, 5800)
+
+[node name="LevelOverview" type="Node2D" parent="."]
+position = Vector2(7400, 4400)
+script = ExtResource("3_v2dqh")
+
+[node name="StartRoster" parent="." instance=ExtResource("4_nu44e")]
+position = Vector2(-909, -5387)
+
+[node name="Hint_1" type="Label" parent="."]
+offset_left = 6400.0
+offset_top = 5400.0
+offset_right = 8452.0
+offset_bottom = 5575.0
+text = "Congratulations, you have completed the demo version of our game!"
+label_settings = SubResource("LabelSettings_5722l")
+horizontal_alignment = 1
+
+[node name="Hint_2" type="Label" parent="."]
+offset_left = 6400.0
+offset_top = 5600.0
+offset_right = 8345.0
+offset_bottom = 5686.0
+text = "Stay tuned for updates, we want to continue improving the game
+Press Z key :)"
+label_settings = SubResource("LabelSettings_5722l")
+horizontal_alignment = 1
+
+[node name="Hint_3" type="Label" parent="."]
+visible = false
+offset_left = 2199.0
+offset_top = 1270.0
+offset_right = 3548.0
+offset_bottom = 1356.0
+text = "He leaves a solid platform after death"
+label_settings = SubResource("LabelSettings_5722l")
+horizontal_alignment = 1
+
+[node name="Exit" parent="." instance=ExtResource("5_kx1xp")]
+visible = false
+position = Vector2(12724, 617)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("6_m516p")]
