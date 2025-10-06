@@ -72,7 +72,6 @@ position = Vector2(2223, 481)
 
 [node name="Door" parent="." instance=ExtResource("8_jq78i")]
 position = Vector2(-499, 1064)
-scale = Vector2(1.5, 1.5)
 
 [node name="Switch" parent="." node_paths=PackedStringArray("door") instance=ExtResource("9_lsnkt")]
 position = Vector2(-1007, 1173)
