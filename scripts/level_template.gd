@@ -352,14 +352,22 @@ func _win_menu_pressed():
 func _show_death_menu(show: bool):
 	if show:
 		death_menu.open()
+		if Engine.has_singleton("Music"):
+			Music.set_menu_mode()
 	else:
 		death_menu.close_menu()
+		if Engine.has_singleton("Music"):
+			Music.set_gameplay_mode()
 
 func _show_win_menu(show: bool):
 	if show:
 		win_menu.open()
+		if Engine.has_singleton("Music"):
+			Music.set_menu_mode()
 	else:
 		win_menu.close_menu()
+		if Engine.has_singleton("Music"):
+			Music.set_gameplay_mode()
 
 func _next_level():
 	print("Level next pressed")
@@ -374,9 +382,13 @@ func _show_character_menu(show: bool):
 		_prev_mouse_mode = Input.get_mouse_mode()
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		(death_menu as Node).call_deferred("open")
+		if Engine.has_singleton("Music"):
+			Music.set_menu_mode()
 	else:
 		Input.set_mouse_mode(_prev_mouse_mode)
 		(death_menu as Node).call_deferred("close")
+		if Engine.has_singleton("Music"):
+			Music.set_gameplay_mode()
 
 func _restart_level():
 	SaveState.set_restarted(true)
