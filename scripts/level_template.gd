@@ -51,13 +51,14 @@ var _prev_mouse_mode: int = Input.get_mouse_mode()
 var level_overview_position: Vector2 = Vector2.ZERO
 var level_overview_zoom: float = 0
 
+var start_roster: Node = null
 
 func _cam_on_level_overview():
 	if level_overview_zoom != 0 and player_alive:
 		camera_node.set_target_state(level_overview_position, level_overview_zoom, 0.3, 0.3)
 
 func _ready():
-	var start_roster = $StartRoster
+	start_roster = $StartRoster
 	
 	if start_roster and not SaveState.get_restarted():
 		SaveState.save_chosen(start_roster.get_roster())
@@ -183,8 +184,11 @@ func _start_game():
 func _unhandled_input(event):
 	# переключение персонажа по Shift до первого движения
 	if can_switch and event.is_action_pressed("switch_char"):
-		print("test11")
-		_switch_next()
+		if start_roster.is_can_change():
+			character_deck[character_deck_idx] = _next_character_type(character_deck[character_deck_idx])
+			SaveState.save_chosen(character_deck)
+			_replace_current_with(character_deck_idx)
+			deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 	if not character_menu.visible and not get_tree().paused and Input.is_action_just_pressed("esc_menu"):
 		print("Pause menu requested")
 		death_menu.set_context(true, "Game paused")
@@ -208,6 +212,17 @@ func characters_on_deck() -> int:
 			count += 1
 	return count
 
+func _next_character_type(type: String):
+	match type:
+		"Fire":
+			return "Wind"
+		"Wind":
+			return "Earth"
+		"Earth":
+			return "Fire"
+		_:
+			return "Fire"
+
 func _switch_next():
 	if is_deck_empty():
 		return
@@ -217,7 +232,6 @@ func _switch_next():
 		if character_deck_alive[next]:
 			break	
 	_replace_current_with(next)
-
 	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
 
 func _replace_current_with(next_idx: int):
