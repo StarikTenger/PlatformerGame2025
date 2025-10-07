@@ -301,11 +301,14 @@ func _physics_process(delta):
 	
 
 	# Прыжки
+
+	if is_on_floor():
+		can_double_jump = true
+
 	if Input.is_action_pressed("jump"):
 		if is_on_floor(): 	# Прыжок с пола
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
-			can_double_jump = true
 			if not _emitted_move:
 				_emitted_move = true
 				emit_signal("moved_once")
@@ -329,6 +332,7 @@ func _physics_process(delta):
 			audio_player.play()
 		
 	if Input.is_action_just_pressed("jump"):
+		print("Jump pressed: ", can_double_jump, " time_since_last_jump=", time_since_last_jump, " 	delay_between_jumps=", delay_between_jumps)
 		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
 			# Double jump sound
