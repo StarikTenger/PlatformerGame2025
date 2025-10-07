@@ -25,4 +25,5 @@ func _ready():
 		Type.EARTH:
 			$AnimatedSprite2D.play("earth")
 		Type.PROJECTILE:
+			scale = Vector2.ONE * 0.5
 			$AnimatedSprite2D.play("projectile")

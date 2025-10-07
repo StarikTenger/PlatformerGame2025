@@ -10,11 +10,22 @@ var _age := 0.0
 
 func _ready() -> void:
 	direction = direction.normalized()
+	explosion_scene = preload("res://scenes/Explosion.tscn")
+
+var explosion_scene : PackedScene
+var explosion_type : Explosion.Type = Explosion.Type.PROJECTILE
+
+func _destroy() -> void:
+	var explosion = explosion_scene.instantiate()
+	explosion.global_position = global_position
+	explosion.type = explosion_type
+	get_parent().add_child(explosion)
+	queue_free()
 
 func _physics_process(delta: float) -> void:
 	_age += delta
 	if _age >= lifetime:
-		queue_free()
+		_destroy()
 		return
 
 	velocity = direction * speed
@@ -26,4 +37,4 @@ func _physics_process(delta: float) -> void:
 			c.die()
 		# в остальном просто исчезаем (об стену/тайлмап и т.п.)
 		if destroy_on_any_collision:
-			queue_free()
+			_destroy()
