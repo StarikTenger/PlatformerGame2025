@@ -23,3 +23,6 @@ shape = SubResource("RectangleShape2D_c4vl1")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_iy2wj")
+
+[node name="CamFocus" type="Node2D" parent="."]
+position = Vector2(1, -266)
