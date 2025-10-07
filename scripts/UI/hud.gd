@@ -1,7 +1,7 @@
 extends Control
 
 # Configuration parameters for deck display
-const DECK_ITEM_SIZE = Vector2(80, 80)  # Size of each character deck item
+const DECK_ITEM_SIZE = Vector2(90, 90)  # Size of each character deck item
 const DECK_CONTAINER_POSITION = Vector2(20, 20)  # Position from top-left corner
 const DECK_ITEM_SEPARATION = 20  # Distance between deck items in pixels
 const DECK_BORDER_WIDTH = 3  # Width of the current character border
@@ -67,9 +67,9 @@ func _create_deck_items(char_deck: Array, alive: Array[bool], current_index: int
 		# The original sprite is quite large (1920x1080), so we need to scale it down significantly
 		var sprite_scale = min(DECK_ITEM_SIZE.x / 1920.0, DECK_ITEM_SIZE.y / 1080.0)
 		if  i != current_index:
-			sprite_scale *= 0.75
-		else:
 			sprite_scale *= 1.2
+		else:
+			sprite_scale *= 1.5
 		animated_sprite.scale = Vector2(sprite_scale, sprite_scale)
 		
 
