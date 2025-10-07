@@ -289,6 +289,8 @@ func _physics_process(delta):
 	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
 	
+	if is_on_floor():
+		can_double_jump = true	
 
 	# Прыжки
 	if Input.is_action_pressed("jump"):
