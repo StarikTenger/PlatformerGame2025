@@ -4,7 +4,7 @@ extends Control
 
 var max_width = 0
 var max_height = 0
-var default_scale: Vector2 = Vector2.ONE
+var default_scale: Vector2 = Vector2.ONE * 2.5
 
 func _ready():
 	# Find the largest frame size among all animations
