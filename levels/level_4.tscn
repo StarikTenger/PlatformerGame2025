@@ -36,12 +36,11 @@ script = ExtResource("3_0fd8o")
 position = Vector2(-1126, 419)
 
 [node name="Hint_1" type="Label" parent="."]
-visible = false
-offset_left = -2246.0
-offset_top = 1866.0
-offset_right = -897.0
-offset_bottom = 2041.0
-text = "What's up there?"
+offset_left = 342.0
+offset_top = 6609.0
+offset_right = 1691.0
+offset_bottom = 6666.0
+text = "TAB to swith element"
 label_settings = SubResource("LabelSettings_5722l")
 horizontal_alignment = 1
 
