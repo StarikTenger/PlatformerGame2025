@@ -1,4 +1,14 @@
 extends Node2D
+class_name Explosion
+
+enum Type {
+	FIRE,
+	WIND,
+	EARTH,
+	PROJECTILE
+}
+
+var type : Type = Type.FIRE
 
 func _ready():
 	#scale = Vector2.ZERO
@@ -6,4 +16,13 @@ func _ready():
 	rotation = randf() * TAU
 
 	$AnimatedSprite2D.connect("animation_finished", Callable(self, "queue_free"))
-	$AnimatedSprite2D.play()
+	
+	match type:
+		Type.FIRE:
+			$AnimatedSprite2D.play("fire")
+		Type.WIND:
+			$AnimatedSprite2D.play("wind")
+		Type.EARTH:
+			$AnimatedSprite2D.play("earth")
+		Type.PROJECTILE:
+			$AnimatedSprite2D.play("projectile")

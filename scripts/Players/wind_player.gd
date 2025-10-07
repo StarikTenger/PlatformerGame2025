@@ -16,6 +16,7 @@ func _ready() -> void:
 	double_jump_height = jump_height
 	
 	tornado_scene = preload("res://scenes/Tornado.tscn")
+	explosion_type = Explosion.Type.WIND
 
 func death_hint() -> String:
 	return "This character will leave a tornado at the place of death"
