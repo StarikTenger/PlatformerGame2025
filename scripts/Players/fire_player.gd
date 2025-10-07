@@ -61,9 +61,10 @@ func _ready() -> void:
 	var lvl = get_tree().current_scene
 	tiles_layer = lvl.find_child("Tiles", true, false) as TileMapLayer
 	tiles_layer_2 = lvl.find_child("Tiles 2", true, false) as TileMapLayer
-	explosion_scene = preload("res://scenes/Explosion.tscn")
 
-var explosion_scene : PackedScene
+	explosion_type = Explosion.Type.FIRE
+	
+
 func _spawn_explosion(pos: Vector2) -> void:
 
 	# Play sound
@@ -74,6 +75,7 @@ func _spawn_explosion(pos: Vector2) -> void:
 
 	var explosion = explosion_scene.instantiate()
 	explosion.global_position = pos
+	explosion.type = Explosion.Type.FIRE
 	get_parent().add_child(explosion)
 
 func _death_effect() -> void:

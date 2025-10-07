@@ -24,6 +24,7 @@ func _ready() -> void:
 	jump_height = 1.2 * TILE_SIZE
 	speed = 600.0
 	platform_scene = preload("res://scenes/Platform.tscn")
+	explosion_type = Explosion.Type.EARTH
 
 func death_hint() -> String:
 	return "This character will leave a platform at the place of death"

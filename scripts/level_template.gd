@@ -305,6 +305,9 @@ func _death_apply_pressed():
 		_pending_player = null
 		_pending_scene_idx = -1
 
+	# Update HUD
+	deck_update.emit(character_deck, character_deck_alive, character_deck_idx)
+
 	if is_deck_empty():
 		#_restart_level()
 		_show_death_menu(true)

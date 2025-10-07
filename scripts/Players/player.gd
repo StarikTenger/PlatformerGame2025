@@ -15,6 +15,9 @@ signal death_request(player: Node)
 
 @onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
+var explosion_scene : PackedScene
+var explosion_type : Explosion.Type = Explosion.Type.FIRE
+
 enum PlayerType {
 	FIRE,
 	WIND,
@@ -66,6 +69,9 @@ func _ready() -> void:
 	if tiles_map_2 == null:
 		var lvl := get_tree().current_scene
 		tiles_map_2 = lvl.find_child("Tiles 2", true, false) as TileMapLayer
+
+	explosion_scene = preload("res://scenes/Explosion.tscn")
+
 	add_to_group("liftable")
 	add_to_group("player")
 
@@ -124,6 +130,10 @@ func die() -> void:
 
 # Уровень вызовет это, если в меню нажали «Применить смерть»
 func apply_death_effect() -> void:
+	var explosion = explosion_scene.instantiate()
+	explosion.global_position = global_position
+	explosion.type = explosion_type
+	get_parent().add_child(explosion)
 	await _death_effect()                   # у наследников (огненный) тут ломаются тайлы
 
 # Уровень вызовет это, когда надо реально умереть (после эффекта)
@@ -293,11 +303,14 @@ func _physics_process(delta):
 		can_double_jump = true	
 
 	# Прыжки
+
+	if is_on_floor():
+		can_double_jump = true
+
 	if Input.is_action_pressed("jump"):
 		if is_on_floor(): 	# Прыжок с пола
 			velocity.y = -sqrt(2 * gravity * jump_height)
 			time_since_last_jump = 0.0
-			can_double_jump = true
 			if not _emitted_move:
 				_emitted_move = true
 				emit_signal("moved_once")
@@ -321,6 +334,7 @@ func _physics_process(delta):
 			audio_player.play()
 		
 	if Input.is_action_just_pressed("jump"):
+		print("Jump pressed: ", can_double_jump, " time_since_last_jump=", time_since_last_jump, " 	delay_between_jumps=", delay_between_jumps)
 		if enabled_double_jumps and can_double_jump and time_since_last_jump >= delay_between_jumps: 	# Прыжок в воздухе
 			# TODO: анимация двойного прыжка
 			# Double jump sound
