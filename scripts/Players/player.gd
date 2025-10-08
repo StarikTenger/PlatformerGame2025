@@ -17,6 +17,7 @@ signal death_request(player: Node)
 
 var explosion_scene : PackedScene
 var explosion_type : Explosion.Type = Explosion.Type.FIRE
+var start_freeze_time := 1.5
 
 enum PlayerType {
 	FIRE,
@@ -159,6 +160,17 @@ func death_hint() -> String:
 	return "This character does not leave any effect after death"
 
 func _physics_process(delta):
+	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+	# start freeze
+	if start_freeze_time > 0.0:
+		start_freeze_time -= delta
+		$Sprite2D.modulate.a = 0.8 + 0.4 * sin(start_freeze_time*10)
+		velocity.y += gravity * delta
+		move_and_slide()
+		return
+	$Sprite2D.modulate.a = 1.0
+
 	if _frozen_on_death:
 		return
 	var input_direction = 0
@@ -296,7 +308,6 @@ func _physics_process(delta):
 				dash_time_left = dash_duration
 				can_dash = false
 
-	var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 	time_since_last_jump += delta
 	
 	if is_on_floor():
