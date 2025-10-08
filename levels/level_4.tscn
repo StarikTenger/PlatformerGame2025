@@ -40,7 +40,7 @@ offset_left = 342.0
 offset_top = 6609.0
 offset_right = 1691.0
 offset_bottom = 6666.0
-text = "TAB to swith element"
+text = "TAB to switch elemental"
 label_settings = SubResource("LabelSettings_5722l")
 horizontal_alignment = 1
 
