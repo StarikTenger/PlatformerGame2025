@@ -1,7 +1,28 @@
-[gd_scene load_steps=5 format=3 uid="uid://dtcv1pbau0idl"]
+[gd_scene load_steps=6 format=3 uid="uid://dtcv1pbau0idl"]
 
 [ext_resource type="Script" uid="uid://cbnd3u0xrkejf" path="res://scripts/Players/player.gd" id="1_v6fml"]
-[ext_resource type="AudioStream" uid="uid://cyk1vsox6hdj0" path="res://sounds/PLAYER_WALK_LOOP.mp3" id="2_d0tyu"]
+[ext_resource type="Texture2D" uid="uid://bhhr1banlkhy8" path="res://icon.svg" id="2_d0tyu"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f0mf6"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(1, 1, 1)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 100.0
+emission_ring_radius = 100.0
+emission_ring_inner_radius = 0.0
+emission_ring_cone_angle = 90.0
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.2
+turbulence_enabled = true
+turbulence_noise_speed_random = 0.5
+turbulence_initial_displacement_min = -50.0
+turbulence_initial_displacement_max = 50.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v6fml"]
 
@@ -12,6 +33,16 @@ height = 126.0
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 3
 script = ExtResource("1_v6fml")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(-5, -4)
+rotation = -3.14159
+scale = Vector2(0.278334, -0.481974)
+amount = 5
+amount_ratio = 0.5
+texture = ExtResource("2_d0tyu")
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_f0mf6")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.146, 0.137)
@@ -25,4 +56,3 @@ position = Vector2(-2, -3)
 shape = SubResource("CapsuleShape2D_3li8b")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("2_d0tyu")
